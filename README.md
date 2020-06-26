@@ -60,4 +60,5 @@ Insert the data file that I sent you (in our email convertation) into Assets/Res
 
 ## Step 11: Run the application
 That should be it. Now you should be able to run the application. See if you can teleport around the screen using the
-hands in the visualization like can be seen in the README here.
+hands in the visualization like can be seen in the README [here](https://github.com/provencher/MRTK-Quest). Also,
+you should be able to see red spheres appearing on the screen. These are the data points that are being plotted.
