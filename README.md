@@ -50,7 +50,7 @@ the packages named MapBox and Third Party Assets. Do not include any of the pack
 using AR. If these packages are included, they will cause errors.
 
 ## Step 9: Configure MRTK Settings
-In the project window, go to Scences > Sample Scene. Once it loads, there should be a gameobject called MixedReality
+In the project window, go to Scences > MapboxTestScene. Once it loads, there should be a gameobject called MixedReality
 Toolkit. Click on it. A window should appear that says that no configuration has been assigned to MRTK. Assign the
 MRTK-Quest Profile.
 
