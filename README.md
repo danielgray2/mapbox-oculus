@@ -43,11 +43,12 @@ Project Settings > XR Plug-in Managment and check the box next to Oculus. If you
 the Oculus SDK with Unity.
 
 ## Step 8: Setup Mapbox
-The installation for Mapbox is relatively straight-forward. All you should have to do is go to this link and follow
-the steps to download the SDK and generate credentials. When you import the project into Unity (Assets > Import
-Package > Custom Package), and it asks you which packages you which packages you would like to import, only import
-the packages named MapBox and Third Party Assets. Do not include any of the packages that relate to AR, as we will not be
-using AR. If these packages are included, they will cause errors.
+The installation for Mapbox is relatively straight-forward. All you should have to do is go to [this]
+(https://www.mapbox.com/install/unity/) link and follow the steps to download the SDK and generate credentials. 
+When you import the project into Unity (Assets > Import Package > Custom Package), and it asks you which packages
+you which packages you would like to import, only import the packages named MapBox and Third Party Assets. Do not
+include any of the packages that relate to AR, as we will not be using AR. If these packages are included, they will
+cause errors.
 
 ## Step 9: Configure MRTK Settings
 In the project window, go to Scences > MapboxTestScene. Once it loads, there should be a gameobject called MixedReality
