@@ -29,14 +29,14 @@ to install the package, and import it using the same process that was used for M
 Click [here](https://github.com/provencher/MRTK-Quest/releases/download/v1.0.1/MRTK-Quest_v101_Examples.unitypackage)
 to install the package, and import it using the same process that was used for MRTK in Step 2.
 
-## Step 5: Install Standard Assets
+## Step 6: Install Standard Assets
 Go to the Assets store in Unity and search for "Standard Assets". Download and import the one made by Unity
 Technologies. Once it imports, you should get an error saying that GUIText is obsolete. To fix this, double
 click on the error to bring up the file that is causing the issue, and comment out all the lines that have an
 instance of the variable that has been deprecated (the variable name is camSwitchButton). You should comment out 3
 lines.
 
-## Step 6: Configure XR-Plugin Settings
+## Step 7: Configure XR-Plugin Settings
 The project is configured to use Unity's plugin system for VR. The only thing that you have to do is go to Edit >
 Project Settings > XR Plug-in Managment and check the box next to Oculus. If you run into issues,
 [here](https://developer.oculus.com/documentation/unity/unity-conf-settings/) is a document on how to configure
@@ -49,14 +49,14 @@ Package > Custom Package), and it asks you which packages you which packages you
 the packages named MapBox and Third Party Assets. Do not include any of the packages that relate to AR, as we will not be
 using AR. If these packages are included, they will cause errors.
 
-## Step 7: Configure MRTK Settings
+## Step 9: Configure MRTK Settings
 In the project window, go to Scences > Sample Scene. Once it loads, there should be a gameobject called MixedReality
 Toolkit. Click on it. A window should appear that says that no configuration has been assigned to MRTK. Assign the
 MRTK-Quest Profile.
 
-## Step : Add in the data file
+## Step 10: Add in the data file
 Insert the data file that I sent you (in our email convertation) into Assets/Resources.
 
-## Step 9: Run the application
+## Step 11: Run the application
 That should be it. Now you should be able to run the application. See if you can teleport around the screen using the
 hands in the visualization like can be seen in the README here.
