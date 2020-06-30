@@ -43,14 +43,15 @@ Project Settings > XR Plug-in Managment and check the box next to Oculus. If you
 the Oculus SDK with Unity.
 
 ## Step 8: Setup Mapbox
-The installation for Mapbox is relatively straight-forward. All you should have to do is go to this link and follow
-the steps to download the SDK and generate credentials. When you import the project into Unity (Assets > Import
-Package > Custom Package), and it asks you which packages you which packages you would like to import, only import
-the packages named MapBox and Third Party Assets. Do not include any of the packages that relate to AR, as we will not be
-using AR. If these packages are included, they will cause errors.
+The installation for Mapbox is relatively straight-forward. All you should have to do is go to [this]
+(https://www.mapbox.com/install/unity/) link and follow the steps to download the SDK and generate credentials. 
+When you import the project into Unity (Assets > Import Package > Custom Package), and it asks you which packages
+you which packages you would like to import, only import the packages named MapBox and Third Party Assets. Do not
+include any of the packages that relate to AR, as we will not be using AR. If these packages are included, they will
+cause errors.
 
 ## Step 9: Configure MRTK Settings
-In the project window, go to Scences > Sample Scene. Once it loads, there should be a gameobject called MixedReality
+In the project window, go to Scences > MapboxTestScene. Once it loads, there should be a gameobject called MixedReality
 Toolkit. Click on it. A window should appear that says that no configuration has been assigned to MRTK. Assign the
 MRTK-Quest Profile.
 
@@ -59,4 +60,5 @@ Insert the data file that I sent you (in our email convertation) into Assets/Res
 
 ## Step 11: Run the application
 That should be it. Now you should be able to run the application. See if you can teleport around the screen using the
-hands in the visualization like can be seen in the README here.
+hands in the visualization like can be seen in the README [here](https://github.com/provencher/MRTK-Quest). Also,
+you should be able to see red spheres appearing on the screen. These are the data points that are being plotted.
