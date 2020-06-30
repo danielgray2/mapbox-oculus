@@ -106,6 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ca918be2d5f7d49b6ac5f5bf66b33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  colorSpeed: 20
-  sizeMultiplier: 100
+  sizeMultiplier: 0
+  colorSpeed: 0

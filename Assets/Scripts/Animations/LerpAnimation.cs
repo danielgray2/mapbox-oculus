@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
 
 public class LerpAnimation : MonoBehaviour
 {
-    [SerializeField]
+    //[SerializeField]
     public float? dataValue { get; private set; }
-    [SerializeField]
-    public float speed = 1f;
-    public float colorSpeed = 10f;
+    //[SerializeField]
+    public float sizeMultiplier { get; set; }
+    float colorSpeed = 0.1f;
     float? startTime;
     Vector3 smallestSize = new Vector3(0.0001f, 0.0001f, 0.0001f);
     Vector3 largestSize;
     float totalChange;
+    float totalColorChange;
+    float zeroApproximate = 0.001f;
+    bool animateDestruct;
     bool largestSizeReached = false;
     bool smallestSizeReached = false;
+    public bool experiencedChangeOnce = false;
     public SData sData { get; set; }
     DataStore ds;
 
@@ -26,11 +28,11 @@ public class LerpAnimation : MonoBehaviour
             {
                 HandleGrowingLerp();
             }
-            else if (!smallestSizeReached)
+            else if (!smallestSizeReached && animateDestruct)
             {
                 HandleInvisibilityLerp();
             }
-            else
+            else if (animateDestruct)
             {
                 int index = MapStore.Instance.iconGOs.FindIndex(g => g == gameObject);
                 if (index != -1)
@@ -42,20 +44,23 @@ public class LerpAnimation : MonoBehaviour
         }
     }
 
-    public void Setup(SData sData, Vector3 position)
+    public void Setup(SData sData, Vector3 position, bool animateDestruct)
     {
         this.sData = sData;
+        this.sizeMultiplier = MapStore.Instance.map.UnityTileSize * MapStore.Instance.map.transform.localScale.x / MapStore.Instance.iconSize;
         this.dataValue = sData.ccmadRatio;
         this.ds = DataStore.Instance;
+        this.animateDestruct = animateDestruct;
         transform.localScale = smallestSize;
         transform.position = position;
         float propMax = (float)dataValue / ds.avgCCMad;
-        largestSize = new Vector3(propMax, propMax, propMax);
-        Debug.Log("PropMax: " + propMax + " sizeMultiplier: " + " largestSize: " + largestSize.x);
+        largestSize = new Vector3(propMax, propMax, propMax) * sizeMultiplier;
         Color color = new Color(propMax, 1 - propMax, 1 - propMax);
         GetComponent<Renderer>().material.color = color;
         totalChange = Vector3.Distance(smallestSize, largestSize);
+        totalColorChange = color.a;
     }
+
     void HandleGrowingLerp()
     {
         if (startTime == null)
@@ -63,9 +68,9 @@ public class LerpAnimation : MonoBehaviour
             startTime = Time.time;
         }
 
-        if (transform.localScale.x < largestSize.x)
+        if (transform.localScale.x < largestSize.x - zeroApproximate)
         {
-            float growthDone = (Time.time - (float)startTime) * speed;
+            float growthDone = (Time.time - (float)startTime) * sizeMultiplier;
             float fractionOfGrowth = growthDone / totalChange;
             transform.localScale = Vector3.Lerp(transform.localScale, largestSize, fractionOfGrowth);
         }
@@ -83,7 +88,7 @@ public class LerpAnimation : MonoBehaviour
 
         if (transform.localScale.x > smallestSize.x)
         {
-            float shrinkingDone = (Time.time - (float)startTime) * speed;
+            float shrinkingDone = (Time.time - (float)startTime) * sizeMultiplier;
             float fractionOfShrinking = shrinkingDone / totalChange;
             transform.localScale = Vector3.Lerp(transform.localScale, smallestSize, fractionOfShrinking);
         }
@@ -101,10 +106,10 @@ public class LerpAnimation : MonoBehaviour
 
         Color color = GetComponent<Renderer>().material.color;
 
-        if (color.a > 0.001)
+        if (color.a > zeroApproximate)
         {
             float changeDone = (Time.time - (float)startTime) * colorSpeed;
-            float fractionOfChange = changeDone / (totalChange * 10);
+            float fractionOfChange = changeDone / (totalColorChange * 10);
             float newAlpha = Mathf.Lerp(color.a, 0, fractionOfChange);
             GetComponent<Renderer>().material.color = new Color(color.r, color.g, color.b, newAlpha);
         }
@@ -113,5 +118,13 @@ public class LerpAnimation : MonoBehaviour
             smallestSizeReached = true;
             startTime = null;
         }
+    }
+
+    public void UpdateLargestSize(float sizeMultiplier)
+    {
+        this.sizeMultiplier = sizeMultiplier;
+        float propMax = (float)dataValue / ds.avgCCMad;
+        largestSize = new Vector3(propMax, propMax, propMax) * sizeMultiplier;
+        totalChange = Vector3.Distance(smallestSize, largestSize);
     }
 }

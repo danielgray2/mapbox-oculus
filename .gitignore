@@ -77,8 +77,8 @@ crashlytics-build.properties
 # Mapbox
 /Assets/Mapbox*
 
-# Materials
-/Assets/Materials*
+# Resources
+/Assets/Resources*
 
 #MRTK
 /Assets/MixedRealityToolkit*

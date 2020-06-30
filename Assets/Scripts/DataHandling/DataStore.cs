@@ -16,6 +16,9 @@ public sealed class DataStore
     public float minCCMad { get; private set; }
     public float maxCCMad { get; private set; }
     public float avgCCMad { get; private set; }
+    public float medianCCMad { get; private set; }
+    public float lowerQCCMad { get; private set; }
+    public float upperQCCMad { get; private set; }
 
     private static DataStore instance = null;
     private static readonly object padlock = new object();
@@ -52,6 +55,10 @@ public sealed class DataStore
         minCCMad = this.sDataRecords.Min(record => record.ccmadRatio);
         maxCCMad = this.sDataRecords.Max(record => record.ccmadRatio);
         avgCCMad = this.sDataRecords.Average(record => record.ccmadRatio);
+
+        medianCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).ToList());
+        lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record <= medianCCMad).ToList());
+        upperQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record >= medianCCMad).ToList());
     }
 
     // Returns a dictionary where int is the index of the last element
@@ -77,7 +84,7 @@ public sealed class DataStore
         return new DataSlice(dataList, currIndex);
     }
 
-    /*
+    
     public DataSlice SliceTimes(DateTime startTime, DateTime endTime)
     {
         List<SData> dataList = new List<SData>();
@@ -100,7 +107,7 @@ public sealed class DataStore
 
         return new DataSlice(dataList, currIndex);
     }
-    */
+    
 
     // Returns the index of the first element
     // with time >= dateTime
@@ -114,5 +121,17 @@ public sealed class DataStore
             currTime = sDataRecords[currIndex].dateTime;
         }
         return currIndex;
+    }
+
+    // There is a faster way to do this (Median Selection). This will
+    // work for now though.
+    public float CalculateMedian(List<float> values)
+    {
+        List<float> sortedList = new List<float>(values);
+        sortedList.Sort();
+
+        int length = sortedList.Count;
+        int midPoint = length / 2;
+        return length % 2 == 0 ? sortedList.ElementAt(midPoint) : ((sortedList.ElementAt(midPoint) + sortedList.ElementAt(midPoint + 1)) / 2);
     }
 }

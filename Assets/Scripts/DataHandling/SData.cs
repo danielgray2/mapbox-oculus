@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using UnityEngine;
+using Mapbox.Unity.Map;
 
 public class SData
 {
@@ -51,5 +52,21 @@ public class SData
 
         string locString = lat + ", " + lon;
         latLon = Conversions.StringToLatLon(locString);
+    }
+
+
+    public Vector3 AdjustPosForDepth(Vector3 unadjustedPos)
+    {
+        float shiftDown = 0.006f;
+        AbstractMap map = MapStore.Instance.map;
+        float currentElevMeter = map.QueryElevationInMetersAt(this.latLon);
+        float currentElevUnity = map.QueryElevationInUnityUnitsAt(this.latLon);
+        currentElevMeter = currentElevMeter == 0 ? 0.001f : currentElevMeter; // Cheat if necessary
+        float ratio = currentElevUnity / currentElevMeter;
+        // Convert kilometers to meters
+        float depthInMeters = -this.depth * 1000;
+        float adjUnityUnits = ratio * depthInMeters * map.transform.localScale.y;
+        float adjElevUnity = unadjustedPos.y + adjUnityUnits + shiftDown * map.transform.localScale.y;
+        return new Vector3(unadjustedPos.x, adjElevUnity, unadjustedPos.z);
     }
 }

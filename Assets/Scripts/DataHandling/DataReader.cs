@@ -11,6 +11,9 @@ public class DataReader : MonoBehaviour
 {
     [SerializeField]
     GameObject dataPointPrefab;
+
+    [SerializeField]
+    GameObject scrubbingMenu;
     void Start()
     {
         using (var reader = new StreamReader("Assets\\Resources\\coso.csv"))
@@ -31,6 +34,8 @@ public class DataReader : MonoBehaviour
         plotAnimation.transform.position = Vector3.zero;
         TimeSeries ts = plotAnimation.AddComponent<TimeSeries>();
         ts.dataPointPrefab = dataPointPrefab;
-        ts.BeginAnimation(DataStore.Instance.sDataRecords.ElementAt(0).dateTime, 1f);
+        //ts.BeginTimeAnimation(DataStore.Instance.sDataRecords.ElementAt(0).dateTime, 1f);
+        //ts.BeginIndexedAnimation(0, 70, 1f);
+        ts.BeginScrubbedAnimation(scrubbingMenu);
     }
 }
