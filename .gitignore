@@ -101,3 +101,6 @@ crashlytics-build.properties
 
 # XR
 /Assets/XR*
+
+# URP
+/Assets/UniversalRenderPipeline*

@@ -7,6 +7,7 @@ using UnityEngine;
 public sealed class DataStore
 {
     public List<SData> sDataRecords { get; private set;}
+    public List<VData> vDataRecords { get; private set; }
     public float minLat { get; private set; }
     public float maxLat { get; private set; }
     public float avgLat { get; private set; }
@@ -59,6 +60,11 @@ public sealed class DataStore
         medianCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).ToList());
         lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record <= medianCCMad).ToList());
         upperQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record >= medianCCMad).ToList());
+    }
+
+    public void SetVDataRecords(List<VData> vDataRecords)
+    {
+        this.vDataRecords = vDataRecords;
     }
 
     // Returns a dictionary where int is the index of the last element
