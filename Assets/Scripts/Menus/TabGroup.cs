@@ -6,12 +6,9 @@ using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
-    List<TabButton> tabButtons;
-    public TabButton selectedTab;
+    public List<TabButton> tabButtons;
+    protected TabButton selectedTab;
     public List<GameObject> objectsToSwap;
-    Sprite tabIdle;
-    Sprite tabHover;
-    Sprite tabActive;
     
     public void AddButton(TabButton button)
     {
@@ -27,20 +24,21 @@ public class TabGroup : MonoBehaviour
         ResetTabs();
         if(selectedTab == null || button != selectedTab)
         {
-            button.background.sprite = tabHover;
+            
         }
     }
 
     public void OnTabExit(TabButton button)
     {
         ResetTabs();
+        int index = button.transform.GetSiblingIndex();
     }
 
     public void OnTabSelected(TabButton button)
     {
         selectedTab = button;
         ResetTabs();
-        button.background.sprite = tabActive;
+        
         int index = button.transform.GetSiblingIndex();
 
         for(int i = 0; i < objectsToSwap.Count; i++)
@@ -62,8 +60,18 @@ public class TabGroup : MonoBehaviour
         {
             if(selectedTab != null && button == selectedTab)
             {
-                button.background.sprite = tabIdle;
+                
             }
         }
+    }
+
+    public void DisableMenu()
+    {
+        gameObject.SetActive(false);   
+    }
+
+    public void EnableMenu()
+    {
+        gameObject.SetActive(true);
     }
 }

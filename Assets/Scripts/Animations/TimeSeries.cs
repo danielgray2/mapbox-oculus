@@ -11,31 +11,30 @@ using UnityEngine;
 public class TimeSeries : MonoBehaviour
 {
     public enum DataSelectionType { TIME, INDEXED, SCRUBBED };
-    [SerializeField]
-    public GameObject dataPointPrefab;
+
+    public GameObject dataPointPrefab { get; set; }
 
     [SerializeField]
     public float secondsPerHour = 1;
+
+    GameObject parent;
 
     // This param was added so that we could
     // initialize the parent for scrubbing and
     // access it later. Should probably follow
     // the same pattern for the rest, just for
     // consistency.
-    GameObject scrubbingParent;
-    GameObject scrubbingMenuPrefab;
     GameObject scrubbingMenuGo;
     bool beginAnimation = false;
     bool animationBegunOnce = false;
     bool timeAnimStopped = false;
     bool indexedAnimStopped = false;
-    bool scrubbing = false;
-    bool menuActive = false;
     DataSelectionType dSType;
     DateTime startTime;
     int startIndex;
     int numberOfValues;
     Gradient gradient;
+    CalendarMenu cM;
 
     void Update()
     {
@@ -55,7 +54,6 @@ public class TimeSeries : MonoBehaviour
                 PrepForScrubbing();
             }
         }
-        HandleMenuToggle();
     }
 
     public void BeginTimeAnimation(DateTime startTime, float secondsPerHour, Gradient gradient)
@@ -85,34 +83,49 @@ public class TimeSeries : MonoBehaviour
         animationBegunOnce = true;
     }
 
-    public void BeginScrubbedAnimation(GameObject scrubbingMenuPrefab, Gradient gradient)
+    public void EndIndexedAnimation()
+    {
+        animationBegunOnce = false;
+        indexedAnimStopped = true;
+        MapStore.Instance.iconGOs = new List<GameObject>();
+        parent.Destroy();
+    }
+
+    public void BeginScrubbedAnimation(GameObject scrubbingMenuGo, Gradient gradient)
     {
         if (!animationBegunOnce)
         {
             beginAnimation = true;
-            this.scrubbingMenuPrefab = scrubbingMenuPrefab;
+            this.scrubbingMenuGo = scrubbingMenuGo;
             this.dSType = DataSelectionType.SCRUBBED;
             this.gradient = gradient;
         }
         animationBegunOnce = true;
     }
 
+    public void EndScrubbedAnimation()
+    {
+        animationBegunOnce = false;
+        cM.DateUpdated.RemoveListener(HandleScrubbing);
+        MapStore.Instance.iconGOs = new List<GameObject>();
+        parent.Destroy();
+    }
+
     public void PrepForScrubbing()
     {
-        this.scrubbing = true;
-        scrubbingMenuGo = Instantiate(scrubbingMenuPrefab, Vector3.zero, Quaternion.identity);
-        ActivateMenu();
-        CalendarMenu cM = scrubbingMenuGo.GetComponent<CalendarMenu>();
+        cM = scrubbingMenuGo.GetComponent<CalendarMenu>();
+        // TODO: I think that the following line will add the same listener
+        // to the callback every time we change to scrubbing. We should
+        // fix this at some point.
         cM.DateUpdated.AddListener(HandleScrubbing);
-        GameObject parent = new GameObject { name = "DataPoints" };
+        parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
         parent.AddComponent<PointPositionHandler>();
-        this.scrubbingParent = parent;
     }
 
     IEnumerator GraphObjectsTime()
     {
-        GameObject parent = new GameObject{ name = "DataPoints" };
+        parent = new GameObject{ name = "DataPoints" };
         parent.transform.position = Vector3.zero;
         parent.AddComponent<PointPositionHandler>();
         int currIndex = DataStore.Instance.GetIndexTime(this.startTime);
@@ -141,10 +154,11 @@ public class TimeSeries : MonoBehaviour
 
     IEnumerator GraphObjectsIndexed()
     {
-        GameObject parent = new GameObject { name = "DataPoints" };
+        parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
         parent.AddComponent<PointPositionHandler>();
         int currIndex = this.startIndex;
+        indexedAnimStopped = false;
 
         while (!indexedAnimStopped)
         {
@@ -169,7 +183,7 @@ public class TimeSeries : MonoBehaviour
 
     IEnumerator GraphObjectsIndexedGradient()
     {
-        GameObject parent = new GameObject { name = "DataPoints" };
+        parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
         parent.AddComponent<PointPositionHandler>();
         int currIndex = this.startIndex;
@@ -215,39 +229,12 @@ public class TimeSeries : MonoBehaviour
             Vector3 position = MapStore.Instance.map.GeoToWorldPosition(sData.latLon);
             position = sData.AdjustPosForDepth(position);
             GameObject go = Instantiate(dataPointPrefab, position, Quaternion.identity);
-            go.transform.parent = this.scrubbingParent.transform;
+            go.transform.parent = this.parent.transform;
             newIconList.Add(go);
             LerpAnimation lA = go.GetComponent<LerpAnimation>();
             lA.Setup(sData, false, gradient);
         }
 
         MapStore.Instance.iconGOs = newIconList;
-    }
-
-    public void HandleMenuToggle()
-    {
-        if (scrubbing)
-        {
-            if (menuActive && (Input.GetKeyDown(KeyCode.I) || OVRInput.GetDown(OVRInput.RawButton.Y)))
-            {
-                DeactivateMenu();
-            }
-            else if(!menuActive && (Input.GetKeyDown(KeyCode.I) || OVRInput.GetUp(OVRInput.RawButton.Y)))
-            {
-                ActivateMenu();
-            }
-        }
-    }
-
-    protected void ActivateMenu()
-    {
-        scrubbingMenuGo.SetActive(true);
-        menuActive = true;
-    }
-
-    protected void DeactivateMenu()
-    {
-        scrubbingMenuGo.SetActive(false);
-        menuActive = false;
     }
 }

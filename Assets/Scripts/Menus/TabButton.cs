@@ -4,13 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Image))]
 public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
     [SerializeField]
     public TabGroup tabGroup;
-
-    public Image background;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -29,13 +26,6 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
 
     void Start()
     {
-        background = GetComponent<Image>();
         tabGroup.AddButton(this);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

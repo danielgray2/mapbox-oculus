@@ -10,6 +10,9 @@ public sealed class MapStore
 {
     public AbstractMap map { get; set; }
     public List<GameObject> iconGOs = new List<GameObject>();
+    // Contains only the iconGOs that are also within the bounds of the
+    // selector region.
+    public List<GameObject> selectedGOs = new List<GameObject>();
     public float iconSize = 10;
 
     private static MapStore instance = null;

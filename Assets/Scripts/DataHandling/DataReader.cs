@@ -25,12 +25,12 @@ public class DataReader : MonoBehaviour
         ReadSeismicData();
         ReadVeloData();
         
-        GameObject plotAnimation = new GameObject();
-        plotAnimation.transform.position = Vector3.zero;
-        TimeSeries ts = plotAnimation.AddComponent<TimeSeries>();
-        ts.dataPointPrefab = dataPointPrefab;
+        //GameObject plotAnimation = new GameObject();
+        //plotAnimation.transform.position = Vector3.zero;
+        //TimeSeries ts = plotAnimation.AddComponent<TimeSeries>();
+        //ts.dataPointPrefab = dataPointPrefab;
         //ts.BeginTimeAnimation(DataStore.Instance.sDataRecords.ElementAt(0).dateTime, 1f, gradient);
-        ts.BeginIndexedAnimation(0, 70, 1f, sphereColorGradient);
+        //ts.BeginIndexedAnimation(0, 70, 1f, sphereColorGradient);
         //ts.BeginScrubbedAnimation(scrubbingMenu, gradient);
     }
 
