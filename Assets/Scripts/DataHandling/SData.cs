@@ -57,16 +57,15 @@ public class SData
 
     public Vector3 AdjustPosForDepth(Vector3 unadjustedPos)
     {
-        float shiftDown = 0.006f;
         AbstractMap map = MapStore.Instance.map;
         float currentElevMeter = map.QueryElevationInMetersAt(this.latLon);
-        float currentElevUnity = map.QueryElevationInUnityUnitsAt(this.latLon);
+        float currentElevUnity = map.QueryElevationInUnityUnitsAt(this.latLon) * map.transform.localScale.y;
         currentElevMeter = currentElevMeter == 0 ? 0.001f : currentElevMeter; // Cheat if necessary
         float ratio = currentElevUnity / currentElevMeter;
         // Convert kilometers to meters
         float depthInMeters = -this.depth * 1000;
-        float adjUnityUnits = ratio * depthInMeters * map.transform.localScale.y;
-        float adjElevUnity = unadjustedPos.y + adjUnityUnits + shiftDown * map.transform.localScale.y;
+        float adjUnityUnits = ratio * depthInMeters;
+        float adjElevUnity = unadjustedPos.y + adjUnityUnits - currentElevUnity;
         return new Vector3(unadjustedPos.x, adjElevUnity, unadjustedPos.z);
     }
 }

@@ -44,18 +44,18 @@ public class LerpAnimation : MonoBehaviour
         }
     }
 
-    public void Setup(SData sData, Vector3 position, bool animateDestruct)
+    public void Setup(SData sData, bool animateDestruct, Gradient gradient)
     {
         this.sData = sData;
-        this.sizeMultiplier = MapStore.Instance.map.UnityTileSize * MapStore.Instance.map.transform.localScale.x / MapStore.Instance.iconSize;
+        this.sizeMultiplier = MapStore.Instance.map.UnityTileSize * MapStore.Instance.map.transform.localScale.x * MapStore.Instance.iconSize;
         this.dataValue = sData.ccmadRatio;
         this.ds = DataStore.Instance;
         this.animateDestruct = animateDestruct;
         transform.localScale = smallestSize;
-        transform.position = position;
-        float propMax = (float)dataValue / ds.avgCCMad;
+        transform.position = Vector3.zero;
+        float propMax = Mathf.InverseLerp(DataStore.Instance.minCCMad, DataStore.Instance.maxCCMad, (float)dataValue);
         largestSize = new Vector3(propMax, propMax, propMax) * sizeMultiplier;
-        Color color = new Color(propMax, 1 - propMax, 1 - propMax);
+        Color color = gradient.Evaluate(propMax);
         GetComponent<Renderer>().material.color = color;
         totalChange = Vector3.Distance(smallestSize, largestSize);
         totalColorChange = color.a;

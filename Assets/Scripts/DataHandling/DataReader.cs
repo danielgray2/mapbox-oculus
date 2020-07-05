@@ -6,6 +6,8 @@ using CsvHelper;
 using System.IO;
 using System.Globalization;
 using System.Linq;
+using UnityEngine.Assertions;
+using System.Security.Permissions;
 
 public class DataReader : MonoBehaviour
 {
@@ -14,17 +16,22 @@ public class DataReader : MonoBehaviour
 
     [SerializeField]
     GameObject scrubbingMenu;
+
+    [SerializeField]
+    Gradient sphereColorGradient;
+
     void Start()
     {
         ReadSeismicData();
+        ReadVeloData();
         
         GameObject plotAnimation = new GameObject();
         plotAnimation.transform.position = Vector3.zero;
         TimeSeries ts = plotAnimation.AddComponent<TimeSeries>();
         ts.dataPointPrefab = dataPointPrefab;
-        //ts.BeginTimeAnimation(DataStore.Instance.sDataRecords.ElementAt(0).dateTime, 1f);
-        //ts.BeginIndexedAnimation(0, 70, 1f);
-        ts.BeginScrubbedAnimation(scrubbingMenu);
+        //ts.BeginTimeAnimation(DataStore.Instance.sDataRecords.ElementAt(0).dateTime, 1f, gradient);
+        ts.BeginIndexedAnimation(0, 70, 1f, sphereColorGradient);
+        //ts.BeginScrubbedAnimation(scrubbingMenu, gradient);
     }
 
     private void ReadSeismicData()
@@ -52,8 +59,27 @@ public class DataReader : MonoBehaviour
         {
             List<VData> vDataRecords = new List<VData>();
             csv.Configuration.RegisterClassMap<CSVToVData>();
-            var sDataEnumberable = csv.GetRecords<VData>();
+            var vDataEnumerable = csv.GetRecords<VData>();
+            foreach (VData vData in vDataEnumerable)
+            {
+                if (CheckBounds(vData.lat, vData.lon))
+                {
+                    vData.SetLatLon();
+                    vDataRecords.Add(vData);
+                }
+                
+            }
             DataStore.Instance.SetVDataRecords(vDataRecords);
         }
+    }
+
+    private bool CheckBounds(float lat, float lon)
+    {
+        if (lat < DataStore.Instance.minLat ||
+           lat > DataStore.Instance.maxLat ||
+           lon < DataStore.Instance.minLon ||
+           lon > DataStore.Instance.maxLon)
+            return false;
+        return true;
     }
 }

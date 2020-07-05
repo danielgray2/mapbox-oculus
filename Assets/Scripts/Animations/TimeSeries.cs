@@ -35,6 +35,7 @@ public class TimeSeries : MonoBehaviour
     DateTime startTime;
     int startIndex;
     int numberOfValues;
+    Gradient gradient;
 
     void Update()
     {
@@ -57,7 +58,7 @@ public class TimeSeries : MonoBehaviour
         HandleMenuToggle();
     }
 
-    public void BeginTimeAnimation(DateTime startTime, float secondsPerHour)
+    public void BeginTimeAnimation(DateTime startTime, float secondsPerHour, Gradient gradient)
     {
         if (!animationBegunOnce)
         {
@@ -65,11 +66,12 @@ public class TimeSeries : MonoBehaviour
             this.startTime = startTime;
             this.secondsPerHour = secondsPerHour;
             this.dSType = DataSelectionType.TIME;
+            this.gradient = gradient;
         }
         animationBegunOnce = true;
     }
 
-    public void BeginIndexedAnimation(int startIndex, int numberOfValues, float secondsPerHour)
+    public void BeginIndexedAnimation(int startIndex, int numberOfValues, float secondsPerHour, Gradient gradient)
     {
         if (!animationBegunOnce)
         {
@@ -78,17 +80,19 @@ public class TimeSeries : MonoBehaviour
             this.secondsPerHour = secondsPerHour;
             this.numberOfValues = numberOfValues;
             this.dSType = DataSelectionType.INDEXED;
+            this.gradient = gradient;
         }
         animationBegunOnce = true;
     }
 
-    public void BeginScrubbedAnimation(GameObject scrubbingMenuPrefab)
+    public void BeginScrubbedAnimation(GameObject scrubbingMenuPrefab, Gradient gradient)
     {
         if (!animationBegunOnce)
         {
             beginAnimation = true;
             this.scrubbingMenuPrefab = scrubbingMenuPrefab;
             this.dSType = DataSelectionType.SCRUBBED;
+            this.gradient = gradient;
         }
         animationBegunOnce = true;
     }
@@ -125,7 +129,7 @@ public class TimeSeries : MonoBehaviour
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
                 LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, Vector3.zero, true);
+                lA.Setup(sData, true, gradient);
             }
             if (dataSlice.lastIndex < DataStore.Instance.sDataRecords.Count)
                 currIndex = dataSlice.lastIndex;
@@ -153,7 +157,7 @@ public class TimeSeries : MonoBehaviour
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
                 LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, Vector3.zero, true);
+                lA.Setup(sData, true, gradient);
                 if (currIndex < DataStore.Instance.sDataRecords.Count - 1)
                     currIndex++;
                 else
@@ -181,7 +185,7 @@ public class TimeSeries : MonoBehaviour
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
                 LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, Vector3.zero, true);
+                lA.Setup(sData, true, gradient);
                 if (currIndex < DataStore.Instance.sDataRecords.Count - 1)
                     currIndex++;
                 else
@@ -214,7 +218,7 @@ public class TimeSeries : MonoBehaviour
             go.transform.parent = this.scrubbingParent.transform;
             newIconList.Add(go);
             LerpAnimation lA = go.GetComponent<LerpAnimation>();
-            lA.Setup(sData, position, false);
+            lA.Setup(sData, false, gradient);
         }
 
         MapStore.Instance.iconGOs = newIconList;
