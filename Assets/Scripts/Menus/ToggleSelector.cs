@@ -20,7 +20,7 @@ public class ToggleSelector : MonoBehaviour
         selectorShapeGo = Instantiate(selectorShapePrefab);
         captureBtnGo = Instantiate(captureBtnPrefab);
 
-        captureBtnGo.GetComponent<CaptureData>().selectorShape = selectorShapeGo;
+        captureBtnGo.GetComponent<DataCapturer>().selectorShape = selectorShapeGo;
 
         selectorShapeGo.SetActive(false);
         captureBtnGo.SetActive(false);

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7508915127992492696}
   - component: {fileID: 7508915127992492697}
   - component: {fileID: 7508915127992492693}
+  - component: {fileID: -8770056461278424893}
   m_Layer: 0
   m_Name: DataPoint
   m_TagString: Untagged
@@ -107,3 +108,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   experiencedChangeOnce: 0
+--- !u!114 &-8770056461278424893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7508915127992492698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97b7c8b351c69b40a22ffee5828d5c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
