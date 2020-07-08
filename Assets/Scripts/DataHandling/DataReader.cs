@@ -62,7 +62,7 @@ public class DataReader : MonoBehaviour
             var vDataEnumerable = csv.GetRecords<VData>();
             foreach (VData vData in vDataEnumerable)
             {
-                if (CheckBounds(vData.lat, vData.lon))
+                if (CheckBounds(vData.lat, vData.lon) && vData.depth > -2f)
                 {
                     vData.SetLatLon();
                     vDataRecords.Add(vData);

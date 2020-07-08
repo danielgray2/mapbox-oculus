@@ -9,7 +9,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class TimeSeries : MonoBehaviour
+public class TimeSeriesDelete : MonoBehaviour
 {
     public enum DataSelectionType { TIME, INDEXED, SCRUBBED };
 
@@ -46,11 +46,11 @@ public class TimeSeries : MonoBehaviour
             {
                 StartCoroutine("GraphObjectsTime");
             }
-            else if(this.dSType == DataSelectionType.INDEXED)
+            else if (this.dSType == DataSelectionType.INDEXED)
             {
                 StartCoroutine("GraphObjectsIndexed");
             }
-            else if(this.dSType == DataSelectionType.SCRUBBED)
+            else if (this.dSType == DataSelectionType.SCRUBBED)
             {
                 PrepForScrubbing();
             }
@@ -88,7 +88,7 @@ public class TimeSeries : MonoBehaviour
     {
         animationBegunOnce = false;
         indexedAnimStopped = true;
-        MapStore.Instance.iconGOs = new List<GameObject>();
+        MapStore.Instance.secondaryIconGOs = new List<GameObject>();
         parent.Destroy();
     }
 
@@ -108,7 +108,7 @@ public class TimeSeries : MonoBehaviour
     {
         animationBegunOnce = false;
         cM.DateUpdated.RemoveListener(HandleScrubbing);
-        MapStore.Instance.iconGOs = new List<GameObject>();
+        MapStore.Instance.secondaryIconGOs = new List<GameObject>();
         parent.Destroy();
     }
 
@@ -121,28 +121,28 @@ public class TimeSeries : MonoBehaviour
         cM.DateUpdated.AddListener(HandleScrubbing);
         parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
-        parent.AddComponent<PointPositionHandler>();
+        parent.AddComponent<PointPositionHandlerDelete>();
     }
 
     IEnumerator GraphObjectsTime()
     {
-        parent = new GameObject{ name = "DataPoints" };
+        parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
-        parent.AddComponent<PointPositionHandler>();
+        parent.AddComponent<PointPositionHandlerDelete>();
         int currIndex = DataStore.Instance.GetIndexTime(this.startTime);
         float hoursToAdd = 3;
         DataSlice dataSlice;
         while (!timeAnimStopped)
         {
             dataSlice = DataStore.Instance.SliceIndexTime(currIndex, hoursToAdd);
-            foreach(SData sData in dataSlice.dataList)
+            foreach (SData sData in dataSlice.dataList)
             {
-                Vector3 position = MapStore.Instance.map.GeoToWorldPosition(sData.latLon);
+                Vector3 position = MapStore.Instance.secondaryMap.GeoToWorldPosition(sData.latLon);
                 Vector3 adjPos = sData.AdjustPosForDepth(position);
                 GameObject go = Instantiate(dataPointPrefab, adjPos, Quaternion.identity);
                 go.transform.parent = parent.transform;
-                MapStore.Instance.iconGOs.Add(go);
-                LerpAnimation lA = go.GetComponent<LerpAnimation>();
+                MapStore.Instance.secondaryIconGOs.Add(go);
+                LerpAnimationDelete lA = go.GetComponent<LerpAnimationDelete>();
                 lA.Setup(sData, true, gradient);
             }
             if (dataSlice.lastIndex < DataStore.Instance.sDataRecords.Count)
@@ -157,21 +157,21 @@ public class TimeSeries : MonoBehaviour
     {
         parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
-        parent.AddComponent<PointPositionHandler>();
+        parent.AddComponent<PointPositionHandlerDelete>();
         int currIndex = this.startIndex;
         indexedAnimStopped = false;
 
         while (!indexedAnimStopped)
         {
-            while(MapStore.Instance.iconGOs.Count < numberOfValues)
+            while (MapStore.Instance.secondaryIconGOs.Count < numberOfValues)
             {
                 SData sData = DataStore.Instance.sDataRecords.ElementAt(currIndex);
-                Vector3 pos = MapStore.Instance.map.GeoToWorldPosition(sData.latLon);
+                Vector3 pos = MapStore.Instance.secondaryMap.GeoToWorldPosition(sData.latLon);
                 Vector3 adjPos = sData.AdjustPosForDepth(pos);
                 GameObject go = Instantiate(dataPointPrefab, adjPos, Quaternion.identity);
                 go.transform.parent = parent.transform;
-                MapStore.Instance.iconGOs.Add(go);
-                LerpAnimation lA = go.GetComponent<LerpAnimation>();
+                MapStore.Instance.secondaryIconGOs.Add(go);
+                LerpAnimationDelete lA = go.GetComponent<LerpAnimationDelete>();
                 lA.Setup(sData, true, gradient);
                 if (currIndex < DataStore.Instance.sDataRecords.Count - 1)
                     currIndex++;
@@ -182,6 +182,7 @@ public class TimeSeries : MonoBehaviour
         }
     }
 
+    /*
     IEnumerator GraphObjectsIndexedGradient()
     {
         parent = new GameObject { name = "DataPoints" };
@@ -209,6 +210,7 @@ public class TimeSeries : MonoBehaviour
             yield return new WaitForSeconds(secondsPerHour);
         }
     }
+    */
 
     public void HandleScrubbing(List<DateTime> startAndEndTimes)
     {
@@ -220,22 +222,22 @@ public class TimeSeries : MonoBehaviour
         // Remove the previous go's since we don't do this is in the
         // lerp animation since we are scrubbing. We should find a better
         // solution for handling animations on data points
-        foreach (GameObject go in MapStore.Instance.iconGOs)
+        foreach (GameObject go in MapStore.Instance.secondaryIconGOs)
         {
             Destroy(go);
         }
-        
-        foreach(SData sData in newDataList)
+
+        foreach (SData sData in newDataList)
         {
-            Vector3 position = MapStore.Instance.map.GeoToWorldPosition(sData.latLon);
+            Vector3 position = MapStore.Instance.secondaryMap.GeoToWorldPosition(sData.latLon);
             position = sData.AdjustPosForDepth(position);
             GameObject go = Instantiate(dataPointPrefab, position, Quaternion.identity);
             go.transform.parent = this.parent.transform;
             newIconList.Add(go);
-            LerpAnimation lA = go.GetComponent<LerpAnimation>();
+            LerpAnimationDelete lA = go.GetComponent<LerpAnimationDelete>();
             lA.Setup(sData, false, gradient);
         }
 
-        MapStore.Instance.iconGOs = newIconList;
+        MapStore.Instance.secondaryIconGOs = newIconList;
     }
 }

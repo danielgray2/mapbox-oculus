@@ -104,3 +104,6 @@ crashlytics-build.properties
 
 # URP
 /Assets/UniversalRenderPipeline*
+
+# AllSky
+/Assets/AllSky*
