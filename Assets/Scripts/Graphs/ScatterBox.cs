@@ -224,7 +224,7 @@ public class ScatterBox : MonoBehaviour, IGraph
             currMarker.transform.rotation = xLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
 
-            value = ((yMax - yMin) / i) + yMin / i;
+            value = ((yMax - yMin) / i) + yMin;
             currMarker = Instantiate(markerPrefab, markerParent);
             currMarker.transform.position = new Vector3(0, plotScale / i, 0);
             currMarker.transform.rotation = yLabel.transform.rotation;

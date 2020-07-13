@@ -65,7 +65,7 @@ public sealed class DataStore
         avgCCMad = this.sDataRecords.Average(record => record.ccmadRatio);
 
         medianCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).ToList());
-        lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record <= medianCCMad).ToList());
+        lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record < medianCCMad).ToList());
         upperQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record >= medianCCMad).ToList());
     }
 

@@ -19,6 +19,9 @@ public class GraphMenu : MonoBehaviour
     GameObject yAxisDD;
 
     [SerializeField]
+    GameObject histogramPrefab;
+
+    [SerializeField]
     GameObject zAxisDD;
 
     [SerializeField]
@@ -30,6 +33,7 @@ public class GraphMenu : MonoBehaviour
     TMP_Dropdown zAxisDDObj;
 
     private static string SCATTERPLOT = "Scatterplot";
+    private static string HISTOGRAM = "Histogram";
 
     private void Start()
     {
@@ -58,6 +62,10 @@ public class GraphMenu : MonoBehaviour
             // of methods so that we can grow
             GenerateScatterplot(xAxis, yAxis, zAxis);
         }
+        else if(graphType == HISTOGRAM)
+        {
+            GenerateHistogram(xAxis);
+        }
     }
 
     public void GenerateScatterplot(string xName, string yName, string zName)
@@ -75,13 +83,28 @@ public class GraphMenu : MonoBehaviour
         scatterplotObj.InitializeScatterplot(sDataList, xName, yName, zName);
     }
 
+    public void GenerateHistogram(string xName)
+    {
+        List<SData> sDataList = new List<SData>();
+
+        foreach (GameObject pointGo in MapStore.Instance.selectedGOs)
+        {
+            SData sData = pointGo.GetComponent<LerpAnimation>().sData;
+            sDataList.Add(sData);
+        }
+
+        GameObject histogramGo = Instantiate(histogramPrefab, Vector3.zero, Quaternion.identity);
+        Histogram scatterplotObj = histogramGo.GetComponentInChildren<Histogram>();
+        scatterplotObj.InitializeHistogram(sDataList, xName);
+    }
+
     // Take a look at the GraphTypeEnum
     // class to get all of the currently
     // implemented graphs. Probably should
     // figure out a better way to do this
     private void SetGraphOptions()
     {
-        List<string> graphTypes = new List<string> { SCATTERPLOT };
+        List<string> graphTypes = new List<string> { SCATTERPLOT, HISTOGRAM };
         List<TMP_Dropdown.OptionData> optionsList = CreateOptions(graphTypes);
         graphTypeDDObj.options = optionsList;
     }
