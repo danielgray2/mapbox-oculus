@@ -58,7 +58,25 @@ MRTK-Quest Profile.
 ## Step 10: Add in the data file
 Insert the data file that I sent you (in our email convertation) into Assets/Resources.
 
-## Step 11: Run the application
-That should be it. Now you should be able to run the application. See if you can teleport around the screen using the
-hands in the visualization like can be seen in the README [here](https://github.com/provencher/MRTK-Quest). Also,
-you should be able to see red spheres appearing on the screen. These are the data points that are being plotted.
+## Step 11: Add in the mesh data file
+Insert the new data file that I sent you (in our email conversation) into Assets/Resources.
+
+## Step 12: Upgrade to the URP
+Unity has a couple of different render pipelines that users can use. In order to make the mesh coloring work, I needed
+to change to the Universal Render Pipeline (URP). Follow the instructions 
+[here](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/InstallURPIntoAProject.html)
+to install and configure the URP.
+
+## Step 13: Update your shaders
+Since we are now using the URP, we need to update our shaders to reflect that.
+See [here](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/upgrading-your-shaders.html)
+for a tutorial on how to do that.
+
+## Step 14: Update MRTK shaders
+For some reason, the shaders that MRTK uses do not update when all of the shaders are updated. In order to do update these
+shaders, select "Mixed Reality Toolkit" from the menu then go to "Utilities" => "Upgrade MRTK Shaders for Lightweight Render Pipeline".
+After this, the shaders should be ready to go.
+
+## Step 15: Run the application
+That should be it. Now you should be able to run the application. If everything is working, you should have all of the functionality
+that I demonstrated in the videos.
