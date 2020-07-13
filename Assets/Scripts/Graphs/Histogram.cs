@@ -41,6 +41,7 @@ public class Histogram : MonoBehaviour, IGraph
     float xMin;
     float maxBin;
     float minBin;
+    int NUMDECIMALS = 4;
 
     bool initialized = false;
 
@@ -77,20 +78,32 @@ public class Histogram : MonoBehaviour, IGraph
     public void CreateBars()
     {
         float iqr = CalcIQR(xName);
-        binWidth = CalcBinWidth(iqr, xMin, xMax, dataList.Count);
-        normedWidth = NormalizeValue(binWidth, xMin, xMax);
-        numBins = (int)Mathf.Floor(1 / normedWidth);
-
+        binWidth = CalcBinWidth(iqr, dataList.Count);
+        numBins = Mathf.CeilToInt((xMax - xMin) / binWidth);
+        normedWidth = 1.0f / (float)numBins;
+        Debug.Log("xMax: " + xMax);
+        Debug.Log("xMin: " + xMin);
         List<int> binNums = new List<int>();
-        for (var i = 0; i < numBins - 1; i++)
+        for (var i = 0; i < numBins; i++)
         {
-            float x = i * normedWidth;
+            //float x = i * normedWidth;
 
+            /*
             int val = dataList
                 .Select(s => (float)s.GetType().GetProperty(xName).GetValue(s, null))
                 .Where(s => s >= binWidth * i && s < binWidth * (i + 1))
                 .Count();
-
+            */
+            List<float> selectedVals = new List<float>();
+            for (int j = 0; j < dataList.Count; j++)
+            {
+                var currVal = (float)dataList[j].GetType().GetProperty(xName).GetValue(dataList[j], null);
+                if(currVal >= xMin + (binWidth * i) && currVal < xMin + (binWidth * (i + 1)))
+                {
+                    selectedVals.Add(currVal);
+                }
+            }
+            int val = selectedVals.Count;
             binNums.Add(val);
         }
 
@@ -175,11 +188,10 @@ public class Histogram : MonoBehaviour, IGraph
     }
 
     // n is the number of observations
-    public float CalcBinWidth(float iqr, float min, float max, float n)
+    public float CalcBinWidth(float iqr, float n)
     {
-        float range = max - min;
-        float h = (float)(2 * iqr * Math.Pow((double)n, -1 / 3));
-        return range / h;
+        double exponent = 1.0 / 3.0;
+        return (float)(2 * iqr / Math.Pow((double)n, exponent));
     }
 
     void ScaleAxes()
@@ -196,7 +208,7 @@ public class Histogram : MonoBehaviour, IGraph
     {
         TextMesh xTextMesh = xLabel.GetComponent<TextMesh>();
         xTextMesh.text = xName;
-        float xPos = (xAxis.transform.localScale.x + xLabel.transform.localScale.x) / 2;
+        float xPos = xAxis.transform.localScale.x / 2;
         xLabel.transform.position = new Vector3(xPos, -offset * 2, 0);
     }
 
@@ -208,18 +220,21 @@ public class Histogram : MonoBehaviour, IGraph
 
         for (int i = 1; i <= numMarkersPerAxis; i++)
         {
-            float value = binWidth * numBins / i;
+            float value = (binWidth * numBins / i) + xMin;
             currMarker = Instantiate(markerPrefab, markerParent);
             currMarker.transform.position = new Vector3((normedWidth * numBins / i) + offset, -offset/2, 0);
             //Vector3 origRotation = xLabel.transform.rotation.eulerAngles;
             //currMarker.transform.rotation = Quaternion.Euler(origRotation.x, origRotation.y, origRotation.z - 45);
             currMarker.transform.rotation = xLabel.transform.rotation;
+            value = (float)Math.Round(value, 1);
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
+            currMarker.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
 
             value = ((maxBin - minBin) / i) + minBin;
             currMarker = Instantiate(markerPrefab, markerParent);
             currMarker.transform.position = new Vector3(-offset, plotScale / i + offset, 0);
             currMarker.transform.rotation = xLabel.transform.rotation;
+            value = (float)Math.Round(value, 1);
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
         }
     }

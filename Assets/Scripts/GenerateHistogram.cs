@@ -19,7 +19,7 @@ public class GenerateHistogram : MonoBehaviour
 
         foreach(KeyValuePair<int, int> keyVal in valuesDict)
         {
-            Debug.Log(keyVal.Key + ": " + keyVal.Value);
+            //Debug.Log(keyVal.Key + ": " + keyVal.Value);
         }
     }
 
@@ -29,7 +29,7 @@ public class GenerateHistogram : MonoBehaviour
         for(int i = 0; i < 1000; i++)
         {
             SData sData = new SData();
-            int value = random.Next(0, 10);
+            int value = random.Next(1000, 1100);
             sData.ccmadRatio = value;
             if (!valuesDict.ContainsKey(value))
             {
