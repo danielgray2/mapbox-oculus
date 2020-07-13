@@ -58,7 +58,7 @@ MRTK-Quest Profile.
 ## Step 10: Add in the data file
 Insert the data file that I sent you (in our email convertation) into Assets/Resources.
 
-# Step 11: Add in the mesh data file
+## Step 11: Add in the mesh data file
 Insert the new data file that I sent you (in our email conversation) into Assets/Resources.
 
 ## Step 12: Upgrade to the URP
