@@ -107,3 +107,6 @@ crashlytics-build.properties
 
 # AllSky
 /Assets/AllSky*
+
+# Packages
+/Packages/*

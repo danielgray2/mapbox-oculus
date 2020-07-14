@@ -5,8 +5,8 @@ using UnityEngine;
 using CsvHelper;
 using System.IO;
 using System.Globalization;
-using System.Linq;
 using UnityEngine.Assertions;
+using Microsoft.Data.Analysis;
 using System.Security.Permissions;
 
 public class DataReader : MonoBehaviour
@@ -22,6 +22,7 @@ public class DataReader : MonoBehaviour
 
     void Start()
     {
+        StringDataFrameColumn strings = new StringDataFrameColumn("Strings", 3); // Makes a column of length 3. Filled with nulls initially
         ReadSeismicData();
         ReadVeloData();
         
