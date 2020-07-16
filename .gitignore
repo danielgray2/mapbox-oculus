@@ -110,3 +110,7 @@ crashlytics-build.properties
 
 # Packages
 /Packages/*
+
+# Third Party
+/Assets/ThirdParty/*
+/Assets/ThirdParty*

@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Data.Analysis;
 using JetBrains.Annotations;
 
 using UnityEngine;
+using Mapbox.Map;
 
 public sealed class DataStore
 {
+    public Dictionary<string, DataObj> dataMap = new Dictionary<string, DataObj>();
     public List<SData> sDataRecords { get; private set;}
     public List<VData> vDataRecords { get; private set; }
     public List<int> triangles { get; private set; }
@@ -48,8 +51,11 @@ public sealed class DataStore
         }
     }
 
-    public void SetSDataRecords(List<SData> sDataRecords)
+    public void AddDataSet(DataFrame df, string name)
     {
+        DataObj dO = new DataObj(df);
+        dataMap.Add(name, dO);
+        /*
         this.sDataRecords = sDataRecords;
 
         minLat = this.sDataRecords.Min(record => record.lat);
@@ -67,6 +73,7 @@ public sealed class DataStore
         medianCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).ToList());
         lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record < medianCCMad).ToList());
         upperQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record >= medianCCMad).ToList());
+        */
     }
 
     public void SetVDataRecords(List<VData> vDataRecords)

@@ -23,7 +23,7 @@ public class DataReader : MonoBehaviour
     void Start()
     {
         StringDataFrameColumn strings = new StringDataFrameColumn("Strings", 3); // Makes a column of length 3. Filled with nulls initially
-        ReadSeismicData();
+        //ReadSeismicData();
         ReadVeloData();
         
         //GameObject plotAnimation = new GameObject();
@@ -35,8 +35,10 @@ public class DataReader : MonoBehaviour
         //ts.BeginScrubbedAnimation(scrubbingMenu, gradient);
     }
 
-    private void ReadSeismicData()
+    private void ReadCSV(string pathToCsv, string name)
     {
+        DataFrame csvDataFrame = DataFrame.LoadCsv(pathToCsv);
+        /*
         using (var reader = new StreamReader("Assets\\Resources\\coso.csv"))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
@@ -51,6 +53,7 @@ public class DataReader : MonoBehaviour
             }
             DataStore.Instance.SetSDataRecords(sDataRecords);
         }
+        */
     }
 
     private void ReadVeloData()
