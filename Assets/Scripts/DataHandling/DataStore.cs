@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Data.Analysis;
-using JetBrains.Annotations;
-
 using UnityEngine;
-using Mapbox.Map;
 
 public sealed class DataStore
 {
-    public Dictionary<string, DataObj> dataMap = new Dictionary<string, DataObj>();
+    public Dictionary<string, DataObj> dataDict = new Dictionary<string, DataObj>();
     public List<SData> sDataRecords { get; private set;}
     public List<VData> vDataRecords { get; private set; }
+    ///*
     public List<int> triangles { get; private set; }
     public float minLat { get; private set; }
     public float maxLat { get; private set; }
@@ -27,6 +24,7 @@ public sealed class DataStore
     public float medianCCMad { get; private set; }
     public float lowerQCCMad { get; private set; }
     public float upperQCCMad { get; private set; }
+    //*/
     public List<List<List<VData>>> depthList { get; private set; }
     public float maxVpVs { get; private set; }
     public float minVpVs { get; private set; }
@@ -54,8 +52,8 @@ public sealed class DataStore
     public void AddDataSet(DataFrame df, string name)
     {
         DataObj dO = new DataObj(df);
-        dataMap.Add(name, dO);
-        /*
+        dataDict.Add(name, dO);
+        ///*
         this.sDataRecords = sDataRecords;
 
         minLat = this.sDataRecords.Min(record => record.lat);
@@ -73,67 +71,20 @@ public sealed class DataStore
         medianCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).ToList());
         lowerQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record < medianCCMad).ToList());
         upperQCCMad = CalculateMedian(this.sDataRecords.Select(record => record.ccmadRatio).Where(record => record >= medianCCMad).ToList());
-        */
+        //*/
     }
 
     public void SetVDataRecords(List<VData> vDataRecords)
     {
         this.vDataRecords = vDataRecords;
-        minVpVs = this.vDataRecords.Min(record => record.vPvS);
-        maxVpVs = this.vDataRecords.Max(record => record.vPvS);
-    }
-
-    // Returns a dictionary where int is the index of the last element
-    // returned by the array in the original array. The dictionary will
-    // only have 1 element.
-    public DataSlice SliceIndexTime(int indexInArray, float hours)
-    {
-        List<SData> dataList = new List<SData>();
-        DateTime startTime = sDataRecords.ElementAt(indexInArray).dateTime;
-        DateTime endTime = startTime.AddHours(hours);
-
-        dataList.Add(sDataRecords.ElementAt(indexInArray));
-        DateTime currTime = startTime;
-        int currIndex = indexInArray;
-
-        while(currTime <= endTime)
-        {
-            currIndex++;
-            currTime = sDataRecords.ElementAt(currIndex).dateTime;
-            dataList.Add(sDataRecords.ElementAt(currIndex));
-        }
-
-        return new DataSlice(dataList, currIndex);
-    }
-
-    
-    public DataSlice SliceTimes(DateTime startTime, DateTime endTime)
-    {
-        List<SData> dataList = new List<SData>();
-
-        DateTime currTime = sDataRecords.ElementAt(0).dateTime;
-        int currIndex = 0;
-
-        while (currTime < startTime)
-        {
-            currIndex++;
-            currTime = sDataRecords.ElementAt(currIndex).dateTime;
-        }
-
-        while(currTime < endTime)
-        {
-            dataList.Add(sDataRecords.ElementAt(currIndex));
-            currIndex++;
-            currTime = sDataRecords.ElementAt(currIndex).dateTime;
-        }
-
-        return new DataSlice(dataList, currIndex);
+        //minVpVs = this.vDataRecords.Min(record => record.vPvS);
+        //maxVpVs = this.vDataRecords.Max(record => record.vPvS);
     }
     
-
     // Returns the index of the first element
-    // with time >= dateTime
-    public int GetIndexTime(DateTime dateTime)
+    // with value >= val
+    /*
+    public int GetIndexAttr<T>(string dfName, string attrName, T val)
     {
         int currIndex = 0;
         DateTime currTime = sDataRecords[currIndex].dateTime;
@@ -144,9 +95,11 @@ public sealed class DataStore
         }
         return currIndex;
     }
+    */
 
     // There is a faster way to do this (Median Selection). This will
     // work for now though.
+    /*
     public float CalculateMedian(List<float> values)
     {
         List<float> sortedList = new List<float>(values);
@@ -156,6 +109,7 @@ public sealed class DataStore
         int midPoint = length / 2;
         return length % 2 == 0 ? sortedList.ElementAt(midPoint) : ((sortedList.ElementAt(midPoint) + sortedList.ElementAt(midPoint + 1)) / 2);
     }
+    */
 
     // This can be optimized by sorting each depth, then each
     // lon grouped by depth, then each lat grouped by lon
@@ -241,4 +195,12 @@ public sealed class DataStore
         }
         return returnList;
     }
+
+    public float CalculateMedian(List<float> dataList) { return 0f; }
+
+    public DataSlice SliceByIndex() { return new DataSlice(new List<SData>(), 0); }
+    public int GetIndexTime(DateTime startTime) { return 0; }
+    public DataSlice SliceIndexTime(float currIndex, float hours) { return new DataSlice(new List<SData>(), 0); }
+
+    public DataSlice SliceTimes(DateTime startTime, DateTime endTime) { return new DataSlice(new List<SData>(), 0); }
 }

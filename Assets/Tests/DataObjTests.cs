@@ -56,7 +56,7 @@ namespace Tests
         public void TestCalcMax()
         {
             float max = dO.GetMax("colOne");
-            Assert.AreEqual(3f, max);
+            Assert.AreEqual(4f, max);
         }
 
         [Test]
@@ -81,10 +81,65 @@ namespace Tests
         }
 
         [Test]
-        public void TestCalcMinStrings()
+        public void TestCalcMinFromCsv()
         {
             float min = dOCsv.GetMin("colOne");
             Assert.AreEqual(1f, min, 0.001);
+        }
+
+        [Test]
+        public void TestCalcMaxFromCSV()
+        {
+            float max = dOCsv.GetMax("colOne");
+            Assert.AreEqual(4f, max);
+        }
+
+        [Test]
+        public void TestCalcAvgFromCSV()
+        {
+            float avg = dOCsv.GetAvg("colOne");
+            Assert.AreEqual(2.5f, avg, 0.001);
+        }
+
+        [Test]
+        public void TestCalcLowerQrtFromCSV()
+        {
+            float lowerQrt = dOCsv.GetLowerQrt("colOne");
+            Assert.AreEqual(1.5f, lowerQrt, 0.001);
+        }
+
+        [Test]
+        public void TestCalcUpperQrtFromCSV()
+        {
+            float upperQrt = dOCsv.GetUpperQrt("colOne");
+            Assert.AreEqual(3.5f, upperQrt, 0.001);
+        }
+
+        [Test]
+        public void TestSliceByAttrInt()
+        {
+            DataObj retObj = dO.SliceByAttribute("colOne", 2, 3);
+            DataFrame retDf = retObj.df;
+            Assert.AreEqual(2f, retDf[0, 0]);
+            Assert.AreEqual(2, retDf.Rows.Count());
+        }
+
+        [Test]
+        public void TestSliceByAttrStr()
+        {
+            DataObj retObj = dOCsv.SliceByAttribute("colThree", 'b', 'd');
+            DataFrame retDf = retObj.df;
+            Assert.AreEqual(2f, retDf[0, 0]);
+            Assert.AreEqual(3, retDf.Rows.Count());
+        }
+
+        [Test]
+        public void TestSliceByIndex()
+        {
+            DataObj retObj = dOCsv.SliceByIndex(1, 3);
+            DataFrame retDf = retObj.df;
+            Assert.AreEqual(2f, retDf[0, 0]);
+            Assert.AreEqual(3, retDf.Rows.Count());
         }
     }
 }
