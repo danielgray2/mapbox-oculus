@@ -33,10 +33,10 @@ public class PointPositionHandler : MonoBehaviour
 
     void UpdateLocation(GameObject go)
     {
-        SData sData = go.GetComponent<LerpAnimation>().sData;
-        Vector3 unadjustedPos = MapStore.Instance.map.GeoToWorldPosition(sData.latLon, true);
-        Vector3 adjustedPos = go.GetComponent<LerpAnimation>().sData.AdjustPosForDepth(unadjustedPos);
-        go.transform.localPosition = adjustedPos;
+        //SData sData = go.GetComponent<LerpAnimation>().sData;
+        //Vector3 unadjustedPos = MapStore.Instance.map.GeoToWorldPosition(sData.latLon, true);
+        //Vector3 adjustedPos = go.GetComponent<LerpAnimation>().sData.AdjustPosForDepth(unadjustedPos);
+        //go.transform.localPosition = adjustedPos;
     }
 
     void UpdateScale(GameObject go)
@@ -44,13 +44,15 @@ public class PointPositionHandler : MonoBehaviour
         int numDecimals = 3;
         float newSizeMultiplier = MapStore.Instance.map.UnityTileSize * MapStore.Instance.map.transform.localScale.x / MapStore.Instance.iconSize;
         float newSizeMultiplierRounded = (float)Math.Round(newSizeMultiplier, numDecimals);
-        float currSizeMultiplier = go.GetComponent<LerpAnimation>().sizeMultiplier;
-        float currSizeMultiplierRounded = (float)Math.Round(currSizeMultiplier, numDecimals);
+        //float currSizeMultiplier = go.GetComponent<LerpAnimation>().sizeMultiplier;
+        //float currSizeMultiplierRounded = (float)Math.Round(currSizeMultiplier, numDecimals);
+        /*
         if (!Mathf.Approximately(newSizeMultiplierRounded, currSizeMultiplierRounded))
         {
-            go.GetComponent<LerpAnimation>().UpdateLargestSize(newSizeMultiplier);
-            Vector3 intermediate = go.transform.localScale / currSizeMultiplier;
+            //go.GetComponent<LerpAnimation>().UpdateLargestSize(newSizeMultiplier);
+            //Vector3 intermediate = go.transform.localScale / currSizeMultiplier;
             go.transform.localScale = intermediate * newSizeMultiplier;
         }
+        */
     }
 }

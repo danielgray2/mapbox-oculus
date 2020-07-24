@@ -6,6 +6,9 @@ using System.Linq;
 public interface IGraph
 {
     void Plot();
-    List<SData> GetData();
-    void SetData(List<SData> data);
+    DataObj GetData();
+    void SetData(DataObj data);
+    List<GameObject> GetDataPoints();
+    Vector3 GetMaxDpScale();
+    Vector3 GetMinDpScale();
 }

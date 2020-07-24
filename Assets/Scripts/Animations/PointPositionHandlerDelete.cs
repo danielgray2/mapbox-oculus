@@ -36,7 +36,6 @@ public class PointPositionHandlerDelete : MonoBehaviour
     {
         SData sData = go.GetComponent<LerpAnimationDelete>().sData;
         Vector3 unadjustedPos = MapStore.Instance.secondaryMap.GeoToWorldPosition(sData.latLon, true);
-        Debug.Log("Here is the pos: " + unadjustedPos);
         Vector3 adjustedPos = go.GetComponent<LerpAnimationDelete>().sData.AdjustPosForDepth(unadjustedPos);
         go.transform.localPosition = adjustedPos;
     }

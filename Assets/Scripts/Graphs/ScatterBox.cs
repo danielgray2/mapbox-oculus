@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using Microsoft.Data.Analysis;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ScatterBox : MonoBehaviour, IGraph
 {
-    public List<SData> dataList = new List<SData>();
+    public DataObj currDataObj;
     private List<GameObject> pointList = new List<GameObject>();
     public float extraMargin = 0.1f;
     public GameObject dataPointPrefab;
@@ -16,6 +17,8 @@ public class ScatterBox : MonoBehaviour, IGraph
     public string zName { get; set; }
 
     public float plotScale = 1;
+
+    Vector3 dataPointScale = new Vector3(0.05f, 0.05f, 0.05f);
 
     [SerializeField]
     public GameObject PointHolder;
@@ -39,7 +42,7 @@ public class ScatterBox : MonoBehaviour, IGraph
     float yMin;
     float zMin;
 
-    bool initialized = false;
+    bool plottedOnce = false;
 
     [SerializeField]
     GameObject xLabel;
@@ -50,9 +53,9 @@ public class ScatterBox : MonoBehaviour, IGraph
     [SerializeField]
     GameObject zLabel;
 
-    public void InitializeScatterplot(List<SData> data, string xName, string yName, string zName)
+    public void InitializeScatterplot(DataObj currDataObj, string xName, string yName, string zName)
     {
-        this.dataList = data;
+        this.currDataObj = currDataObj;
         GraphStore.Instance.graphList.Add(this);
 
         xMax = FindMax(xName);
@@ -68,20 +71,23 @@ public class ScatterBox : MonoBehaviour, IGraph
         this.zName = zName;
 
         Plot();
-        initialized = true;
     }
 
-    public List<SData> GetData()
+    public DataObj GetData()
     {
-        return dataList;
+        return currDataObj;
     }
 
     public void Plot()
     {
-        PlotPoints();
-        ScaleAxes();
-        AddLabels();
-        PlaceScale();
+        if (!plottedOnce)
+        {
+            PlotPoints();
+            ScaleAxes();
+            AddLabels();
+            PlaceScale();
+            plottedOnce = true;
+        }
     }
 
     public void Update()
@@ -91,19 +97,19 @@ public class ScatterBox : MonoBehaviour, IGraph
 
     public void PlotPoints()
     {
-        for (var i = 0; i < dataList.Count; i++)
+        for (var i = 0; i < currDataObj.df.Rows.Count; i++)
         {
-            float xVal = (float)dataList[i].GetType().GetProperty(xName).GetValue(dataList[i], null);
+            float xVal = (float)currDataObj.df.Columns[xName][i];
             float x =
                 (xVal - xMin)
                 / (xMax - xMin);
 
-            float yVal = (float)dataList[i].GetType().GetProperty(yName).GetValue(dataList[i], null);
+            float yVal = (float)currDataObj.df.Columns[yName][i];
             float y =
                 (yVal - yMin)
                 / (yMax - yMin);
 
-            float zVal = (float)dataList[i].GetType().GetProperty(zName).GetValue(dataList[i], null);
+            float zVal = (float)currDataObj.df.Columns[zName][i];
             float z =
                 (zVal - zMin)
                 / (zMax - zMin);
@@ -112,6 +118,8 @@ public class ScatterBox : MonoBehaviour, IGraph
             dataPoint.transform.localPosition = new Vector3(x, y, z) * plotScale;
             dataPoint.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             dataPoint.transform.rotation = Quaternion.identity;
+            dataPoint.GetComponent<DataPoint>().SetOriginalValues();
+            dataPoint.GetComponent<DataPoint>().SetData(currDataObj.df.Rows[i]);
 
             // Assigns original values to dataPointName
             string dataPointName =
@@ -126,42 +134,24 @@ public class ScatterBox : MonoBehaviour, IGraph
             dataPoint.GetComponent<Renderer>().material.color =
                 new Color(x, y, z, 1.0f);
             // Adds a Point object to this point
-            dataPoint.GetComponent<DataHolder>().data = dataList[i];
+            dataPoint.GetComponent<DataPoint>().data = currDataObj.df.Rows[i];
             pointList.Add(dataPoint);
         }
     }
 
-    public void SetData(List<SData> data)
+    public void SetData(DataObj currDataObj)
     {
-        this.dataList = data;
+        this.currDataObj = currDataObj;
     }
 
     public float FindMax(string attrName)
     {
-        float maxValue = -1000000f;
-        foreach (SData sData in dataList)
-        {
-            float currVal = (float)sData.GetType().GetProperty(attrName).GetValue(sData, null);
-            if (currVal > maxValue)
-            {
-                maxValue = currVal;
-            }
-        }
-        return maxValue;
+        return currDataObj.GetMax(attrName);
     }
 
     public float FindMin(string attrName)
     {
-        float minValue = 1000000f;
-        foreach (SData sData in dataList)
-        {
-            float currVal = (float)sData.GetType().GetProperty(attrName).GetValue(sData, null);
-            if (currVal < minValue)
-            {
-                minValue = currVal;
-            }
-        }
-        return minValue;
+        return currDataObj.GetMin(attrName);
     }
 
     void ScaleAxes()
@@ -205,9 +195,9 @@ public class ScatterBox : MonoBehaviour, IGraph
         yTextMesh.text = yName;
         zTextMesh.text = zName;
 
-        xLabel.transform.position = new Vector3(plotScale / 2 + extraMargin * plotScale, plotScale / 2.5f, 0);
-        yLabel.transform.position = new Vector3(-plotScale / 2.5f, plotScale + extraMargin * plotScale, 0);
-        zLabel.transform.position = new Vector3(0, plotScale / 2.5f, plotScale / 2 + extraMargin * plotScale);
+        xLabel.transform.localPosition = new Vector3(plotScale / 2 + extraMargin * plotScale, plotScale / 2.5f, 0);
+        yLabel.transform.localPosition = new Vector3(-plotScale / 2.5f, plotScale + extraMargin * plotScale, 0);
+        zLabel.transform.localPosition = new Vector3(0, plotScale / 2.5f, plotScale / 2 + extraMargin * plotScale);
     }
 
     void PlaceScale()
@@ -220,22 +210,37 @@ public class ScatterBox : MonoBehaviour, IGraph
         {
             float value = ((xMax - xMin) / i) + xMin;
             currMarker = Instantiate(markerPrefab, markerParent);
-            currMarker.transform.position = new Vector3(plotScale / i, plotScale / 5, 0);
+            currMarker.transform.localPosition = new Vector3(plotScale / i, plotScale / 5, 0);
             currMarker.transform.rotation = xLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
 
             value = ((yMax - yMin) / i) + yMin;
             currMarker = Instantiate(markerPrefab, markerParent);
-            currMarker.transform.position = new Vector3(0, plotScale / i, 0);
+            currMarker.transform.localPosition = new Vector3(0, plotScale / i, 0);
             currMarker.transform.rotation = yLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
 
             value = ((zMax - zMin) / i) + zMin;
             currMarker = Instantiate(markerPrefab, markerParent);
-            currMarker.transform.position = new Vector3(0, plotScale / 5, plotScale / i);
+            currMarker.transform.localPosition = new Vector3(0, plotScale / 5, plotScale / i);
             currMarker.transform.rotation = zLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
             
         }
+    }
+
+    public List<GameObject> GetDataPoints()
+    {
+        return pointList;
+    }
+
+    public Vector3 GetMaxDpScale()
+    {
+        return new Vector3(0.15f, 0.15f, 0.15f);
+    }
+
+    public Vector3 GetMinDpScale()
+    {
+        return new Vector3(0.01f, 0.01f, 0.01f);
     }
 }

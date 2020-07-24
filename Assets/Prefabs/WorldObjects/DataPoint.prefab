@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 7508915127992492695}
   - component: {fileID: 7508915127992492696}
   - component: {fileID: 7508915127992492697}
-  - component: {fileID: 7508915127992492693}
-  - component: {fileID: -8770056461278424893}
+  - component: {fileID: 3439786084539874289}
   m_Layer: 0
   m_Name: DataPoint
   m_TagString: Untagged
@@ -95,7 +94,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7508915127992492693
+--- !u!114 &3439786084539874289
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,19 +103,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7508915127992492698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17ca918be2d5f7d49b6ac5f5bf66b33b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  experiencedChangeOnce: 0
---- !u!114 &-8770056461278424893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7508915127992492698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a97b7c8b351c69b40a22ffee5828d5c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ccc2c873b0168848a04e6ea6e86ff2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

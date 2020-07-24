@@ -74,13 +74,13 @@ public class GraphMenu : MonoBehaviour
 
         foreach(GameObject pointGo in MapStore.Instance.selectedGOs)
         {
-            SData sData = pointGo.GetComponent<LerpAnimation>().sData;
-            sDataList.Add(sData);
+            //SData sData = pointGo.GetComponent<LerpAnimation>().sData;
+            //sDataList.Add(sData);
         }
 
         GameObject scatterplotGo = Instantiate(scatterplotPrefab, Vector3.zero, Quaternion.identity);
         ScatterBox scatterplotObj = scatterplotGo.GetComponentInChildren<ScatterBox>();
-        scatterplotObj.InitializeScatterplot(sDataList, xName, yName, zName);
+        //scatterplotObj.InitializeScatterplot(sDataList, xName, yName, zName);
     }
 
     public void GenerateHistogram(string xName)
@@ -89,13 +89,13 @@ public class GraphMenu : MonoBehaviour
 
         foreach (GameObject pointGo in MapStore.Instance.selectedGOs)
         {
-            SData sData = pointGo.GetComponent<LerpAnimation>().sData;
-            sDataList.Add(sData);
+            //SData sData = pointGo.GetComponent<LerpAnimation>().sData;
+            //sDataList.Add(sData);
         }
 
         GameObject histogramGo = Instantiate(histogramPrefab, Vector3.zero, Quaternion.identity);
         Histogram scatterplotObj = histogramGo.GetComponentInChildren<Histogram>();
-        scatterplotObj.InitializeHistogram(sDataList, xName);
+        //scatterplotObj.InitializeHistogram(sDataList, xName);
     }
 
     // Take a look at the GraphTypeEnum

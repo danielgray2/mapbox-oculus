@@ -2,8 +2,18 @@
 using Microsoft.Data.Analysis;
 using System.Linq;
 using System;
+using Microsoft.Recognizers.Text;
+using Microsoft.Recognizers.Text.DateTime;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using System.Globalization;
 
+// TODO: We need to figure out a generic way to read in dates
+// and calculate min, max, and median on them.
+// We will probably have to find a way to recognize dates, and
+// then convert them to UNIX time stamps and then calculate the
+// stats from there.
+// Our stats functions are set up to be pretty dynamic though.
 public class DataObj
 {
     public enum STATSVALS
@@ -13,69 +23,99 @@ public class DataObj
         AVG,
         MEDIAN,
         LOWERQRT,
-        UPPERQRT
+        UPPERQRT,
+        IQR
     }
+    protected string[] dateFormats = { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss.fff", "yyyy-MM-dd" };
     public DataFrame df { get; protected set; }
-    protected Dictionary<string, Dictionary<STATSVALS, float>> statsDict { get; set; }
+    protected Dictionary<string, Dictionary<STATSVALS, dynamic>> statsDict { get; set; }
     public DataObj(DataFrame df)
     {
         this.df = df;
-        statsDict = new Dictionary<string, Dictionary<STATSVALS, float>>();
+        statsDict = new Dictionary<string, Dictionary<STATSVALS, dynamic>>();
     }
 
-    public float GetMin(string colName)
+    public dynamic GetMin(string colName)
     {
         if (!this.statsDict.ContainsKey(colName))
         {
-            this.statsDict.Add(colName, new Dictionary<STATSVALS, float>());
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
         }
-        float minVal;
-        if(!this.statsDict[colName].TryGetValue(STATSVALS.MIN, out minVal))
+
+        dynamic minVal;
+        try
+        {
+            minVal = df.Columns[colName][0];
+        }
+        catch(IndexOutOfRangeException)
+        {
+            throw new IndexOutOfRangeException("Unable to assign first value in column to variable. Column may be empty.");
+        }
+
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.MIN))
         {
             for (int i = 0; i < df.Columns[colName].Length; i++)
             {
                 try
                 {
-                    minVal = (float)this.df.Columns[colName].Min();
+                    if (minVal.CompareTo(df.Columns[colName][i]) > 0)
+                    {
+                        minVal = df.Columns[colName][i];
+                    }
                 }
                 catch
                 {
-                    throw new InvalidCastException("Attempted to find the min of an illegal variable type");
+                    throw new ArgumentException("Error thrown when comparing elements");
                 }
             }
-            
             this.statsDict[colName].Add(STATSVALS.MIN, minVal);
         }
         return this.statsDict[colName][STATSVALS.MIN];
     }
 
-    public float GetMax(string colName)
+    public dynamic GetMax(string colName)
     {
         if (!this.statsDict.ContainsKey(colName))
         {
-            this.statsDict.Add(colName, new Dictionary<STATSVALS, float>());
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
         }
-        float maxVal;
-        if (!this.statsDict[colName].TryGetValue(STATSVALS.MAX, out maxVal))
+
+        dynamic maxVal;
+        try
         {
-            try
+            maxVal = df.Columns[colName][0];
+        }
+        catch (IndexOutOfRangeException)
+        {
+            throw new IndexOutOfRangeException("Unable to assign first value in column to variable. Column may be empty.");
+        }
+
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.MAX))
+        {
+            for (int i = 0; i < df.Columns[colName].Length; i++)
             {
-                maxVal = (float)this.df.Columns[colName].Max();
-            }
-            catch
-            {
-                throw new System.ApplicationException("Attempted to convert an illegal type to a float");
+                try
+                {
+                    if (maxVal.CompareTo(df.Columns[colName][i]) < 0)
+                    {
+                        maxVal = df.Columns[colName][i];
+                    }
+                }
+                catch
+                {
+                    throw new ArgumentException("Error thrown when comparing elements");
+                }
             }
             this.statsDict[colName].Add(STATSVALS.MAX, maxVal);
         }
         return this.statsDict[colName][STATSVALS.MAX];
     }
 
-    public float GetAvg(string colName)
+    public float GetMedian(string colName)
     {
         if (!this.statsDict.ContainsKey(colName))
         {
-            this.statsDict.Add(colName, new Dictionary<STATSVALS, float>());
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
         }
         if (!this.statsDict[colName].ContainsKey(STATSVALS.AVG))
         {
@@ -86,7 +126,7 @@ public class DataObj
             }
             catch
             {
-                throw new System.ApplicationException("Attempted to convert an illegal type to a float");
+                throw new ArgumentException("Attempted to calculate mean on an invalid datatype");
             }
             this.statsDict[colName].Add(STATSVALS.AVG, avgVal);
         }
@@ -97,22 +137,30 @@ public class DataObj
     {
         if (!this.statsDict.ContainsKey(colName))
         {
-            this.statsDict.Add(colName, new Dictionary<STATSVALS, float>());
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
         }
 
         float avgVal;
-        if (!this.statsDict.ContainsKey(colName) || !this.statsDict[colName].TryGetValue(STATSVALS.AVG, out avgVal))
+        if (!this.statsDict.ContainsKey(colName) || !this.statsDict[colName].ContainsKey(STATSVALS.AVG))
         {
-            this.GetAvg(colName);
-            avgVal = this.statsDict[colName][STATSVALS.AVG];
+            this.GetMedian(colName);
         }
+        avgVal = this.statsDict[colName][STATSVALS.AVG];
 
-        float lowerQrtVal;
-        if (!this.statsDict[colName].TryGetValue(STATSVALS.LOWERQRT, out lowerQrtVal))
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.LOWERQRT))
         {
+            float lowerQrtVal;
             try
             {
-                PrimitiveDataFrameColumn<float> col = (PrimitiveDataFrameColumn<float>)this.df.Columns[colName];
+                PrimitiveDataFrameColumn<float> col = new PrimitiveDataFrameColumn<float>("floatCol", this.df.Columns[colName].Length);
+                for (int i = 0; i < this.df.Columns[colName].Length; i++)
+                {
+                    object currVal = this.df.Columns[colName][i];
+                    string currString = currVal.ToString();
+                    float currFloat = float.Parse(currString, CultureInfo.InvariantCulture.NumberFormat);
+                    col[i] = currFloat;
+                }
+
                 List<float?> valsAsList = col.Where(val => val < avgVal).ToList();
                 lowerQrtVal = this.CalculateMedian(valsAsList);
             }
@@ -129,32 +177,70 @@ public class DataObj
     {
         if (!this.statsDict.ContainsKey(colName))
         {
-            this.statsDict.Add(colName, new Dictionary<STATSVALS, float>());
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
         }
 
         float avgVal;
-        if (!this.statsDict[colName].TryGetValue(STATSVALS.AVG, out avgVal))
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.AVG))
         {
-            this.GetAvg(colName);
-            avgVal = this.statsDict[colName][STATSVALS.AVG];
+            this.GetMedian(colName);
         }
+        avgVal = this.statsDict[colName][STATSVALS.AVG];
 
-        float upperQrtVal;
-        if (!this.statsDict[colName].TryGetValue(STATSVALS.UPPERQRT, out upperQrtVal))
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.UPPERQRT))
         {
+            float upperQrtVal;
             try
             {
-                PrimitiveDataFrameColumn<float> col = (PrimitiveDataFrameColumn<float>)this.df.Columns[colName];
+                PrimitiveDataFrameColumn<float> col = new PrimitiveDataFrameColumn<float>("floatCol", this.df.Columns[colName].Length);
+                for(int i = 0; i < this.df.Columns[colName].Length; i++)
+                {
+                    object currVal = this.df.Columns[colName][i];
+                    string currString = currVal.ToString();
+                    float currFloat = float.Parse(currString, CultureInfo.InvariantCulture.NumberFormat);
+                    col[i] = currFloat;
+                }
+
                 List<float?> valsAsList = col.Where(val => val >= avgVal).ToList();
                 upperQrtVal = this.CalculateMedian(valsAsList);
             }
             catch
             {
-                throw new System.ApplicationException("Attempted to calculate stats on an illegal type");
+                throw new ApplicationException("Attempted to calculate stats on an illegal type");
             }
+
             this.statsDict[colName].Add(STATSVALS.UPPERQRT, upperQrtVal);
         }
         return this.statsDict[colName][STATSVALS.UPPERQRT];
+    }
+
+    public float GetIQR(string colName)
+    {
+        if (!this.statsDict.ContainsKey(colName))
+        {
+            this.statsDict.Add(colName, new Dictionary<STATSVALS, dynamic>());
+        }
+
+        float upperQrtVal;
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.UPPERQRT))
+        {
+            this.GetUpperQrt(colName);
+        }
+        upperQrtVal = this.statsDict[colName][STATSVALS.UPPERQRT];
+
+        float lowerQrtVal;
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.LOWERQRT))
+        {
+            this.GetLowerQrt(colName);
+        }
+        lowerQrtVal = this.statsDict[colName][STATSVALS.LOWERQRT];
+
+        if (!this.statsDict[colName].ContainsKey(STATSVALS.IQR))
+        {
+            float iqrVal = upperQrtVal - lowerQrtVal;
+            this.statsDict[colName].Add(STATSVALS.IQR, iqrVal);
+        }
+        return this.statsDict[colName][STATSVALS.IQR];
     }
 
     public float CalculateMedian(List<float?> values)
@@ -176,6 +262,7 @@ public class DataObj
         int midPoint = (length / 2) - 1;
         return length % 2 == 0 ? ((sortedList.ElementAt(midPoint) + sortedList.ElementAt(midPoint + 1)) / 2) : sortedList.ElementAt(midPoint);
     }
+
     public DataObj SliceByAttribute<T>(string attrName, T startVal, T endVal) where T : unmanaged, IComparable
     {
         CheckValidAttr(attrName);
@@ -270,4 +357,121 @@ public class DataObj
         }
         return true;
     }
+
+    public void ParseDateColumns()
+    {
+        for(int i = 0; i < df.Columns.Count; i++)
+        {
+            StringDataFrameColumn col;
+            try
+            {
+                col = (StringDataFrameColumn)df.Columns[i];
+            }
+            catch
+            {
+                continue;
+            }
+
+            PrimitiveDataFrameColumn<DateTime> newCol = AttemptParseDateCol((StringDataFrameColumn)col);
+            if(newCol != null)
+            {
+                df.Columns[i] = newCol;
+            }
+        }
+    }
+
+    public DateTime CreateDateFromString(string dateString)
+    {
+        if (DateTime.TryParseExact(dateString, dateFormats, null,
+                        System.Globalization.DateTimeStyles.AllowWhiteSpaces |
+                        System.Globalization.DateTimeStyles.AdjustToUniversal,
+                        out DateTime parsedDate))
+        {
+            return parsedDate;
+        }
+        throw new ArgumentException("Could not parse the given date string to a DateTime variable: " + dateString);
+    }
+
+    public PrimitiveDataFrameColumn<DateTime> AttemptParseDateCol(DataFrameColumn col)
+    {
+        PrimitiveDataFrameColumn<DateTime> newCol = new PrimitiveDataFrameColumn<DateTime>(col.Name, col.Length);
+        DateTimeModel dTM = new DateTimeRecognizer(Culture.English).GetDateTimeModel();
+        
+        for (int i = 0; i < col.Length; i++)
+        {
+            List<ModelResult> results = dTM.Parse((string)col[i]);
+            if (results.Count > 0)
+            {
+                List<Dictionary<string, string>> valueArray = (List<Dictionary<string, string>>)results[0].Resolution["values"];
+                if (CheckIfTimeOnly(valueArray[0]["value"]))
+                {
+                    return null;
+                }
+                DateTime currDate = CreateDateFromString(valueArray[0]["value"]);
+                // Date Parser strips milliseconds, so add them back
+                int numMillis = CheckForMillis((String)col[i]);
+                currDate = currDate.AddMilliseconds(numMillis);
+                newCol[i] = currDate;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return newCol;
+    }
+
+    public bool CheckIfTimeOnly(string dateString)
+    {
+        string pattern = @"^\d\d:\d\d:\d\d\.?\d{0,3}$";
+        Regex rg = new Regex(pattern);
+        MatchCollection matches = rg.Matches(dateString);
+
+        return matches.Count > 0 ;
+    }
+
+    public int CheckForMillis(String val)
+    {
+        int numMillis = 0;
+        string patternOne = @"\.\d{1,3}\s";
+        string patternTwo = @"\.\d{1,3}$";
+        Regex rgOne = new Regex(patternOne);
+        Regex rgTwo = new Regex(patternTwo);
+        MatchCollection matchesOne = rgOne.Matches(val);
+        MatchCollection matchesTwo = rgTwo.Matches(val);
+
+        string result;
+        if (matchesOne.Count <= 0 && matchesTwo.Count <= 0)
+        {
+            return numMillis;
+        }
+
+        MatchCollection matches = matchesOne.Count > 0 ? matchesOne : matchesTwo;
+
+        result = matches[0].Value.Trim();
+        result = result.Substring(1, result.Length - 1);
+        if(result.Length == 1)
+        {
+            result += "00";
+        }
+
+        if(result.Length == 2)
+        {
+            result += "0";
+        }
+
+        try
+        {
+            numMillis = Int32.Parse(result);
+        }
+        catch (FormatException)
+        {
+            throw new FormatException("Unable to parse milliseconds");
+        }
+
+        return numMillis;
+    }
+
+    // TODO: At some point, implement a way for us to be able to
+    // filter by multiple columns (e.g. filter by date, then by time)
 }

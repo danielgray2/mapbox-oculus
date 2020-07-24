@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Microsoft.Data.Analysis;
+using System.Globalization;
 
 public class Histogram : MonoBehaviour, IGraph
 {
-    public List<SData> dataList = new List<SData>();
+    public DataObj currDataObj;
     private List<GameObject> barList = new List<GameObject>();
     public float extraMargin = 0.1f;
     public GameObject barPrefab;
@@ -43,14 +45,14 @@ public class Histogram : MonoBehaviour, IGraph
     float minBin;
     int NUMDECIMALS = 4;
 
-    bool initialized = false;
+    bool plottedOnce = false;
 
     [SerializeField]
     GameObject xLabel;
 
-    public void InitializeHistogram(List<SData> data, string xName)
+    public void InitializeHistogram(DataObj dataObj, string xName)
     {
-        this.dataList = data;
+        this.currDataObj = dataObj;
         GraphStore.Instance.graphList.Add(this);
 
         xMax = FindMax(xName);
@@ -59,30 +61,31 @@ public class Histogram : MonoBehaviour, IGraph
         this.xName = xName;
 
         Plot();
-        initialized = true;
     }
 
-    public List<SData> GetData()
+    public DataObj GetData()
     {
-        return dataList;
+        return currDataObj;
     }
 
     public void Plot()
     {
-        CreateBars();
-        ScaleAxes();
-        AddLabels();
-        PlaceScale();
+        if (!plottedOnce)
+        {
+            CreateBars();
+            ScaleAxes();
+            AddLabels();
+            PlaceScale();
+            plottedOnce = true;
+        }
     }
 
     public void CreateBars()
     {
         float iqr = CalcIQR(xName);
-        binWidth = CalcBinWidth(iqr, dataList.Count);
+        binWidth = CalcBinWidth(iqr, currDataObj.df.Rows.Count);
         numBins = Mathf.CeilToInt((xMax - xMin) / binWidth);
         normedWidth = 1.0f / (float)numBins;
-        Debug.Log("xMax: " + xMax);
-        Debug.Log("xMin: " + xMin);
         List<int> binNums = new List<int>();
         for (var i = 0; i < numBins; i++)
         {
@@ -95,9 +98,10 @@ public class Histogram : MonoBehaviour, IGraph
                 .Count();
             */
             List<float> selectedVals = new List<float>();
-            for (int j = 0; j < dataList.Count; j++)
+            for (int j = 0; j < currDataObj.df.Rows.Count; j++)
             {
-                var currVal = (float)dataList[j].GetType().GetProperty(xName).GetValue(dataList[j], null);
+                string stringVal = currDataObj.df.Columns[xName][j].ToString();
+                var currVal = float.Parse(stringVal, CultureInfo.InvariantCulture.NumberFormat);
                 if(currVal >= xMin + (binWidth * i) && currVal < xMin + (binWidth * (i + 1)))
                 {
                     selectedVals.Add(currVal);
@@ -117,6 +121,11 @@ public class Histogram : MonoBehaviour, IGraph
             bar.transform.localScale = new Vector3(normedWidth, binHeight, 0.25f);
             bar.transform.localPosition = new Vector3((i * normedWidth) + offset + bar.transform.localScale.x, binHeight / 2 + offset, 0) * plotScale;
             bar.transform.rotation = Quaternion.identity;
+            bar.GetComponent<DataPoint>().SetOriginalValues();
+            // This is just a place holder for now, we need to come back and change
+            // "currDataObj.df.Rows[0]" to be something that actually has a meaning.
+            // This is fine for now though.
+            bar.GetComponent<DataPoint>().SetData(currDataObj.df.Rows[0]);
 
             // Assigns original values to dataPointName
             string barName = i.ToString();
@@ -133,7 +142,7 @@ public class Histogram : MonoBehaviour, IGraph
             bar.GetComponent<Renderer>().material.color =
                 Color.Lerp(startColor, endColor, i / binNums.Count);
             // Adds a Point object to this point
-            bar.GetComponent<DataHolder>().data = dataList[i];
+            bar.GetComponent<DataPoint>().data = currDataObj.df.Rows[i];
             barList.Add(bar);
         }
     }
@@ -144,47 +153,24 @@ public class Histogram : MonoBehaviour, IGraph
             / (maxValue - minValue);
     }
 
-    public void SetData(List<SData> data)
+    public void SetData(DataObj data)
     {
-        this.dataList = data;
+        this.currDataObj = data;
     }
 
     public float FindMax(string attrName)
     {
-        float maxValue = -1000000f;
-        foreach (SData sData in dataList)
-        {
-            float currVal = (float)sData.GetType().GetProperty(attrName).GetValue(sData, null);
-            if (currVal > maxValue)
-            {
-                maxValue = currVal;
-            }
-        }
-        return maxValue;
+        return currDataObj.GetMax(attrName);
     }
 
     public float FindMin(string attrName)
     {
-        float minValue = 1000000f;
-        foreach (SData sData in dataList)
-        {
-            float currVal = (float)sData.GetType().GetProperty(attrName).GetValue(sData, null);
-            if (currVal < minValue)
-            {
-                minValue = currVal;
-            }
-        }
-        return minValue;
+        return currDataObj.GetMin(attrName);
     }
 
     public float CalcIQR(string attrName)
     {
-        List<float> dataVals = dataList.Select(s => (float)s.GetType().GetProperty(attrName).GetValue(s, null)).ToList();
-        float median = DataStore.Instance.CalculateMedian(dataVals);
-        float qOne = DataStore.Instance.CalculateMedian(dataVals.Where(v => v < median).ToList());
-        float qThree = DataStore.Instance.CalculateMedian(dataVals.Where(v => v >= median).ToList());
-
-        return qThree - qOne;
+        return currDataObj.GetIQR(attrName);
     }
 
     // n is the number of observations
@@ -237,5 +223,25 @@ public class Histogram : MonoBehaviour, IGraph
             value = (float)Math.Round(value, 1);
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
         }
+    }
+
+    public List<GameObject> GetDataPoints()
+    {
+        return this.barList;
+    }
+
+    public Vector3 GetDataPointScale()
+    {
+        return Vector3.zero;        
+    }
+
+    public Vector3 GetMaxDpScale()
+    {
+        return new Vector3(1f, 1.2f, 1f);
+    }
+
+    public Vector3 GetMinDpScale()
+    {
+        return new Vector3(0.01f, 0.01f, 0.01f);
     }
 }

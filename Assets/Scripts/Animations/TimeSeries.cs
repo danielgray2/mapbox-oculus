@@ -142,8 +142,8 @@ public class TimeSeries : MonoBehaviour
                 GameObject go = Instantiate(dataPointPrefab, adjPos, Quaternion.identity);
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
-                LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, true, gradient);
+                //LerpAnimation lA = go.GetComponent<LerpAnimation>();
+                //lA.Setup(sData, true, gradient);
             }
             if (dataSlice.lastIndex < DataStore.Instance.sDataRecords.Count)
                 currIndex = dataSlice.lastIndex;
@@ -171,8 +171,8 @@ public class TimeSeries : MonoBehaviour
                 GameObject go = Instantiate(dataPointPrefab, adjPos, Quaternion.identity);
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
-                LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, true, gradient);
+                //LerpAnimation lA = go.GetComponent<LerpAnimation>();
+                //lA.Setup(sData, true, gradient);
                 if (currIndex < DataStore.Instance.sDataRecords.Count - 1)
                     currIndex++;
                 else
@@ -199,8 +199,8 @@ public class TimeSeries : MonoBehaviour
                 GameObject go = Instantiate(dataPointPrefab, position, Quaternion.identity);
                 go.transform.parent = parent.transform;
                 MapStore.Instance.iconGOs.Add(go);
-                LerpAnimation lA = go.GetComponent<LerpAnimation>();
-                lA.Setup(sData, true, gradient);
+                //LerpAnimation lA = go.GetComponent<LerpAnimation>();
+                //lA.Setup(sData, true, gradient);
                 if (currIndex < DataStore.Instance.sDataRecords.Count - 1)
                     currIndex++;
                 else
@@ -232,8 +232,8 @@ public class TimeSeries : MonoBehaviour
             GameObject go = Instantiate(dataPointPrefab, position, Quaternion.identity);
             go.transform.parent = this.parent.transform;
             newIconList.Add(go);
-            LerpAnimation lA = go.GetComponent<LerpAnimation>();
-            lA.Setup(sData, false, gradient);
+            //LerpAnimation lA = go.GetComponent<LerpAnimation>();
+            //lA.Setup(sData, false, gradient);
         }
 
         MapStore.Instance.iconGOs = newIconList;

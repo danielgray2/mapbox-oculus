@@ -20,7 +20,10 @@
         "CsvHelper.dll",
         "Microsoft.Data.Analysis.dll",
         "Mapbox.Json.dll",
-        "Microsoft.ML.DataView.dll"
+        "Microsoft.ML.DataView.dll",
+        "Microsoft.Recognizers.Text.DateTime.dll",
+        "Microsoft.Recognizers.Text.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

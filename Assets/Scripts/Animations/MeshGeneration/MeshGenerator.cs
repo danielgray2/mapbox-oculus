@@ -111,6 +111,8 @@ public class MeshGenerator : MonoBehaviour
                 //float value = (float)rand.NextDouble();
                 colors.Add(gradient.Evaluate(value));
             }
+            // Hmm... looking back at this, it looks like i should be in the inner for loop
+            // Look into this after you refactor
             i++;
         }
     }
