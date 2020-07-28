@@ -5,15 +5,9 @@ using System;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using System.Globalization;
+using UnityEngine;
 
-// TODO: We need to figure out a generic way to read in dates
-// and calculate min, max, and median on them.
-// We will probably have to find a way to recognize dates, and
-// then convert them to UNIX time stamps and then calculate the
-// stats from there.
-// Our stats functions are set up to be pretty dynamic though.
 public class DataObj
 {
     public enum STATSVALS
@@ -263,18 +257,17 @@ public class DataObj
         return length % 2 == 0 ? ((sortedList.ElementAt(midPoint) + sortedList.ElementAt(midPoint + 1)) / 2) : sortedList.ElementAt(midPoint);
     }
 
-    public DataObj SliceByAttribute<T>(string attrName, T startVal, T endVal) where T : unmanaged, IComparable
+    public DataObj SliceByAttribute(string attrName, IComparable startVal, IComparable endVal)
     {
         CheckValidAttr(attrName);
         List<bool> lowerBools = new List<bool>();
         List<bool> upperBools = new List<bool>();
         for (int i = 0; i < df.Columns[attrName].Length; i++)
         {
-            T currVal;
-
+            IComparable currVal;
             try
             {
-                currVal = (T)Convert.ChangeType(df.Columns[attrName][i], typeof(T));
+                currVal = (IComparable)df.Columns[attrName][i];
             }
             catch
             {
@@ -472,6 +465,40 @@ public class DataObj
         return numMillis;
     }
 
-    // TODO: At some point, implement a way for us to be able to
-    // filter by multiple columns (e.g. filter by date, then by time)
+    public int CountNumVals<T>(string colName, T value) where T : IComparable
+    {
+        int counter = 0;
+        for(int i = 0; i < df.Columns[colName].Length; i++)
+        {
+            T currVal;
+
+            try
+            {
+                currVal = (T)Convert.ChangeType(df.Columns[colName][i], typeof(T));
+            }
+            catch
+            {
+                throw new InvalidCastException("Attempted an illegal cast");
+            }
+            if(value.CompareTo(currVal) == 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public List<IComparable> GetUniqueVals(string colName)
+    {
+        List<IComparable> retList = new List<IComparable>();
+        DataFrameColumn col = df.Columns[colName];
+        for(int i = 0; i < col.Length; i++)
+        {
+            if(retList.FindIndex(elem => elem.CompareTo(col[i]) == 0) < 0)
+            {
+                retList.Add((IComparable)col[i]);
+            }
+        }
+        return retList;
+    }
 }

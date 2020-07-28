@@ -10,4 +10,10 @@ public class MeshDataObj
     // and this val.
     public float colorValue { get; set; }
     public Vector3 position { get; set; }
+
+    public MeshDataObj(float colorValue, Vector3 position)
+    {
+        this.colorValue = colorValue;
+        this.position = position;
+    }
 }

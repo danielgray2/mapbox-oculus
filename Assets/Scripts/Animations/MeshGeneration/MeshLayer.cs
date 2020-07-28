@@ -5,40 +5,22 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-public class MeshGenerator : MonoBehaviour
+public class MeshLayer : MonoBehaviour
 {
     Mesh mesh;
     List<Vector3> vertices;
-    List<VData> dataPoints;
+    List<MeshDataObj> dataPoints;
     List<int> triangles;
     Gradient gradient;
 
     List<Color> colors;
 
-    public void GenerateMesh(List<List<VData>> dataMesh, Gradient gradient, Material meshMaterial)
+    public void GenerateMesh(List<List<MeshDataObj>> dataMesh, Gradient gradient, Material meshMaterial)
     {
-        /*
-        this.gradient = new Gradient();
-        GradientColorKey[] colorKey;
-        GradientAlphaKey[] alphaKey;
-
-        colorKey = new GradientColorKey[2];
-        colorKey[0].color = Color.red;
-        colorKey[0].time = 0.0f;
-        colorKey[1].color = Color.blue;
-        colorKey[1].time = 1.0f;
-
-        alphaKey = new GradientAlphaKey[2];
-        alphaKey[0].alpha = 1.0f;
-        alphaKey[0].time = 0.0f;
-        alphaKey[1].alpha = 0.0f;
-        alphaKey[1].time = 1.0f;
-
-        gradient.SetKeys(colorKey, alphaKey);
-        */
         this.gradient = gradient;
 
         mesh = new Mesh();
+        /*
         List<string> stringList = new List<string>();
         for(int i = 0; i < dataMesh.Count; i++)
         {
@@ -51,6 +33,7 @@ public class MeshGenerator : MonoBehaviour
             stringList.Add(currString);
         }
         System.IO.File.WriteAllLines(@"C:\Users\grayd\Documents\WriteLines.txt", stringList);
+        */
         GetComponent<MeshFilter>().mesh = mesh;
         Renderer renderer = GetComponent<Renderer>();
         renderer.material = meshMaterial;
@@ -61,21 +44,21 @@ public class MeshGenerator : MonoBehaviour
         UpdateMesh();
     }
 
-    void CreateShape(List<List<VData>> dataMesh)
+    void CreateShape(List<List<MeshDataObj>> dataMesh)
     {
         // Vertices holds the positions and dataPoints
         // holds the actual data. Their indices must
         // match each other.
         vertices = new List<Vector3>();
-        dataPoints = new List<VData>();
+        dataPoints = new List<MeshDataObj>();
         
         // DataMesh is our array of longitudes
         for(int k = 0; k < dataMesh.Count; k++)
         {
             for(int j = 0; j < dataMesh[k].Count; j++)
             {
-                VData dataPoint = dataMesh[k][j];
-                vertices.Add(dataPoint.GetUnityPosition());
+                MeshDataObj dataPoint = dataMesh[k][j];
+                vertices.Add(dataPoint.position);
                 dataPoints.Add(dataPoint);
             }
         }
@@ -102,18 +85,14 @@ public class MeshGenerator : MonoBehaviour
         triangles.Reverse();
 
         colors = new List<Color>();
-        //System.Random rand = new System.Random();
         for (int i = 0, k = 0; k < dataMesh.Count; k++)
         {
             for (int j = 0; j < dataMesh[k].Count; j++)
             {
-                float value = Mathf.InverseLerp(DataStore.Instance.minVpVs, DataStore.Instance.maxVpVs, dataPoints[i].vPvS);
-                //float value = (float)rand.NextDouble();
+                float value = dataPoints[i].colorValue;
                 colors.Add(gradient.Evaluate(value));
+                i++;
             }
-            // Hmm... looking back at this, it looks like i should be in the inner for loop
-            // Look into this after you refactor
-            i++;
         }
     }
 

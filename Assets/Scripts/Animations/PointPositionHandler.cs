@@ -1,11 +1,4 @@
-﻿using Mapbox.Map;
-using Mapbox.Unity.Map;
-using Mapbox.Unity.Utilities;
-using Mapbox.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System;
 using UnityEngine;
 
 public class PointPositionHandler : MonoBehaviour

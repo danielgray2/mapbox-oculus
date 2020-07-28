@@ -146,7 +146,7 @@ namespace Tests
         [Test]
         public void TestSliceByAttrInt()
         {
-            DataObj retObj = dO.SliceByAttribute("colOne", 2, 3);
+            DataObj retObj = dO.SliceByAttribute("colOne", 2f, 3f);
             DataFrame retDf = retObj.df;
             Assert.AreEqual(2f, retDf[0, 0]);
             Assert.AreEqual(2, retDf.Rows.Count());
@@ -155,7 +155,7 @@ namespace Tests
         [Test]
         public void TestSliceByAttrStr()
         {
-            DataObj retObj = dOCsv.SliceByAttribute("colThree", 'b', 'd');
+            DataObj retObj = dOCsv.SliceByAttribute("colThree", "b", "d");
             DataFrame retDf = retObj.df;
             Assert.AreEqual(2f, retDf[0, 0]);
             Assert.AreEqual(3, retDf.Rows.Count());
@@ -283,6 +283,51 @@ namespace Tests
         {
             float val = dO.GetIQR("colOne");
             Assert.AreEqual(2, val);
+        }
+
+        [Test]
+        public void TestCounter()
+        {
+            PrimitiveDataFrameColumn<int> col = new PrimitiveDataFrameColumn<int>("col", 4);
+            
+            col[0] = 1;
+            col[1] = 1;
+            col[2] = 1;
+            col[3] = 2;
+
+            DataFrame df = new DataFrame(col);
+            DataObj dO = new DataObj(df);
+
+            int numOnes = dO.CountNumVals("col", 1);
+            int numTwos = dO.CountNumVals("col", 2);
+            int numThrees = dO.CountNumVals("col", 3);
+
+            Assert.AreEqual(3, numOnes);
+            Assert.AreEqual(1, numTwos);
+            Assert.AreEqual(0, numThrees);
+        }
+
+        [Test]
+        public void TestGetUnique()
+        {
+            List<IComparable> vals = dO.GetUniqueVals("colOne");
+            Assert.AreEqual(4, vals.Count());
+        }
+
+        [Test]
+        public void TestGetUniqueDuplicates()
+        {
+            PrimitiveDataFrameColumn<int> colOne = new PrimitiveDataFrameColumn<int>("colOne", 2);
+            colOne[0] = 1;
+            colOne[1] = 1;
+
+            DataFrame df = new DataFrame(colOne);
+
+            DataObj currDO = new DataObj(df);
+
+            List<IComparable> vals = currDO.GetUniqueVals("colOne");
+            Assert.AreEqual(1, vals.Count());
+            Assert.AreEqual(1, vals[0]);
         }
     }
 }
