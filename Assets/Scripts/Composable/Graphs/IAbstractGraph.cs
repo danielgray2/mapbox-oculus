@@ -5,10 +5,8 @@ using UnityEngine;
 public abstract class IAbstractGraph : IGraph
 {
     public DataObj dataObj { get; set; }
-    public List<GameObject> dataPoints { get; set; }
-    public Vector3 maxDpScale { get; set; }
-    public Vector3 minDpScale { get; set; }
-    public IOptions options { get; set; }
+    public Vector3 minDpSize { get; set; }
+    public Vector3 maxDpSize { get; set; }
 
-    public abstract void Plot();
+    public abstract void Plot() { }
 }

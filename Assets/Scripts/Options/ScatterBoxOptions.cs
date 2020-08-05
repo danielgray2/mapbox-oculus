@@ -6,6 +6,7 @@ using UnityEngine;
 // and put it in the wrapper.
 public class ScatterBoxOptions : IOptions
 {
+    public DataObj dataObj { get; set; }
     public GameObject dataPointPrefab { get; set; }
     public GameObject markerPrefab { get; set; }
     public float extraMargin { get; set; } = 0.1f;
@@ -19,4 +20,8 @@ public class ScatterBoxOptions : IOptions
     public GameObject xAxis { get; set; }
     public GameObject yAxis { get; set; }
     public GameObject zAxis { get; set; }
+    public GameObject xLabel { get; set; }
+    public GameObject yLabel { get; set; }
+    public GameObject zLabel { get; set; }
+    public int numMarkersPerAxis { get; set; }
 }
