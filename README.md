@@ -15,9 +15,9 @@ To install MRTK, click [here](https://github.com/microsoft/MixedRealityToolkit-U
 and then import the unity package into your project by going to Assets > Import Package > Custom Package, and
 then browsing for the package.
 
-## Step 3: Install Oculus SDK
-To install the Oculus SDK, go to the asset store inside of the Unity Editor, and search for "Oculus". The
-SDK should be the first one that pops up. Click "yes" anytime that it asks you if you want to do something.
+## Step 3: Install Oculus Integration
+To install the Oculus Integration, go to the asset store inside of the Unity Editor, and search for "Oculus". The
+Integration should be the first one that pops up. Click "yes" anytime that it asks you if you want to do something.
 The process is completed once Unity restarts. Once Unity restarts, a pop-up should appear for MRTK. Click the
 button that lets MRTK do what it wants.
 
