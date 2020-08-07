@@ -77,6 +77,10 @@ For some reason, the shaders that MRTK uses do not update when all of the shader
 shaders, select "Mixed Reality Toolkit" from the menu then go to "Utilities" => "Upgrade MRTK Shaders for Lightweight Render Pipeline".
 After this, the shaders should be ready to go.
 
+## Step 16: All Sky SkyBox
+Go to the Unity Asset Store inside of the editor and search for "All Sky". There should be an asset called "All Sky" that is free. Install
+that one.
+
 ## Step 15: Run the application
 That should be it. Now you should be able to run the application. If everything is working, you should have all of the functionality
 that I demonstrated in the videos.
