@@ -6,22 +6,20 @@ using UnityEngine;
 // and put it in the wrapper.
 public class ScatterBoxOptions : IOptions
 {
-    public DataObj dataObj { get; set; }
-    public GameObject dataPointPrefab { get; set; }
-    public GameObject markerPrefab { get; set; }
-    public float extraMargin { get; set; } = 0.1f;
-    public string xName { get; set; }
-    public string yName { get; set; }
-    public string zName { get; set; }
-    public float plotScale { get; set; } = 1f;
-    public Vector3 dataPointScale { get; set; } = new Vector3(0.05f, 0.05f, 0.05f);
+    // Not here => Inspector
     public GameObject PointHolder { get; set; }
+    // Not here => Inspector
     public GameObject markerParent { get; set; }
+    // Not here => Inspector
     public GameObject xAxis { get; set; }
+    // Not here => Inspector
     public GameObject yAxis { get; set; }
+    // Not here => Inspector
     public GameObject zAxis { get; set; }
+    // Not here => Inspector
     public GameObject xLabel { get; set; }
+    // Not here => Inspector
     public GameObject yLabel { get; set; }
+    // Not here => Inspector
     public GameObject zLabel { get; set; }
-    public int numMarkersPerAxis { get; set; }
 }

@@ -18,7 +18,7 @@ public class GenerateHistogram : MonoBehaviour
         SetupData();
         GameObject histoGo = Instantiate(histogramPrefab, Vector3.zero, Quaternion.identity);
         Histogram hObj = histoGo.GetComponentInChildren<Histogram>();
-        hObj.InitializeHistogram(dO, "ccmadRatio");
+        //hObj.InitializeHistogram(dO, "ccmadRatio");
         AddObjectManipulator oM = histoGo.AddComponent<AddObjectManipulator>();
         oM.PlaceObjectManipulator(histoGo.transform);
 

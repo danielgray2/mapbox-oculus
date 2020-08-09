@@ -6,6 +6,9 @@ public class DashBoardWrapper : MonoBehaviour, IDashBoard
 {
     IAbstractDashBoard dB;
 
+    public int numRows { get; set; }
+    public int numCols { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,26 +21,6 @@ public class DashBoardWrapper : MonoBehaviour, IDashBoard
 
     }
     public void DrawDashBoard()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public int GetCols()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public int GetRows()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetCols(int numCols)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetRows(int numRows)
     {
         throw new System.NotImplementedException();
     }

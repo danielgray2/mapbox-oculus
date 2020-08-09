@@ -4,6 +4,5 @@ using UnityEngine;
 
 public interface IContext : IComposable
 {
-    public IOptions options { get; set; }
     void Generate();
 }

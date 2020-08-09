@@ -4,9 +4,7 @@ using UnityEngine;
 
 public interface IDashBoard
 {
-    public IOptions options { get; set; }
-    public int numRows { get; set; }
-    public int numCols { get; set; }
-
+    int numRows { get; set; }
+    int numCols { get; set; }
     void DrawDashBoard();
 }

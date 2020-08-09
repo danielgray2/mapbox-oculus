@@ -8,7 +8,7 @@ public class GenerateScatterplot : MonoBehaviour
 {
     [SerializeField]
     GameObject scatterplotPrefab;
-
+    /*
     DataFrame df;
     DataObj dO;
 
@@ -63,4 +63,5 @@ public class GenerateScatterplot : MonoBehaviour
         df = new DataFrame(ccmadCol, latCol, lonCol);
         dO = new DataObj(df);
     }
+    */
 }

@@ -294,7 +294,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5557319594519682385}
-  - component: {fileID: 678465737895059152}
   m_Layer: 0
   m_Name: Markers
   m_TagString: Untagged
@@ -316,28 +315,6 @@ Transform:
   m_Father: {fileID: 5557319594199035100}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &678465737895059152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5557319594519682384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da549a3036ebc8d4fb10f866d4e73216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  extraMargin: 0.1
-  barPrefab: {fileID: 0}
-  markerPrefab: {fileID: 0}
-  plotScale: 1
-  BarHolder: {fileID: 0}
-  markerParent: {fileID: 0}
-  xAxis: {fileID: 0}
-  yAxis: {fileID: 0}
-  offset: 0.1
-  xLabel: {fileID: 0}
 --- !u!1 &5557319594521995110
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5027495515196726190}
-  - component: {fileID: 3990809161621531921}
+  - component: {fileID: 4356669916144930026}
   m_Layer: 0
   m_Name: HistogramContainer
   m_TagString: Untagged
@@ -597,7 +574,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3990809161621531921
+--- !u!114 &4356669916144930026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -606,18 +583,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6387586177638801958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da549a3036ebc8d4fb10f866d4e73216, type: 3}
+  m_Script: {fileID: 11500000, guid: 42053d1f1a7254e48a60d34d20652071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extraMargin: 0.1
+  BarHolder: {fileID: 5557319595295067156}
   barPrefab: {fileID: 3390533149403903039, guid: 2acd7e2d928f19f468172d2786180558,
     type: 3}
   markerPrefab: {fileID: 7853558781817306471, guid: c9d0776dbf5a3004db00d8ad2d0763b0,
     type: 3}
-  plotScale: 1
-  BarHolder: {fileID: 5557319595295067156}
   markerParent: {fileID: 5557319594519682384}
   xAxis: {fileID: 3498926645146122890}
   yAxis: {fileID: 5450469497159101430}
-  offset: 0.1
   xLabel: {fileID: 5557319594182221289}

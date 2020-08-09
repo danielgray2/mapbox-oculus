@@ -48,6 +48,12 @@ public sealed class DataStore
         }
     }
 
+    public void FakeAddDataSet(DataFrame df, string name)
+    {
+        DataObj dO = new DataObj(df);
+        dataDict.Add(name, dO);
+    }
+
     public void AddDataSet(DataFrame df, string name)
     {
         DataObj dO = new DataObj(df);

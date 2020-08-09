@@ -5,18 +5,6 @@ using UnityEngine;
 
 public abstract class IAbstractTransformation : IAbsTransformationAnimator
 {
-    public IOptions transformationOptions
-    {
-        get
-        {
-            return transformationOptions;
-        }
-        set
-        {
-            transformationOptions = value;
-            base.options = transformationOptions;
-        }
-    }
     public IAbstractTransformation() : base()
     {
         Init(this);

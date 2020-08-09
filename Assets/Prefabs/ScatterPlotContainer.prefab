@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5526808368254575784}
-  - component: {fileID: 850632442333694980}
+  - component: {fileID: 2856345570336202224}
   m_Layer: 0
   m_Name: ScatterPlotContainer
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &850632442333694980
+--- !u!114 &2856345570336202224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,23 +41,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2612818464391990061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad2bd8b864120fc4a86d0f0787dc70f3, type: 3}
+  m_Script: {fileID: 11500000, guid: fd432d8ce61053d4a9517da2de533f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extraMargin: 0.1
   dataPointPrefab: {fileID: 7508915127992492698, guid: d07cdb72716384245905c5ae622ac5f7,
     type: 3}
-  markerPrefab: {fileID: 7853558781817306471, guid: c9d0776dbf5a3004db00d8ad2d0763b0,
-    type: 3}
-  plotScale: 1
   PointHolder: {fileID: 3952304257037716660}
-  markerParent: {fileID: 3952304258408766960}
   xAxis: {fileID: 3952304258706895559}
   yAxis: {fileID: 3952304257838044740}
   zAxis: {fileID: 3952304256844994455}
   xLabel: {fileID: 3952304258070781257}
   yLabel: {fileID: 3952304257023605237}
   zLabel: {fileID: 3952304257741596102}
+  markerPrefab: {fileID: 7853558781817306471, guid: c9d0776dbf5a3004db00d8ad2d0763b0,
+    type: 3}
+  markerParent: {fileID: 3952304258408766961}
 --- !u!1 &3952304256844994455
 GameObject:
   m_ObjectHideFlags: 0

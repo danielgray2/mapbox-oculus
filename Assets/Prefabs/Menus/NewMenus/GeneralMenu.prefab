@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 9058958523376121503}
   - component: {fileID: 9058958523376121500}
   - component: {fileID: 9058958523376121501}
-  - component: {fileID: 60800463}
+  - component: {fileID: 2916381927686734398}
   m_Layer: 5
   m_Name: GeneralMenu
   m_TagString: Untagged
@@ -549,7 +549,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &60800463
+--- !u!114 &2916381927686734398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -558,9 +558,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9058958523376121499}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14ef83e5e9a9dcf4bb7ce36028cd21ca, type: 3}
+  m_Script: {fileID: 11500000, guid: ef36214069b8d37429ff43b7165af30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  next: {fileID: 0}
   menuHandlerGo: {fileID: 0}
 --- !u!1 &9058958523862744527
 GameObject:
@@ -940,6 +941,26 @@ PrefabInstance:
       propertyPath: m_firstOverflowCharacterIndex
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 4700229452461844182, guid: 0bb2a3db516b409418f7b0071dcf3bef,
+        type: 3}
+      propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1775094042325544443}
+    - target: {fileID: 4700229452461844182, guid: 0bb2a3db516b409418f7b0071dcf3bef,
+        type: 3}
+      propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnHandPressCompleted
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700229452461844182, guid: 0bb2a3db516b409418f7b0071dcf3bef,
+        type: 3}
+      propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700229452461844182, guid: 0bb2a3db516b409418f7b0071dcf3bef,
+        type: 3}
+      propertyPath: ButtonReleased.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6533815778140756778, guid: 0bb2a3db516b409418f7b0071dcf3bef,
         type: 3}
       propertyPath: thisMenu
@@ -953,6 +974,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3895770441229220334}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1775094042325544443 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3365007178151154709, guid: 0bb2a3db516b409418f7b0071dcf3bef,
+    type: 3}
+  m_PrefabInstance: {fileID: 3895770441229220334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881d1ff8f009f5148b9f192e6ba31223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5195265197348303359
 PrefabInstance:
   m_ObjectHideFlags: 0

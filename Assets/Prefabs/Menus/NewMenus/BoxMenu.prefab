@@ -2641,7 +2641,7 @@ GameObject:
   - component: {fileID: 5015608192095683884}
   - component: {fileID: 5015608192095683887}
   - component: {fileID: 5015608192095683886}
-  - component: {fileID: 752352985}
+  - component: {fileID: -4195628440027310059}
   m_Layer: 5
   m_Name: BoxMenu
   m_TagString: Untagged
@@ -2852,7 +2852,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &752352985
+--- !u!114 &-4195628440027310059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2861,10 +2861,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5015608192095683880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0578d396eac65d644a3ba95319691df2, type: 3}
+  m_Script: {fileID: 11500000, guid: 621bb9ce8b0a47b438dc7e12af09b9df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuManagerGo: {fileID: 0}
+  menuHandlerGo: {fileID: 0}
+  configDPMenuGo: {fileID: 0}
+  transfsMenuGo: {fileID: 0}
+  parentMenuGo: {fileID: 0}
+  childrenMenuGo: {fileID: 0}
+  graphMenuGo: {fileID: 0}
+  contextMenuGo: {fileID: 0}
+  dashMenuGo: {fileID: 0}
+  dataObjDDGo: {fileID: 0}
 --- !u!1 &5015608192189851047
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IComposable
+public interface IComposable : IController
 {
-    DataObj GetDataObj();
-    void SetDataObj();
-    List<Transformation> GetTransformations();
-    void SetTransformations(List<Transformation> transformations);
-    DataPointOptions GetDataPointOptions();
-    void SetDataPointOptions(DataPointOptions dPO);
-    IComposableOptions GetIComposableOptions();
-    void SetIComposableOptions(IComposableOptions iCO);
-    List<IComposable> GetSubComps();
-    void SetSubComps(List<IComposable> subComps);
-    void GetSuperComp();
-    void SetSuperComp(IComposable superComp);
+    DataObj dataObj { get; set; }
+    List<IAbstractTransformation> transformations { get; set; }
+    DataPointOptions dataPointOptions { get; set; }
+    List<IComposable> subComps { get; set; }
+    IComposable superComp { get; set; }
 }

@@ -1,25 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-
-public abstract class IAbstractMenu : MonoBehaviour
+﻿
+public abstract class IAbstractMenu : IController
 {
-    [SerializeField]
-    protected GameObject menuHandlerGo;
+    public IModel model { get; set; }
+    public IAbstractView view { get; set; }
 
-    protected MenuEnum mE;
-    protected MenuHandler mH;
-
-    public MenuEnum? GetMenuEnum()
+    public IAbstractMenu(IAbstractView view)
     {
-        return mE;
+        this.view = view;
     }
 
-    public virtual void Initiate(IMenuData mD)
-    {
-        mH.ActivateMenu(this.gameObject);
-    }
+    public abstract void Transition(IAbstractMenu next);
 
-    public abstract void Transition(MenuEnum? mE);
+    public abstract void Initialize(IModel iModel);
+
+    public abstract void Update();
 }

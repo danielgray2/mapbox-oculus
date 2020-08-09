@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class IAbsTransformationAnimator
 {
-    public IOptions options { get; set; }
     bool running = false;
     protected IAbstractTransformation transformation { get; set; }
     public IAbsTransformationAnimator()

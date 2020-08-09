@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MenuHandler : MonoBehaviour
 {
-    public Dictionary<MenuEnum, IAbstractMenu> menuDictionary = new Dictionary<MenuEnum, IAbstractMenu>();
+    public Dictionary<MenuEnum, GameObject> menuDictionary = new Dictionary<MenuEnum, GameObject>();
 
     protected MenuEnum startMenu = MenuEnum.GENERAL_MENU;
 
@@ -23,22 +23,21 @@ public class MenuHandler : MonoBehaviour
 
     public void ActivateMenu(GameObject gO)
     {
-        IAbstractMenu aM = gO.GetComponent<IAbstractMenu>();
         List<MenuEnum> menuList = menuDictionary.Keys.ToList();
         foreach(MenuEnum curr in menuList)
         {
-            if(menuDictionary[curr] == aM)
+            if(menuDictionary[curr] == gO)
             {
-                menuDictionary[curr].gameObject.SetActive(true);
+                menuDictionary[curr].SetActive(true);
             }
             else
             {
-                menuDictionary[curr].gameObject.SetActive(false);
+                menuDictionary[curr].SetActive(false);
             }
         }
     }
 
-    public void Register(MenuEnum key, IAbstractMenu value)
+    public void Register(MenuEnum key, GameObject value)
     {
         menuDictionary.Add(key, value);
     }

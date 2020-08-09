@@ -27,6 +27,10 @@ public class MapViz : MonoBehaviour, IGraph
     GameObject pointHolder;
     bool plottedOnce = false;
 
+    public DataObj dataObj { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Vector3 minDpSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Vector3 maxDpSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
     public void InitializeMapViz(DataObj dataObj, string latColName, string lonColName)
     {
         this.currDataObj = dataObj;

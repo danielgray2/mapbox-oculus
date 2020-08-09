@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Analysis;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,22 +13,19 @@ public class ScatterBox : IAbstractGraph
     float yMin;
     float zMin;
 
-    ScatterBoxOptions options;
-
-    public ScatterBox(ScatterBoxOptions options)
+    public ScatterBox(ScatterplotModel model)
     {
-        this.options = options;
-        dataObj = options.dataObj;
-
+        this.model = model;
         GraphStore.Instance.graphList.Add(this);
+        DataObj dataObj = model.compModel.dataObj;
 
-        xMax = options.dataObj.GetMax(options.xName);
-        yMax = options.dataObj.GetMax(options.yName);
-        zMax = options.dataObj.GetMax(options.zName);
+        xMax = dataObj.GetMax(model.xName);
+        yMax = dataObj.GetMax(model.xName);
+        zMax = dataObj.GetMax(model.xName);
 
-        xMin = options.dataObj.GetMin(options.xName);
-        yMin = options.dataObj.GetMin(options.yName);
-        zMin = options.dataObj.GetMin(options.zName);
+        xMin = dataObj.GetMin(model.xName);
+        yMin = dataObj.GetMin(model.xName);
+        zMin = dataObj.GetMin(model.xName);
 
         maxDpSize = new Vector3(0.15f, 0.15f, 0.15f);
         minDpSize = new Vector3(0.01f, 0.01f, 0.01f);
@@ -40,19 +38,25 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<float>> CreatePoints()
     {
-        List<List<float>> retList = new List<List<float>>();
+        if(!(model is ScatterplotModel scatterModel))
+        {
+            throw new ArgumentException("Model must be of type ScatterplotModel");
+        }
 
-        for (var i = 0; i < options.dataObj.df.Rows.Count; i++)
+        List<List<float>> retList = new List<List<float>>();
+        DataObj dataObj = scatterModel.compModel.dataObj;
+
+        for (var i = 0; i < dataObj.df.Rows.Count; i++)
         {
             List<float> currList = new List<float>();
 
-            float xVal = (float)options.dataObj.df.Columns[options.xName][i];
+            float xVal = (float)dataObj.df.Columns[scatterModel.xName][i];
             float x = (xVal - xMin) / (xMax - xMin);
 
-            float yVal = (float)options.dataObj.df.Columns[options.yName][i];
+            float yVal = (float)dataObj.df.Columns[scatterModel.yName][i];
             float y = (yVal - yMin) / (yMax - yMin);
 
-            float zVal = (float)options.dataObj.df.Columns[options.zName][i];
+            float zVal = (float)dataObj.df.Columns[scatterModel.zName][i];
             float z = (zVal - zMin) / (zMax - zMin);
             
             currList.Add(x);
@@ -66,7 +70,12 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<Vector3>> ScaleAxes()
     {
-        float lengthOfAxis = options.plotScale + options.plotScale * options.extraMargin;
+        if (!(model is ScatterplotModel scatterModel))
+        {
+            throw new ArgumentException("Model must be of type ScatterplotModel");
+        }
+
+        float lengthOfAxis = scatterModel.plotScale + scatterModel.plotScale * scatterModel.extraMargin;
         Vector3 origin = new Vector3(0, 0, 0);
 
         List<Vector3> xPoints = new List<Vector3>();
@@ -86,8 +95,13 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<float>> PlaceScale()
     {
+        if (!(model is ScatterplotModel scatterModel))
+        {
+            throw new ArgumentException("Model must be of type ScatterplotModel");
+        }
+
         List<List<float>> retList = new List<List<float>>();
-        for (int i = 1; i <= options.numMarkersPerAxis; i++)
+        for (int i = 1; i <= scatterModel.numMarkersPerAxis; i++)
         {
             List<float> currList = new List<float>();
             

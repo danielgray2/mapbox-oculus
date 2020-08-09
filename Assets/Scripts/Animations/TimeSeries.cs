@@ -35,7 +35,7 @@ public class TimeSeries : MonoBehaviour
     int startIndex;
     int numberOfValues;
     Gradient gradient;
-    CalendarMenu cM;
+    //CalendarMenu cM;
 
     void Update()
     {
@@ -107,18 +107,18 @@ public class TimeSeries : MonoBehaviour
     public void EndScrubbedAnimation()
     {
         animationBegunOnce = false;
-        cM.DateUpdated.RemoveListener(HandleScrubbing);
+        //cM.DateUpdated.RemoveListener(HandleScrubbing);
         MapStore.Instance.iconGOs = new List<GameObject>();
         parent.Destroy();
     }
 
     public void PrepForScrubbing()
     {
-        cM = scrubbingMenuGo.GetComponent<CalendarMenu>();
+        //cM = scrubbingMenuGo.GetComponent<CalendarMenu>();
         // TODO: I think that the following line will add the same listener
         // to the callback every time we change to scrubbing. We should
         // fix this at some point.
-        cM.DateUpdated.AddListener(HandleScrubbing);
+        //cM.DateUpdated.AddListener(HandleScrubbing);
         parent = new GameObject { name = "DataPoints" };
         parent.transform.position = Vector3.zero;
         parent.AddComponent<PointPositionHandler>();

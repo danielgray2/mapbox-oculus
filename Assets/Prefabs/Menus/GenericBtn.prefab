@@ -316,7 +316,6 @@ GameObject:
   - component: {fileID: 3365007178151154709}
   - component: {fileID: 8404484866070723974}
   - component: {fileID: 3696095757567022853}
-  - component: {fileID: 6533815778140756778}
   m_Layer: 0
   m_Name: GenericBtn
   m_TagString: Untagged
@@ -616,17 +615,3 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &6533815778140756778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2427881173894191171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7c4341614ecea148b0a9ab4e59e97b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuToNavTo: {fileID: 0}
-  thisMenu: {fileID: 0}
