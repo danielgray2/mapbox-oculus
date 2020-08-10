@@ -99,8 +99,8 @@ public class ScatterMenuView : IAbstractView
     public void PrepForTransition()
     {
         scatterContr.updateXName(xDDObj.options[xDDObj.value].text);
-        scatterContr.updateYName(yDDObj.options[xDDObj.value].text);
-        scatterContr.updateZName(zDDObj.options[xDDObj.value].text);
+        scatterContr.updateYName(yDDObj.options[yDDObj.value].text);
+        scatterContr.updateZName(zDDObj.options[zDDObj.value].text);
 
         if (scatterModel.parent != null)
         {

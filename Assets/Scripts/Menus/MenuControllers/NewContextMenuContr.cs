@@ -1,11 +1,10 @@
-﻿
-public class MapBaseMenuContr : IAbstractMenu
+﻿public class NewContextMenuContr : IAbstractMenu
 {
-    public MapBaseMenuContr(IAbstractView view) : base(view) { }
+    public NewContextMenuContr(IAbstractView view) : base(view) { }
     public override void Initialize(IModel iModel)
     {
-        model = iModel;
         view.gameObject.SetActive(true);
+        model = iModel;
         view.Initialize(iModel);
     }
 

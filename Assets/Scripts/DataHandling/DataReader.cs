@@ -22,7 +22,7 @@ public class DataReader : MonoBehaviour
 
     void Start()
     {
-        ReadCSV("Assets\\Tests\\LargeTestData.csv", "testdata");
+        ReadCSV("Assets\\Resources\\coso.csv", "testdata");
         //ReadSeismicData();
         //ReadVeloData();
         
@@ -39,9 +39,9 @@ public class DataReader : MonoBehaviour
     {
         DataFrame csvDataFrame = DataFrame.LoadCsv(pathToCsv);
         DataStore.Instance.FakeAddDataSet(csvDataFrame, name);
-        GroupBy groupBy = csvDataFrame.GroupBy("colOne");
-        DataFrame counts = groupBy.Count();
-        Debug.Log(counts);
+        //GroupBy groupBy = csvDataFrame.GroupBy("colOne");
+        //DataFrame counts = groupBy.Count();
+        //Debug.Log(counts);
         /*
         using (var reader = new StreamReader("Assets\\Resources\\coso.csv"))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))

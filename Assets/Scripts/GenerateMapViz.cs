@@ -11,9 +11,9 @@ public class GenerateMapViz : MonoBehaviour
     {
         DataObj dO = GenerateData();
         GameObject mapGO = Instantiate(mapPrefab);
-        MapViz mV = mapGO.GetComponent<MapViz>();
-        mV.InitializeMapViz(dO, "lat", "lon");
-        mV.Plot();
+        //MapViz mV = mapGO.GetComponent<MapViz>();
+        //mV.InitializeMapViz(dO, "lat", "lon");
+        //mV.Plot();
     }
 
     DataObj GenerateData()

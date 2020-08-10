@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
-public interface IGraph
+public interface IGraph : IComposable
 {
-    DataObj dataObj { get; set; }
     Vector3 minDpSize { get; set; }
     Vector3 maxDpSize { get; set; }
 }
