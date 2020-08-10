@@ -27,7 +27,6 @@ public class HistWrapper : IAbstractWrapper
     [SerializeField]
     GameObject xLabel;
 
-    HistModel histModel;
     bool initialized = false;
     bool firstRun = true;
     Histogram wrapped;
@@ -42,11 +41,11 @@ public class HistWrapper : IAbstractWrapper
             DrawAxes();
             DrawScale();
             AddLabels();
+
+            AddObjectManipulator oM = this.gameObject.AddComponent<AddObjectManipulator>();
+            oM.PlaceObjectManipulator(this.transform);
+
             firstRun = false;
-        }
-        else if(!firstRun)
-        {
-            DrawAxes();
         }
     }
 
@@ -55,7 +54,6 @@ public class HistWrapper : IAbstractWrapper
         if (!initialized)
         {
             wrapped = new Histogram(model);
-            histModel = model;
             this.model = model;
             initialized = true;
         }
@@ -63,11 +61,7 @@ public class HistWrapper : IAbstractWrapper
 
     public void DrawBins(List<int> binNums)
     {
-        if (!(model is HistModel histModel))
-        {
-            throw new ArgumentException("Model must be of type ScatterplotModel");
-        }
-
+        HistModel histModel = CastToHistModel();
         for (int i = 0; i < binNums.Count; i++)
         {
             float binHeight = wrapped.NormalizeValue(binNums.ElementAt(i), histModel.minBin, histModel.maxBin);
@@ -113,11 +107,7 @@ public class HistWrapper : IAbstractWrapper
 
     protected void DrawLabels()
     {
-        if (!(model is HistModel histModel))
-        {
-            throw new ArgumentException("Model must be of type ScatterplotModel");
-        }
-
+        HistModel histModel = CastToHistModel();
         TextMesh xTextMesh = xLabel.GetComponent<TextMesh>();
         xTextMesh.text = histModel.xName;
         float xPos = xAxis.transform.localScale.x / 2;
@@ -126,11 +116,7 @@ public class HistWrapper : IAbstractWrapper
 
     void DrawScale()
     {
-        if (!(model is HistModel histModel))
-        {
-            throw new ArgumentException("Model must be of type ScatterplotModel");
-        }
-
+        HistModel histModel = CastToHistModel();
         int numMarkersPerAxis = 2;
         GameObject currMarker;
         Transform markerParent = this.markerParent.transform;
@@ -162,15 +148,20 @@ public class HistWrapper : IAbstractWrapper
 
     void AddLabels()
     {
-        if (!(model is HistModel histModel))
-        {
-            throw new ArgumentException("Model must be of type ScatterplotModel");
-        }
-
+        HistModel histModel = CastToHistModel();
         TextMesh xTextMesh = xLabel.GetComponent<TextMesh>();
         xTextMesh.text = histModel.xName;
         float xPos = xAxis.transform.localScale.x / 2;
         xLabel.transform.position = new Vector3(xPos, -histModel.offset * 2, 0);
+    }
+
+    HistModel CastToHistModel()
+    {
+        if (!(model is HistModel histModel))
+        {
+            throw new ArgumentException("Model must be of type HistModel");
+        }
+        return histModel;
     }
 
     public override void Create()

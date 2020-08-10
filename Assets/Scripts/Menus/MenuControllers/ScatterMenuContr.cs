@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ScatterMenuContr : IAbstractMenu
 {
-    ScatterplotModel scatterModel;
+    ScatterModel scatterModel;
     public ScatterMenuContr(IAbstractView view) : base(view){}
 
     public override void Initialize(IModel iModel) 
@@ -20,7 +20,7 @@ public class ScatterMenuContr : IAbstractMenu
 
     public override void Update(){}
 
-    public void UpdateScatterModel(ScatterplotModel scatterModel)
+    public void UpdateScatterModel(ScatterModel scatterModel)
     {
         this.scatterModel = scatterModel;
     }

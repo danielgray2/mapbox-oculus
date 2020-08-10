@@ -37,10 +37,6 @@ public class ScatterBoxWrapper : IAbstractWrapper
     Transform markerParent;
 
     ScatterBox wrapped;
-    ScatterplotModel scatterModel;
-    string xName;
-    string yName;
-    string zName;
     bool initialized = false;
     bool firstRun = true;
     public DataObj dataObj { get; set; }
@@ -51,24 +47,23 @@ public class ScatterBoxWrapper : IAbstractWrapper
     {
         if (initialized && firstRun)
         {
-            firstRun = false;
             CreateDataPoints(wrapped.CreatePoints());
             DrawAxes(wrapped.ScaleAxes());
             AddLabels();
             DrawScale(wrapped.PlaceScale());
-        }
-        else if(!firstRun)
-        {
-            DrawAxes(wrapped.ScaleAxes());
+
+            AddObjectManipulator oM = this.gameObject.AddComponent<AddObjectManipulator>();
+            oM.PlaceObjectManipulator(this.transform);
+
+            firstRun = false;
         }
     }
 
-    public void Initialize(ScatterplotModel model)
+    public void Initialize(ScatterModel model)
     {
         if (!initialized)
         {
             wrapped = new ScatterBox(model);
-            scatterModel = model;
             this.model = model;
             initialized = true;
         }
@@ -76,12 +71,8 @@ public class ScatterBoxWrapper : IAbstractWrapper
 
     void CreateDataPoints(List<List<float>> vals)
     {
-        if(!(model is ScatterplotModel scatterModel))
-        {
-            throw new ArgumentException("Model must be of type ScatteerplotModel");
-        }
-
-        for(int i = 0; i < vals.Count; i++)
+        ScatterModel scatterModel = CastToScatterModel();
+        for (int i = 0; i < vals.Count; i++)
         {
             List<float> currVal = vals[i];
             GameObject dataPoint = Instantiate(dataPointPrefab, PointHolder.transform);
@@ -132,33 +123,26 @@ public class ScatterBoxWrapper : IAbstractWrapper
 
     void AddLabels()
     {
-        if (!(model is ScatterplotModel scatterModel))
-        {
-            throw new ArgumentException("Model must be of type ScatteerplotModel");
-        }
-
+        ScatterModel scatterModel = CastToScatterModel();
         TextMesh xTextMesh = xLabel.GetComponent<TextMesh>();
         TextMesh yTextMesh = yLabel.GetComponent<TextMesh>();
         TextMesh zTextMesh = zLabel.GetComponent<TextMesh>();
 
-        xTextMesh.text = xName;
-        yTextMesh.text = yName;
-        zTextMesh.text = zName;
+        xTextMesh.text = scatterModel.xName;
+        yTextMesh.text = scatterModel.yName;
+        zTextMesh.text = scatterModel.zName;
 
         float plotScale = scatterModel.plotScale;
         float extraMargin = scatterModel.extraMargin;
 
-        xLabel.transform.localPosition = new Vector3(plotScale / 2 + extraMargin * plotScale, plotScale / 2.5f, 0);
+        xLabel.transform.localPosition = new Vector3(plotScale / 1.5f + extraMargin * plotScale, plotScale / 2.5f, 0);
         yLabel.transform.localPosition = new Vector3(-plotScale / 2.5f, plotScale + extraMargin * plotScale, 0);
         zLabel.transform.localPosition = new Vector3(0, plotScale / 2.5f, plotScale / 2 + extraMargin * plotScale);
     }
 
     void DrawScale(List<List<float>> scaleList)
     {
-        if (!(model is ScatterplotModel scatterModel))
-        {
-            throw new ArgumentException("Model must be of type ScatteerplotModel");
-        }
+        ScatterModel scatterModel = CastToScatterModel();
 
         float plotScale = scatterModel.plotScale;
 
@@ -181,6 +165,15 @@ public class ScatterBoxWrapper : IAbstractWrapper
             currMarker.transform.rotation = zLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = scaleList[i-1][2].ToString("0.0");
         }
+    }
+
+    ScatterModel CastToScatterModel()
+    {
+        if (!(model is ScatterModel scatterModel))
+        {
+            throw new ArgumentException("Model must be of type ScatterModel");
+        }
+        return scatterModel;
     }
 
     public override void Create()

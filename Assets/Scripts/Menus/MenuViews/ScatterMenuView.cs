@@ -30,7 +30,7 @@ public class ScatterMenuView : IAbstractView
 
     protected MenuHandler mH;
     protected MenuEnum mE;
-    protected ScatterplotModel scatterModel;
+    protected ScatterModel scatterModel;
     protected ScatterMenuContr scatterContr;
 
     private void Awake()
@@ -60,7 +60,7 @@ public class ScatterMenuView : IAbstractView
             throw new ArgumentException("Model must be of type ComposableModel");
         }
 
-        scatterModel = new ScatterplotModel(compModel);
+        scatterModel = new ScatterModel(compModel);
         scatterContr.UpdateScatterModel(scatterModel);
 
         xDDObj = xDDGo.GetComponent<TMP_Dropdown>();

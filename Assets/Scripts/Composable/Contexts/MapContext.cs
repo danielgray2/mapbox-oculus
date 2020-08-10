@@ -3,11 +3,10 @@ using Mapbox.Unity.Map.Strategies;
 using Mapbox.Utils;
 using Microsoft.Data.Analysis;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapViz : MonoBehaviour, IGraph
+public class MapContext : MonoBehaviour, IGraph
 {
     [SerializeField]
     public Texture2D loadingTexture;

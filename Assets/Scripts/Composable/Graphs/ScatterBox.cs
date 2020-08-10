@@ -13,7 +13,7 @@ public class ScatterBox : IAbstractGraph
     float yMin;
     float zMin;
 
-    public ScatterBox(ScatterplotModel model)
+    public ScatterBox(ScatterModel model)
     {
         this.model = model;
         GraphStore.Instance.graphList.Add(this);
@@ -38,7 +38,7 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<float>> CreatePoints()
     {
-        if(!(model is ScatterplotModel scatterModel))
+        if(!(model is ScatterModel scatterModel))
         {
             throw new ArgumentException("Model must be of type ScatterplotModel");
         }
@@ -70,7 +70,7 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<Vector3>> ScaleAxes()
     {
-        if (!(model is ScatterplotModel scatterModel))
+        if (!(model is ScatterModel scatterModel))
         {
             throw new ArgumentException("Model must be of type ScatterplotModel");
         }
@@ -95,7 +95,7 @@ public class ScatterBox : IAbstractGraph
 
     public List<List<float>> PlaceScale()
     {
-        if (!(model is ScatterplotModel scatterModel))
+        if (!(model is ScatterModel scatterModel))
         {
             throw new ArgumentException("Model must be of type ScatterplotModel");
         }

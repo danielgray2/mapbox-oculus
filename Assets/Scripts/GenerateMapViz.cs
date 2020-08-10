@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.Analysis;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GenerateMapViz : MonoBehaviour
