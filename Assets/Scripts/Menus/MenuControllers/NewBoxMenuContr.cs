@@ -1,22 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class NewBoxMenuContr : IAbstractMenu
+﻿
+public class NewBoxMenuContr : IAbsMenuContr
 {
-    public NewBoxMenuContr(IAbstractView view) : base(view) { }
-
-    public override void Initialize(IModel iModel)
-    {
-        view.gameObject.SetActive(true);
-        view.Initialize(null);
-    }
-
-    public override void Transition(IAbstractMenu next)
-    {
-        view.gameObject.SetActive(false);
-        next.Initialize(model);
-    }
+    public NewBoxMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
 
     public override void Update() { }
 }

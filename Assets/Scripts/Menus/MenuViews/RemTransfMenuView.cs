@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RemTransfMenuView : IAbstractView
 {
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
         throw new System.NotImplementedException();
     }

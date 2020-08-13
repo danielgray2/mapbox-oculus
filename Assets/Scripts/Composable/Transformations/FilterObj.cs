@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FilterObj : IAbstractTransformation
+public class FilterObj : IAbsTransf
 {
     public enum FilterType
     {
@@ -13,7 +13,7 @@ public class FilterObj : IAbstractTransformation
         LTE
     }
 
-    protected IAbsTransformationAnimator iTA;
+    protected IAbsTransfAnim iTA;
     public FilterType filterType { get; set; }
     public IComparable value { get; set; }
     public string colName { get; set; }

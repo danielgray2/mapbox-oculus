@@ -1,14 +1,14 @@
 using UnityEngine;
 /*
-public class TransfMenuContr : IAbstractMenu
+public class TransfMenuContr : IAbsMenuContr
 {
     protected MenuData data;
     public class MenuData : IMenuData { }
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
+        mV = menuHandlerGo.GetComponent<MenuView>();
         mE = MenuEnum.TRANSFORMATION;
-        mH.Register(mE, this);
+        mV.Register(mE, this);
     }
     public override void Transition(MenuEnum? mE)
     {

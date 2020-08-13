@@ -11,7 +11,7 @@ using UnityEngine.Events;
 //using UnityScript.Steps;
 
 /*
-public class CalMenuContr : IAbstractMenu
+public class CalMenuContr : IAbsMenuContr
 {
     [SerializeField]
     GameObject menuManagerGo;

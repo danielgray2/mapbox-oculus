@@ -102,7 +102,7 @@ public class Map : IAbstractContext
         throw new NotImplementedException();
     }
 
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
         throw new NotImplementedException();
     }

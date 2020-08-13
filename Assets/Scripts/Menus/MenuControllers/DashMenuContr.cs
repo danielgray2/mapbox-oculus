@@ -1,14 +1,14 @@
 ﻿/*
-public class DashMenuContr : IAbstractMenu
+public class DashMenuContr : IAbsMenuContr
 {
     protected MenuData data;
     public class MenuData : IMenuData { }
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
+        mV = menuHandlerGo.GetComponent<MenuView>();
         mE = MenuEnum.DASHBOARD;
-        mH.Register(mE, this);
+        mV.Register(mE, this);
     }
 
     public override void Transition(MenuEnum? mE)

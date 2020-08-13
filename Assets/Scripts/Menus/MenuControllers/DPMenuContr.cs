@@ -1,15 +1,15 @@
 using UnityEngine;
 /*
-public class DPMenuContr : IAbstractMenu
+public class DPMenuContr : IAbsMenuContr
 {
     protected MenuData data;
     public class MenuData : IMenuData { }
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
+        mV = menuHandlerGo.GetComponent<MenuView>();
         mE = MenuEnum.DATA_POINT;
-        mH.Register(mE, this);
+        mV.Register(mE, this);
     }
 
     public override void Transition(MenuEnum? mE)

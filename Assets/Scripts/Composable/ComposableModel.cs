@@ -7,9 +7,10 @@ public enum ComposableType
 {
     GRAPH,
     CONTEXT,
-    DASHBOARD
+    DASHBOARD,
+    MESH
 }
-public class ComposableModel : IModel
+public class ComposableModel : IAbsModel
 {
     public DataObj dataObj { get; set; }
     public ComposableType compType { get; set; }

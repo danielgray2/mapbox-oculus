@@ -4,7 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class NewGraphMenuView : IAbstractView
+public class NewGraphMenuView : IAbsMenuView
 {
     [SerializeField]
     GameObject menuHandlerGo;
@@ -18,18 +18,13 @@ public class NewGraphMenuView : IAbstractView
     [SerializeField]
     GameObject graphTypeDDGo;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
     protected TMP_Dropdown graphTypeDDObj;
     protected GameObject next;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.NEW_GRAPH;
-        mH.Register(mE, this.gameObject);
+        Setup(MenuEnum.NEW_GRAPH, menuHandlerGo.GetComponent<MenuView>());
         graphTypeDDObj = graphTypeDDGo.GetComponent<TMP_Dropdown>();
-        controller = new NewGraphMenuContr(this);
     }
 
     // Start is called before the first frame update
@@ -49,24 +44,14 @@ public class NewGraphMenuView : IAbstractView
         string graphName = graphTypeDDObj.options[graphTypeDDObj.value].text;
         GraphTypeEnum enumVal = GraphDict.stringEnumDict[graphName];
         next = DetermineNext(enumVal);
-        
-        if(!(controller is NewGraphMenuContr graphContr))
-        {
-            throw new ArgumentException("Controller must be of type NewGraphMenuContr");
-        }
 
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
-
-        graphContr.Transition(nextMenu);
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iModel;
+        model = iAbsModel;
+        controller = new NewGraphMenuContr(this, model);
         graphTypeDDObj.options = GetGraphOptions();
     }
 

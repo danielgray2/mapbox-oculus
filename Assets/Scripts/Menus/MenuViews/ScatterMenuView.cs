@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ScatterMenuView : IAbstractView
+public class ScatterMenuView : IAbsMenuView
 {
     [SerializeField]
     public GameObject next;
@@ -28,40 +28,25 @@ public class ScatterMenuView : IAbstractView
     protected TMP_Dropdown yDDObj;
     protected TMP_Dropdown zDDObj;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
     protected ScatterModel scatterModel;
     protected ScatterMenuContr scatterContr;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.SCATTERPLOT_GRAPH;
-        mH.Register(mE, this.gameObject);
-        scatterContr = new ScatterMenuContr(this);
-        controller = scatterContr;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        Setup(MenuEnum.SCATTERPLOT_GRAPH, menuHandlerGo.GetComponent<MenuView>());
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        
-    }
-
-    public override void Initialize(IModel iModel)
-    {
-        if(!(iModel is ComposableModel compModel))
+        if(!(iAbsModel is ComposableModel compModel))
         {
             throw new ArgumentException("Model must be of type ComposableModel");
         }
 
         scatterModel = new ScatterModel(compModel);
-        scatterContr.UpdateScatterModel(scatterModel);
+        model = scatterModel;
+        scatterContr = new ScatterMenuContr(this, model);
+        controller = scatterContr;
 
         xDDObj = xDDGo.GetComponent<TMP_Dropdown>();
         yDDObj = yDDGo.GetComponent<TMP_Dropdown>();
@@ -111,12 +96,6 @@ public class ScatterMenuView : IAbstractView
         ScatterBoxWrapper scatterBoxWrapper = scatterBoxGo.GetComponent<ScatterBoxWrapper>();
         scatterBoxWrapper.Initialize(scatterModel);
 
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
-
-        scatterContr.Transition(nextMenu);
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 }

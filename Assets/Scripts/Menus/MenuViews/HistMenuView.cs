@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class HistMenuView : IAbstractView
+public class HistMenuView : IAbsMenuView
 {
     [SerializeField]
     public GameObject next;
@@ -21,40 +21,26 @@ public class HistMenuView : IAbstractView
 
     protected TMP_Dropdown dDObj;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
     protected HistModel histModel;
     protected HistMenuContr histContr;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.HISTOGRAM_GRAPH;
-        mH.Register(mE, this.gameObject);
-        histContr = new HistMenuContr(this);
-        controller = histContr;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        Setup(MenuEnum.HISTOGRAM_GRAPH, menuHandlerGo.GetComponent<MenuView>());
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Initialize(IAbsModel iAbsModel)
     {
-
-    }
-
-    public override void Initialize(IModel iModel)
-    {
-        if (!(iModel is ComposableModel compModel))
+        if (!(iAbsModel is ComposableModel compModel))
         {
             throw new ArgumentException("Model must be of type ComposableModel");
         }
 
         histModel = new HistModel(compModel);
-        histContr.UpdateHistModel(histModel);
+        mV.RegisterModel(histModel.gUID, histModel);
+        histContr = new HistMenuContr(this, histModel);
+        controller = histContr;
+        model = histModel;
 
         dDObj = dDGo.GetComponent<TMP_Dropdown>();
 
@@ -98,12 +84,7 @@ public class HistMenuView : IAbstractView
         HistWrapper histWrapper = histGo.GetComponent<HistWrapper>();
         histWrapper.Initialize(histModel);
 
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
 
-        histContr.Transition(nextMenu);
     }
 }

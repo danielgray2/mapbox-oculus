@@ -5,7 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class BoxMenuView : IAbstractView
+public class BoxMenuView : IAbsMenuView
 {
     [SerializeField]
     GameObject menuHandlerGo;
@@ -32,40 +32,27 @@ public class BoxMenuView : IAbstractView
     GameObject dashMenuGo;
 
     [SerializeField]
+    GameObject meshMenuGo;
+
+    [SerializeField]
     GameObject dataObjDDGo;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
-    protected ComposableModel compModel;
     protected GameObject next;
     protected TMP_Dropdown dataDDObj;
     protected string dataObjName;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.BOX;
-        mH.Register(mE, this.gameObject);
-        controller = new BoxMenuContr(this);
+        Setup(MenuEnum.BOX, menuHandlerGo.GetComponent<MenuView>());
         dataDDObj = dataObjDDGo.GetComponent<TMP_Dropdown>();
     }
 
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        this.model = iModel;
-        if(!(this.model is ComposableModel compModel))
-        {
-            throw new ArgumentException("Model must be of type ComposableModel");
-        }
-        this.compModel = compModel;
+        model = iAbsModel;
+        controller = new BoxMenuContr(this, model);
         dataDDObj.options = GetGraphOptions();
     }
-
-    // Start is called before the first frame update
-    void Start() { }
-
-    // Update is called once per frame
-    void Update() { }
 
     public void PrepForTransition()
     {   
@@ -74,17 +61,11 @@ public class BoxMenuView : IAbstractView
             throw new ArgumentException("Controller must be of type BoxMenuContr");
         }
 
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
-
         dataObjName = dataDDObj.options[dataDDObj.value].text;
         DataObj dataObj = DataStore.Instance.dataDict[dataObjName];
 
         boxContr.UpdateModelDataObj(dataObj);
-        boxContr.Transition(nextMenu);
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
     public List<TMP_Dropdown.OptionData> GetGraphOptions()
@@ -130,6 +111,7 @@ public class BoxMenuView : IAbstractView
 
     public void ContinueBtnClicked()
     {
+        ComposableModel compModel = CastToCompModel();
         switch (compModel.compType)
         {
             case ComposableType.CONTEXT:
@@ -141,9 +123,21 @@ public class BoxMenuView : IAbstractView
             case ComposableType.GRAPH:
                 next = graphMenuGo;
                 break;
+            case ComposableType.MESH:
+                next = meshMenuGo;
+                break;
             default:
                 throw new ArgumentException("Unable to recognize the button clicked");
         }
         PrepForTransition();
+    }
+
+    public ComposableModel CastToCompModel()
+    {
+        if (!(this.model is ComposableModel compModel))
+        {
+            throw new ArgumentException("Model must be of type ComposableModel");
+        }
+        return compModel;
     }
 }

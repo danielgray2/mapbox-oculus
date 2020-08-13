@@ -4,8 +4,7 @@ using UnityEngine;
 
 public interface IController
 {
-    IModel model { get; set; }
+    IAbsModel model { get; set; }
     IAbstractView view { get; set; }
-    void Initialize(IModel iModel);
     void Update();
 }

@@ -1,20 +1,8 @@
 using UnityEngine;
 
-public class HistBaseMenuContr : IAbstractMenu
+public class HistBaseMenuContr : IAbsMenuContr
 {
-    public HistBaseMenuContr(IAbstractView view) : base(view) { }
-    public override void Initialize(IModel iModel)
-    {
-        model = iModel;
-        view.gameObject.SetActive(true);
-        view.Initialize(iModel);
-    }
-
-    public override void Transition(IAbstractMenu next)
-    {
-        view.gameObject.SetActive(false);
-        next.Initialize(model);
-    }
+    public HistBaseMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
 
     public override void Update() { }
 }

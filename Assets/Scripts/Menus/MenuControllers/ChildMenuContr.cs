@@ -1,20 +1,20 @@
 using UnityEngine;
 /*
-public class ChildMenuContr : IAbstractMenu
+public class ChildMenuContr : IAbsMenuContr
 {
     protected MenuData data;
     public class MenuData : IMenuData { }
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
+        mV = menuHandlerGo.GetComponent<MenuView>();
         mE = MenuEnum.CHILD;
-        mH.Register(mE, this);
+        mV.Register(mE, this);
     }
 
     public override void Transition(MenuEnum? mE)
     {
-        IAbstractMenu aM = mH.menuDictionary[mE.Value];
+        IAbsMenuContr aM = mV.menuDictionary[mE.Value];
         aM.Initiate(new MenuData());
     }
 }

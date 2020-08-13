@@ -5,7 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class NewContextMenuView : IAbstractView
+public class NewContextMenuView : IAbsMenuView
 {
     [SerializeField]
     GameObject menuHandlerGo;
@@ -16,23 +16,19 @@ public class NewContextMenuView : IAbstractView
     [SerializeField]
     GameObject mapMenuGo;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
     protected TMP_Dropdown contextTypeDDObj;
     protected GameObject next;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.NEW_CONTEXT;
-        mH.Register(mE, this.gameObject);
+        Setup(MenuEnum.NEW_CONTEXT, menuHandlerGo.GetComponent<MenuView>());
         contextTypeDDObj = contextTypeDDGo.GetComponent<TMP_Dropdown>();
-        controller = new NewContextMenuContr(this);
     }
 
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iModel;
+        model = iAbsModel;
+        controller = new NewContextMenuContr(this, model);
         contextTypeDDObj.options = GetContextOptions();
     }
 
@@ -42,30 +38,7 @@ public class NewContextMenuView : IAbstractView
         ContextTypeEnum enumVal = ContextDict.stringEnumDict[contextName];
         next = DetermineNext(enumVal);
 
-        if (!(controller is NewContextMenuContr contextContr))
-        {
-            throw new ArgumentException("Controller must be of type NewContextMenuContr");
-        }
-
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
-
-        contextContr.Transition(nextMenu);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
     public List<TMP_Dropdown.OptionData> GetContextOptions()

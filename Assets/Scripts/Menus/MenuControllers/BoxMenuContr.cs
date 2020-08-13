@@ -1,35 +1,23 @@
 ﻿using System;
-using UnityEngine;
 
-public class BoxMenuContr : IAbstractMenu
+public class BoxMenuContr : IAbsMenuContr
 {
-    ComposableModel compModel;
-    public BoxMenuContr(IAbstractView view) : base(view) { }
-
-    public override void Initialize(IModel iModel)
-    {
-        model = iModel;
-        view.gameObject.SetActive(true);
-        view.Initialize(iModel);
-
-        if (!(iModel is ComposableModel compModel))
-        {
-            throw new ArgumentException("Controller must be of type BoxMenuContr");
-        }
-
-        this.compModel = compModel;
-    }
-
-    public override void Transition(IAbstractMenu next)
-    {
-        view.gameObject.SetActive(false);
-        next.Initialize(model);
-    }
+    public BoxMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
 
     public override void Update() { }
 
     public void UpdateModelDataObj(DataObj dataObj)
     {
-        this.compModel.dataObj = dataObj;
+        ComposableModel compModel = CastToCompModel();
+        compModel.dataObj = dataObj;
+    }
+
+    public ComposableModel CastToCompModel()
+    {
+        if(!(model is ComposableModel compModel))
+        {
+            throw new ArgumentException("Model must be of type COmposableModel");
+        }
+        return compModel;
     }
 }

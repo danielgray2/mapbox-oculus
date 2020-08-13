@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class IAbstractWrapper : MonoBehaviour
 {
     public abstract void Create();
-    public IModel model { get; set; }
+    public IAbsModel model { get; set; }
 }

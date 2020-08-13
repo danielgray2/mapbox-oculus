@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ManualAnimator : IAbsTransformationAnimator
+public class ManualAnimator : IAbsTransfAnim
 {
-    public ManualAnimator(IAbstractTransformation transformation) : base()
+    public ManualAnimator(IAbsTransf transformation) : base()
     {
         Init(transformation);
     }

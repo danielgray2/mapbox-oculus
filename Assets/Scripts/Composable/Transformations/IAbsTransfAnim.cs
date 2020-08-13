@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class IAbsTransformationAnimator
+public abstract class IAbsTransfAnim
 {
     bool running = false;
-    protected IAbstractTransformation transformation { get; set; }
-    public IAbsTransformationAnimator()
+    protected IAbsTransf transformation { get; set; }
+    public IAbsTransfAnim()
     {
         this.transformation = null;
     }
     
-    public void Init(IAbstractTransformation transformation)
+    public void Init(IAbsTransf transformation)
     {
         this.transformation = transformation;
     }

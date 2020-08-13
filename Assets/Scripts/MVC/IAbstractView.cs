@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class IAbstractView : MonoBehaviour
 {
     public IController controller { get; set; }
-    public IModel model { get; set; }
+    public IAbsModel model { get; set; }
 
     void Start()
     {
@@ -18,5 +18,5 @@ public abstract class IAbstractView : MonoBehaviour
         
     }
 
-    public abstract void Initialize(IModel iModel);
+    public abstract void Initialize(IAbsModel iAbsModel);
 }

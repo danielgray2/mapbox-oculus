@@ -1,9 +1,7 @@
 ﻿using Mapbox.Unity.Map;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MapModel : IModel
+public class MapModel : IAbsModel
 {
     public ComposableModel compModel { get; set; }
     public string latColName { get; set; }

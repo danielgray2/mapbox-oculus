@@ -1,11 +1,6 @@
-﻿using CsvHelper.Configuration.Attributes;
-using Mapbox.Json;
-using Mapbox.Utils;
+﻿using Mapbox.Utils;
 using Mapbox.Unity.Utilities;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
 using UnityEngine;
 using Mapbox.Unity.Map;
 
@@ -53,7 +48,6 @@ public class SData
         string locString = lat + ", " + lon;
         latLon = Conversions.StringToLatLon(locString);
     }
-
 
     public Vector3 AdjustPosForDepth(Vector3 unadjustedPos)
     {

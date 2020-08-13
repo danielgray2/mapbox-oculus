@@ -20,12 +20,12 @@ public class ScatterBox : IAbstractGraph
         DataObj dataObj = model.compModel.dataObj;
 
         xMax = dataObj.GetMax(model.xName);
-        yMax = dataObj.GetMax(model.xName);
-        zMax = dataObj.GetMax(model.xName);
+        yMax = dataObj.GetMax(model.yName);
+        zMax = dataObj.GetMax(model.zName);
 
         xMin = dataObj.GetMin(model.xName);
-        yMin = dataObj.GetMin(model.xName);
-        zMin = dataObj.GetMin(model.xName);
+        yMin = dataObj.GetMin(model.yName);
+        zMin = dataObj.GetMin(model.zName);
 
         maxDpSize = new Vector3(0.15f, 0.15f, 0.15f);
         minDpSize = new Vector3(0.01f, 0.01f, 0.01f);

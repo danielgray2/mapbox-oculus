@@ -22,7 +22,10 @@ public class DataReader : MonoBehaviour
 
     void Start()
     {
-        ReadCSV("Assets\\Resources\\coso.csv", "testdata");
+        ReadCSV("Assets\\Resources\\coso_velo.csv", "Velocity");
+        ReadCSV("Assets\\Resources\\small_coso.csv", "Earthquakes");
+        ReadCSV("Assets\\Resources\\santa_fe.csv", "SantaFe");
+        ReadCSV("Assets\\Tests\\LargeTestData.csv", "Large");
         //ReadSeismicData();
         //ReadVeloData();
         

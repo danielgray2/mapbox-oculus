@@ -58,5 +58,33 @@ namespace Tests
             List<string> correctOrdering = new List<string> { "colTwo", "colThree", "colOne" };
             Assert.AreEqual(correctOrdering, colOrdering);
         }
+
+        // Maybe we can try putting this in a test at some point
+        /*
+        int counter = 0;
+        for (int i = 0; i < meshStruct.Count; i++)
+        {
+            for(int j = 0; j < meshStruct[i].Count; j++)
+            {
+                for (int k = 0; k < meshStruct[i][j].Count; k++)
+                {
+                    if (i + 1 < meshStruct.Count)
+                    {
+                        Assert.IsTrue(meshStruct[i][j][k].position.y < meshStruct[i + 1][0][0].position.y);
+                    }
+                    if (j + 1 < meshStruct[i].Count)
+                    {
+                        Assert.IsTrue(meshStruct[i][j][k].position.x < meshStruct[i][j+1][0].position.x);
+                    }
+                    if (k + 1 < meshStruct[i][j].Count)
+                    {
+                        Assert.IsTrue(meshStruct[i][j][k].position.z < meshStruct[i][j][k + 1].position.z);
+                    }
+                    counter++;
+                }
+            }
+        }
+        Debug.Log("Well, that is pretty neat: " + counter);
+        */
     }
 }

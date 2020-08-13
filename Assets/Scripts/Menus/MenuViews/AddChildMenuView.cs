@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddMenuView : IAbstractView
+public class AddChildMenuView : IAbsMenuView
 {
-    public override void Initialize(IModel iModel)
+    [SerializeField]
+    GameObject menuHandlerGo;
+
+    [SerializeField]
+    GameObject next;
+
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        throw new System.NotImplementedException();
+        model = iAbsModel;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void PrepForTransition()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

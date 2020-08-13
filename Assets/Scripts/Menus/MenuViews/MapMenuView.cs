@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MapMenuView : IAbstractView
+public class MapMenuView : IAbsMenuView
 {
     [SerializeField]
     GameObject menuHandlerGo;
@@ -30,29 +30,25 @@ public class MapMenuView : IAbstractView
     protected TMP_Dropdown lonDDObj;
     protected TMP_Dropdown extrusionDDObj;
 
-    protected MenuHandler mH;
-    protected MenuEnum mE;
     protected MapMenuContr mapMenuContr;
 
     private void Awake()
     {
-        mH = menuHandlerGo.GetComponent<MenuHandler>();
-        mE = MenuEnum.MAP;
-        mH.Register(mE, this.gameObject);
-        mapMenuContr = new MapMenuContr(this);
+        Setup(MenuEnum.MAP, menuHandlerGo.GetComponent<MenuView>());
         controller = mapMenuContr;
     }
 
-    public override void Initialize(IModel iModel)
+    public override void Initialize(IAbsModel iAbsModel)
     {
-        if (!(iModel is ComposableModel compModel))
+        if (!(iAbsModel is ComposableModel compModel))
         {
             throw new ArgumentException("Model must be of type ComposableModel");
         }
 
         MapModel mapModel = new MapModel(compModel);
+        mV.RegisterModel(mapModel.gUID, mapModel);
         model = mapModel;
-        mapMenuContr.UpdateMapModel(mapModel);
+        mapMenuContr = new MapMenuContr(this, model);
 
         latDDObj = latDDGo.GetComponent<TMP_Dropdown>();
         lonDDObj = lonDDGo.GetComponent<TMP_Dropdown>();
@@ -64,18 +60,6 @@ public class MapMenuView : IAbstractView
         latDDObj.options = coordOptions;
         lonDDObj.options = coordOptions;
         extrusionDDObj.options = extrusionOptions;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public List<TMP_Dropdown.OptionData> GetCoordOptions()
@@ -92,8 +76,6 @@ public class MapMenuView : IAbstractView
 
     public List<TMP_Dropdown.OptionData> GetExtrusionOptions()
     {
-        MapModel mapModel = CastToMapModel();
-        DataObj dataObj = mapModel.compModel.dataObj;
         List<string> optionsList = new List<string>();
         for(int i = 1; i < 10; i++)
         {
@@ -124,13 +106,7 @@ public class MapMenuView : IAbstractView
         MapWrapper mapWrapper = mapGo.GetComponent<MapWrapper>();
         mapWrapper.Initialize(mapModel);
 
-        IController nextIController = next.GetComponent<IAbstractView>().controller;
-        if (!(nextIController is IAbstractMenu nextMenu))
-        {
-            throw new ArgumentException("Controller must be of type IAbstractMenu");
-        }
-
-        mapMenuContr.Transition(nextMenu);
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
     MapModel CastToMapModel()

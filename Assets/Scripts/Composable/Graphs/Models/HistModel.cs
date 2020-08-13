@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HistModel : IModel
+public class HistModel : IAbsModel
 {
     public ComposableModel compModel { get; set; }
     public float extraMargin { get; set; } = 0.1f;

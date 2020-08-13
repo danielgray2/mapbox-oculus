@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.Data.Analysis;
 
-public class AutomaticAnimator : IAbsTransformationAnimator
+public class AutomaticAnimator : IAbsTransfAnim
 {
-    IAbsTransformationAnimator wrapped;
-    public AutomaticAnimator(IAbstractTransformation transformation) : base()
+    IAbsTransfAnim wrapped;
+    public AutomaticAnimator(IAbsTransf transformation) : base()
     {
         wrapped = new ManualAnimator(transformation);
         Init(transformation);
