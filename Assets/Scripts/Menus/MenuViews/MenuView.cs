@@ -15,28 +15,17 @@ public class MenuView : IAbstractView
         controller = menuContr;
         menuContr.UpdateCurrMenu(startMenu);
     }
-    
-    private void Start()
-    {
-        MenuModel mM = CastToMenuModel();
-        List<MenuEnum> menuList = mM.menuDictionary.Keys.ToList();
-        foreach (MenuEnum curr in menuList)
-        {
-            if(curr != startMenu)
-            {
-                mM.menuDictionary[curr].gameObject.SetActive(false);
-            }
-        }
-    }
 
-    public void ActivateMenu(GameObject gO)
+    protected void ActivateMenu(IAbsMenuView view)
     {
         MenuModel mM = CastToMenuModel();
         List<MenuEnum> menuList = mM.menuDictionary.Keys.ToList();
         foreach(MenuEnum curr in menuList)
         {
-            if(mM.menuDictionary[curr] == gO)
+            Debug.Log("curr: " + curr);
+            if(mM.menuDictionary[curr] == view)
             {
+                Debug.Log("Activated");
                 mM.menuDictionary[curr].gameObject.SetActive(true);
             }
             else
@@ -46,9 +35,17 @@ public class MenuView : IAbstractView
         }
     }
 
-    public void RegisterMenu(MenuEnum key, IAbsMenuView value)
+    public void RegisterMenu(MenuEnum key, IAbsMenuView value, bool startInit = false)
     {
         menuContr.RegisterMenu(key, value);
+        if (startInit || key == startMenu)
+        {
+            ActivateMenu(value);
+        }
+        else
+        {
+            value.gameObject.SetActive(false);
+        }
     }
 
     public void RegisterModel(Guid key, IAbsModel value)

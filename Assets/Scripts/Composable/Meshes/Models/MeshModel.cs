@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MeshModel : IAbsModel
 {
-    public ComposableModel compModel { get; set; }
     public string yCol { get; set; }
     public string xCol { get; set; }
     public string zCol { get; set; }

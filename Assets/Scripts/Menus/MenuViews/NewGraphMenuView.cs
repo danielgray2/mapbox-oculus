@@ -21,22 +21,10 @@ public class NewGraphMenuView : IAbsMenuView
     protected TMP_Dropdown graphTypeDDObj;
     protected GameObject next;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.NEW_GRAPH, menuHandlerGo.GetComponent<MenuView>());
         graphTypeDDObj = graphTypeDDGo.GetComponent<TMP_Dropdown>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void PrepForTransition()

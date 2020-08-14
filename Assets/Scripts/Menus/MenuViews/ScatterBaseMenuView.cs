@@ -15,7 +15,7 @@ public class ScatterBaseMenuView : IAbsMenuView
     GameObject boxMenuGo;
 
     protected GameObject next;
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.SCATTERPLOT_BASE, menuHandlerGo.GetComponent<MenuView>());
     }

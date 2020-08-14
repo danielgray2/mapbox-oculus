@@ -14,9 +14,14 @@ public class ComposableModel : IAbsModel
 {
     public DataObj dataObj { get; set; }
     public ComposableType compType { get; set; }
+    public List<IAbsTransf> transformations { get; set; }
+    public DataPointOptions dataPointOptions { get; set; }
+    public List<IComposable> subComps { get; set; }
+    public IComposable superComp { get; set; }
+    public bool beingCreated { get; set; }
 
-    public ComposableModel(ComposableType compType)
+    public ComposableModel()
     {
-        this.compType = compType;
+        beingCreated = true;
     }
 }

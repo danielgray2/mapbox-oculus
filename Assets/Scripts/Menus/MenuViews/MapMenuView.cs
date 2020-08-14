@@ -32,7 +32,7 @@ public class MapMenuView : IAbsMenuView
 
     protected MapMenuContr mapMenuContr;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.MAP, menuHandlerGo.GetComponent<MenuView>());
         controller = mapMenuContr;

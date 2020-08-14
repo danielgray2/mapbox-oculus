@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ScatterModel : IAbsModel
 {
-    public ComposableModel compModel { get; set; }
     public float extraMargin { get; set; } = 0.1f;
     public string xName { get; set; }
     public string yName { get; set; }

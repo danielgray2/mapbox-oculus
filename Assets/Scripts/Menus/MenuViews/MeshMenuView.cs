@@ -36,7 +36,7 @@ public class MeshMenuView : IAbsMenuView
 
     protected MeshMenuContr meshMenuContr;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.MESH, menuHandlerGo.GetComponent<MenuView>());
     }

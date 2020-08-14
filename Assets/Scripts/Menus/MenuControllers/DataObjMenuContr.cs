@@ -1,11 +1,8 @@
 ﻿using System;
 
-public class BoxMenuContr : IAbsMenuContr
+public class DataObjMenuContr : IAbsMenuContr
 {
-    public BoxMenuContr(IAbstractView view, IAbsModel model) : base(view, model)
-    {
-        this.model = model;
-    }
+    public DataObjMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
 
     public override void Update() { }
 
@@ -18,11 +15,11 @@ public class BoxMenuContr : IAbsMenuContr
     public ComposableModel CastToCompModel()
     {
         ComposableModel compModel;
-        if(model is ComposableModel)
+        if (model is ComposableModel)
         {
             compModel = (ComposableModel)model;
         }
-        else if(model.compModel != null)
+        else if (model.compModel != null)
         {
             compModel = model.compModel;
         }

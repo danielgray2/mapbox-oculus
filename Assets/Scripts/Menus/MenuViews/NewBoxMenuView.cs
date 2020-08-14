@@ -7,16 +7,28 @@ public class NewBoxMenuView : IAbsMenuView
     GameObject menuHandlerGo;
 
     [SerializeField]
-    GameObject next;
+    GameObject graphMenuGo;
 
-    protected ComposableModel compModel;
+    [SerializeField]
+    GameObject contextMenuGo;
 
-    private void Awake()
+    [SerializeField]
+    GameObject dashMenuGo;
+
+    [SerializeField]
+    GameObject meshMenuGo;
+
+    protected GameObject next;
+
+    private void Start()
     {
         Setup(MenuEnum.NEW_BOX, menuHandlerGo.GetComponent<MenuView>());
     }
 
-    public override void Initialize(IAbsModel iAbsModel) { }
+    public override void Initialize(IAbsModel iAbsModel)
+    {
+        model = iAbsModel;
+    }
 
     public void PrepForTransition()
     {
@@ -25,33 +37,51 @@ public class NewBoxMenuView : IAbsMenuView
 
     public void GraphButtonClicked()
     {
-        compModel = new ComposableModel(ComposableType.GRAPH);
-        mV.RegisterModel(compModel.gUID, compModel);
-        model = compModel;
+        ComposableModel compModel = CastToCompModel();
+        compModel.compType = ComposableType.GRAPH;
+        next = graphMenuGo;
         PrepForTransition();
     }
 
     public void ContextButtonClicked()
     {
-        compModel = new ComposableModel(ComposableType.CONTEXT);
-        mV.RegisterModel(compModel.gUID, compModel);
-        model = compModel;
+        ComposableModel compModel = CastToCompModel();
+        compModel.compType = ComposableType.CONTEXT;
+        next = contextMenuGo;
         PrepForTransition();
     }
 
     public void MeshButtonClicked()
     {
-        compModel = new ComposableModel(ComposableType.MESH);
-        mV.RegisterModel(compModel.gUID, compModel);
-        model = compModel;
+        ComposableModel compModel = CastToCompModel();
+        compModel.compType = ComposableType.MESH;
+        next = meshMenuGo;
         PrepForTransition();
     }
 
     public void DashButtonClicked()
     {
-        compModel = new ComposableModel(ComposableType.DASHBOARD);
-        mV.RegisterModel(compModel.gUID, compModel);
-        model = compModel;
+        ComposableModel compModel = CastToCompModel();
+        compModel.compType = ComposableType.DASHBOARD;
+        next = dashMenuGo;
         PrepForTransition();
+    }
+
+    ComposableModel CastToCompModel()
+    {
+        ComposableModel compModel;
+        if (model is ComposableModel)
+        {
+            compModel = (ComposableModel)model;
+        }
+        else if (model.compModel != null)
+        {
+            compModel = model.compModel;
+        }
+        else
+        {
+            throw new ArgumentException("Model must be of type ComposableModel");
+        }
+        return compModel;
     }
 }

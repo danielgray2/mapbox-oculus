@@ -11,7 +11,7 @@ public class GenMenuView : IAbsMenuView
     [SerializeField]
     GameObject menuHandlerGo;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.GENERAL_MENU, menuHandlerGo.GetComponent<MenuView>());
     }
@@ -20,6 +20,8 @@ public class GenMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, Guid.NewGuid()));
+        model = new ComposableModel();
+        mV.RegisterModel(model.gUID, model);
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 }

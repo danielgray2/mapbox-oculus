@@ -3572,10 +3572,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuHandlerGo: {fileID: 0}
   next: {fileID: 0}
-  xDDGo: {fileID: 0}
-  yDDGo: {fileID: 0}
-  zDDGo: {fileID: 0}
-  meshVizPrefab: {fileID: 0}
+  xDDGo: {fileID: 3319498396508672328}
+  yDDGo: {fileID: 4161950315283302866}
+  valueDDGo: {fileID: 6760408417183138816}
+  zDDGo: {fileID: 3299289540228474556}
+  meshVizPrefab: {fileID: 7181095257491945597, guid: b435a80663cbe6a48a7172c84f84af5d,
+    type: 3}
 --- !u!1 &4265552024459922845
 GameObject:
   m_ObjectHideFlags: 0

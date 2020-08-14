@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MapModel : IAbsModel
 {
-    public ComposableModel compModel { get; set; }
     public string latColName { get; set; }
     public string lonColName { get; set; }
     public float iconSize { get; set; } = 5;

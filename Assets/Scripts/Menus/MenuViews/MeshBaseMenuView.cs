@@ -15,7 +15,7 @@ public class MeshBaseMenuView : IAbsMenuView
     GameObject boxMenuGo;
 
     protected GameObject next;
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.MESH_BASE, menuHandlerGo.GetComponent<MenuView>());
     }

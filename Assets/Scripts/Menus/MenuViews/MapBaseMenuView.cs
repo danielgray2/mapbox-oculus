@@ -15,7 +15,7 @@ public class MapBaseMenuView : IAbsMenuView
     GameObject boxMenuGo;
 
     protected GameObject next;
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.MAP_BASE, menuHandlerGo.GetComponent<MenuView>());
     }

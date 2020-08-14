@@ -24,7 +24,7 @@ public class HistMenuView : IAbsMenuView
     protected HistModel histModel;
     protected HistMenuContr histContr;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.HISTOGRAM_GRAPH, menuHandlerGo.GetComponent<MenuView>());
     }

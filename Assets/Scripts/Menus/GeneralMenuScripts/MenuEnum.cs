@@ -24,5 +24,6 @@ public enum MenuEnum
     ANIMATED_TRANSFORMATION,
     DASHBOARD,
     MESH_BASE,
-    MESH
+    MESH,
+    DATA_OBJ
 }

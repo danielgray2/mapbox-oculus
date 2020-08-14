@@ -19,7 +19,7 @@ public class NewContextMenuView : IAbsMenuView
     protected TMP_Dropdown contextTypeDDObj;
     protected GameObject next;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.NEW_CONTEXT, menuHandlerGo.GetComponent<MenuView>());
         contextTypeDDObj = contextTypeDDGo.GetComponent<TMP_Dropdown>();

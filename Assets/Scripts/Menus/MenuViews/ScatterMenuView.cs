@@ -31,7 +31,7 @@ public class ScatterMenuView : IAbsMenuView
     protected ScatterModel scatterModel;
     protected ScatterMenuContr scatterContr;
 
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.SCATTERPLOT_GRAPH, menuHandlerGo.GetComponent<MenuView>());
     }
@@ -44,6 +44,7 @@ public class ScatterMenuView : IAbsMenuView
         }
 
         scatterModel = new ScatterModel(compModel);
+        mV.RegisterModel(scatterModel.gUID, scatterModel);
         model = scatterModel;
         scatterContr = new ScatterMenuContr(this, model);
         controller = scatterContr;

@@ -3257,7 +3257,8 @@ MonoBehaviour:
   yDDGo: {fileID: 0}
   zDDGo: {fileID: 0}
   menuHandlerGo: {fileID: 0}
-  scatterBoxPrefab: {fileID: 0}
+  scatterBoxPrefab: {fileID: 2612818464391990061, guid: 14dcfbddbe6453d49b5b601b58fb5632,
+    type: 3}
 --- !u!1 &5015608192189851047
 GameObject:
   m_ObjectHideFlags: 0

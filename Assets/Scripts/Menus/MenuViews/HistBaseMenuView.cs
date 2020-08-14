@@ -15,7 +15,7 @@ public class HistBaseMenuView : IAbsMenuView
     GameObject boxMenuGo;
 
     protected GameObject next;
-    private void Awake()
+    private void Start()
     {
         Setup(MenuEnum.HISTOGRAM_BASE, menuHandlerGo.GetComponent<MenuView>());
     }

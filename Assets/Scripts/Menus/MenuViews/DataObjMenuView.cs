@@ -1,65 +1,54 @@
-﻿using System;
-using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using System;
 
-public class BoxMenuView : IAbsMenuView
+public class DataObjMenuView : IAbsMenuView
 {
     [SerializeField]
     GameObject menuHandlerGo;
 
     [SerializeField]
-    GameObject configDPMenuGo;
-
-    [SerializeField]
-    GameObject transfsMenuGo;
-
-    [SerializeField]
-    GameObject parentMenuGo;
-
-    [SerializeField]
-    GameObject childrenMenuGo;
-
-    [SerializeField]
     GameObject dataObjDDGo;
 
-    protected GameObject next;
+    [SerializeField]
+    GameObject next;
+
     protected TMP_Dropdown dataDDObj;
     protected string dataObjName;
 
     private void Start()
     {
-        Setup(MenuEnum.BOX, menuHandlerGo.GetComponent<MenuView>());
+        Setup(MenuEnum.DATA_OBJ, menuHandlerGo.GetComponent<MenuView>());
         dataDDObj = dataObjDDGo.GetComponent<TMP_Dropdown>();
     }
 
     public override void Initialize(IAbsModel iAbsModel)
     {
         model = iAbsModel;
-        controller = new BoxMenuContr(this, model);
+        controller = new DataObjMenuContr(this, model);
         dataDDObj.options = GetGraphOptions();
-    }
-
-    public void PrepForTransition()
-    {   
-        if (!(controller is BoxMenuContr boxContr))
-        {
-            throw new ArgumentException("Controller must be of type BoxMenuContr");
-        }
-
-        dataObjName = dataDDObj.options[dataDDObj.value].text;
-        DataObj dataObj = DataStore.Instance.dataDict[dataObjName];
-
-        boxContr.UpdateModelDataObj(dataObj);
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
     public List<TMP_Dropdown.OptionData> GetGraphOptions()
     {
         List<string> keys = DataStore.Instance.dataDict.Keys.ToList();
         return CreateOptions(keys);
+    }
+
+    public void PrepForTransition()
+    {
+        if (!(controller is DataObjMenuContr dataContr))
+        {
+            throw new ArgumentException("Controller must be of type BoxMenuContr");
+        }
+
+        dataObjName = dataDDObj.options[dataDDObj.value].text;
+        DataObj dataObj = DataStore.Instance.dataDict[dataObjName];
+        dataContr.UpdateModelDataObj(dataObj);
+
+        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
     }
 
     public List<TMP_Dropdown.OptionData> CreateOptions(List<string> stringList)
@@ -71,30 +60,6 @@ public class BoxMenuView : IAbsMenuView
         }
 
         return optionData;
-    }
-
-    public void ConfigDPBtnClicked()
-    {
-        next = configDPMenuGo;
-        PrepForTransition();
-    }
-
-    public void TransfsBtnClicked()
-    {
-        next = transfsMenuGo;
-        PrepForTransition();
-    }
-
-    public void ParentBtnClicked()
-    {
-        next = parentMenuGo;
-        PrepForTransition();
-    }
-
-    public void ChildrenBtnClicked()
-    {
-        next = childrenMenuGo;
-        PrepForTransition();
     }
 
     public ComposableModel CastToCompModel()
