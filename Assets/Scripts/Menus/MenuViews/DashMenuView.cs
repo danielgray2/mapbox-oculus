@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashMenuView : IAbstractView
+public class DashMenuView : IAbsMenuView
 {
     public override void Initialize(IAbsModel iAbsModel)
     {

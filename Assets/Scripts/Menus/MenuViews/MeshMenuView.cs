@@ -34,7 +34,7 @@ public class MeshMenuView : IAbsMenuView
     protected TMP_Dropdown zDDObj;
     protected TMP_Dropdown valueDDObj;
 
-    protected MeshMenuContr meshMenuContr;
+    protected MeshModel meshModel;
 
     private void Start()
     {
@@ -43,16 +43,12 @@ public class MeshMenuView : IAbsMenuView
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        if (!(iAbsModel is ComposableModel compModel))
-        {
-            throw new ArgumentException("Model must be of type ComposableModel");
-        }
+        IAbsCompModel compModel = VizUtils.CastToCompModel(iAbsModel);
 
-        MeshModel meshModel = new MeshModel(compModel);
+        meshModel = new MeshModel();
+        meshModel.SetValsFromBase(compModel);
         mV.RegisterModel(meshModel.gUID, meshModel);
-        model = meshModel;
-        meshMenuContr = new MeshMenuContr(this, model);
-        controller = meshMenuContr;
+        mV.UpdateCurrModel(meshModel);
 
         xDDObj = xDDGo.GetComponent<TMP_Dropdown>();
         yDDObj = yDDGo.GetComponent<TMP_Dropdown>();
@@ -69,8 +65,7 @@ public class MeshMenuView : IAbsMenuView
 
     public List<TMP_Dropdown.OptionData> GetOptions()
     {
-        MeshModel meshModel = CastToMeshModel();
-        DataObj dataObj = meshModel.compModel.dataObj;
+        DataObj dataObj = meshModel.dataObj;
         List<string> nameList = new List<string>();
         foreach (DataFrameColumn col in dataObj.df.Columns)
         {
@@ -92,25 +87,18 @@ public class MeshMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        MeshModel meshModel = CastToMeshModel();
-        meshMenuContr.UpdateXColName(xDDObj.options[xDDObj.value].text);
-        meshMenuContr.UpdateYColName(yDDObj.options[yDDObj.value].text);
-        meshMenuContr.UpdateZColName(zDDObj.options[zDDObj.value].text);
-        meshMenuContr.UpdateValueColName(valueDDObj.options[valueDDObj.value].text);
+        mV.UpdateMeshXColName(xDDObj.options[xDDObj.value].text);
+        mV.UpdateMeshYColName(yDDObj.options[yDDObj.value].text);
+        mV.UpdateMeshZColName(zDDObj.options[zDDObj.value].text);
+        mV.UpdateMeshValColName(valueDDObj.options[valueDDObj.value].text);
 
+        // Again, maybe move this
         GameObject meshGo = Instantiate(meshVizPrefab, Vector3.zero, Quaternion.identity);
         MeshVizWrapper meshWrapper = meshGo.GetComponent<MeshVizWrapper>();
+        mV.UpdateTransform(meshWrapper.transform);
         meshWrapper.Initialize(meshModel);
+        meshWrapper.Plot();
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
-    }
-
-    MeshModel CastToMeshModel()
-    {
-        if (!(model is MeshModel meshModel))
-        {
-            throw new ArgumentException("Model must be of type MeshModel");
-        }
-        return meshModel;
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 }

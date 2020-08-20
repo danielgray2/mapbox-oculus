@@ -1,7 +1,5 @@
-﻿using Mapbox.Unity.Map;
-using Microsoft.Data.Analysis;
+﻿using Microsoft.Data.Analysis;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -29,26 +27,20 @@ public class MapMenuView : IAbsMenuView
     protected TMP_Dropdown latDDObj;
     protected TMP_Dropdown lonDDObj;
     protected TMP_Dropdown extrusionDDObj;
-
-    protected MapMenuContr mapMenuContr;
+    protected MapModel mapModel;
 
     private void Start()
     {
         Setup(MenuEnum.MAP, menuHandlerGo.GetComponent<MenuView>());
-        controller = mapMenuContr;
     }
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        if (!(iAbsModel is ComposableModel compModel))
-        {
-            throw new ArgumentException("Model must be of type ComposableModel");
-        }
-
-        MapModel mapModel = new MapModel(compModel);
+        IAbsCompModel compModel = VizUtils.CastToCompModel(iAbsModel);
+        mapModel = new MapModel();
+        mapModel.SetValsFromBase(compModel);
         mV.RegisterModel(mapModel.gUID, mapModel);
-        model = mapModel;
-        mapMenuContr = new MapMenuContr(this, model);
+        mV.UpdateCurrModel(mapModel);
 
         latDDObj = latDDGo.GetComponent<TMP_Dropdown>();
         lonDDObj = lonDDGo.GetComponent<TMP_Dropdown>();
@@ -64,8 +56,7 @@ public class MapMenuView : IAbsMenuView
 
     public List<TMP_Dropdown.OptionData> GetCoordOptions()
     {
-        MapModel mapModel = CastToMapModel();
-        DataObj dataObj = mapModel.compModel.dataObj;
+        DataObj dataObj = mapModel.dataObj;
         List<string> nameList = new List<string>();
         foreach (DataFrameColumn col in dataObj.df.Columns)
         {
@@ -97,24 +88,17 @@ public class MapMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        MapModel mapModel = CastToMapModel();
-        mapMenuContr.UpdateLatName(latDDObj.options[latDDObj.value].text);
-        mapMenuContr.UpdateLonName(lonDDObj.options[lonDDObj.value].text);
-        mapMenuContr.UpdateExaggeration(extrusionDDObj.options[extrusionDDObj.value].text);
+        mV.UpdateMapLatName(latDDObj.options[latDDObj.value].text);
+        mV.UpdateMapLonName(lonDDObj.options[lonDDObj.value].text);
+        mV.UpdateMapExaggeration(extrusionDDObj.options[extrusionDDObj.value].text);
 
+        // Maybe move this
         GameObject mapGo = Instantiate(mapPrefab, Vector3.zero, Quaternion.identity);
         MapWrapper mapWrapper = mapGo.GetComponent<MapWrapper>();
+        mV.UpdateTransform(mapWrapper.transform);
         mapWrapper.Initialize(mapModel);
+        mapWrapper.Plot();
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
-    }
-
-    MapModel CastToMapModel()
-    {
-        if (!(model is MapModel mapModel))
-        {
-            throw new ArgumentException("Model must be of type MapModel");
-        }
-        return mapModel;
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 }

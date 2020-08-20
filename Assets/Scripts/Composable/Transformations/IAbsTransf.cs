@@ -10,6 +10,7 @@ public abstract class IAbsTransf : IAbsTransfAnim
         Init(this);
     }
     public IAbsTransfAnim aTA { get; set; }
+    public static string friendlyName { get; protected set; }
     public List<IAbsTransf> nestedTransformations { get; set; }
     public IAbsTransf containingTransformation { get; set; }
     public abstract DataObj ApplyTransformation(DataObj dO);

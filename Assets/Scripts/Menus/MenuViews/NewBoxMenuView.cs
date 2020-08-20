@@ -19,6 +19,7 @@ public class NewBoxMenuView : IAbsMenuView
     GameObject meshMenuGo;
 
     protected GameObject next;
+    protected IAbsCompModel compModel;
 
     private void Start()
     {
@@ -27,17 +28,16 @@ public class NewBoxMenuView : IAbsMenuView
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iAbsModel;
+        compModel = VizUtils.CastToCompModel(iAbsModel);
     }
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public void GraphButtonClicked()
     {
-        ComposableModel compModel = CastToCompModel();
         compModel.compType = ComposableType.GRAPH;
         next = graphMenuGo;
         PrepForTransition();
@@ -45,7 +45,6 @@ public class NewBoxMenuView : IAbsMenuView
 
     public void ContextButtonClicked()
     {
-        ComposableModel compModel = CastToCompModel();
         compModel.compType = ComposableType.CONTEXT;
         next = contextMenuGo;
         PrepForTransition();
@@ -53,7 +52,6 @@ public class NewBoxMenuView : IAbsMenuView
 
     public void MeshButtonClicked()
     {
-        ComposableModel compModel = CastToCompModel();
         compModel.compType = ComposableType.MESH;
         next = meshMenuGo;
         PrepForTransition();
@@ -61,27 +59,8 @@ public class NewBoxMenuView : IAbsMenuView
 
     public void DashButtonClicked()
     {
-        ComposableModel compModel = CastToCompModel();
         compModel.compType = ComposableType.DASHBOARD;
         next = dashMenuGo;
         PrepForTransition();
-    }
-
-    ComposableModel CastToCompModel()
-    {
-        ComposableModel compModel;
-        if (model is ComposableModel)
-        {
-            compModel = (ComposableModel)model;
-        }
-        else if (model.compModel != null)
-        {
-            compModel = model.compModel;
-        }
-        else
-        {
-            throw new ArgumentException("Model must be of type ComposableModel");
-        }
-        return compModel;
     }
 }

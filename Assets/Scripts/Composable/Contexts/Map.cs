@@ -1,9 +1,6 @@
 ﻿using Mapbox.Unity.Map;
 using Mapbox.Unity.Map.Strategies;
-using Mapbox.Utils;
-using Microsoft.Data.Analysis;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : IAbstractContext
@@ -98,16 +95,6 @@ public class Map : IAbstractContext
     }
 
     public override void Generate()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Initialize(IAbsModel iAbsModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Update()
     {
         throw new NotImplementedException();
     }

@@ -14,8 +14,8 @@ public class Histogram : IAbstractGraph
 
         GraphStore.Instance.graphList.Add(this);
 
-        model.xMax = model.compModel.dataObj.GetMax(model.xName);
-        model.xMin = model.compModel.dataObj.GetMin(model.xName);
+        model.xMax = model.dataObj.GetMax(model.xName);
+        model.xMin = model.dataObj.GetMin(model.xName);
 
         maxDpSize = new Vector3(1f, 1.2f, 1f);
         minDpSize = new Vector3(0.01f, 0.01f, 0.01f);
@@ -28,7 +28,7 @@ public class Histogram : IAbstractGraph
             throw new ArgumentException("Model must be of type ScatterplotModel");
         }
 
-        DataObj dataObj = histModel.compModel.dataObj;
+        DataObj dataObj = histModel.dataObj;
         float iqr = dataObj.GetIQR(histModel.xName);
         histModel.binWidth = CalcBinWidth(iqr, dataObj.df.Rows.Count);
         histModel.numBins = Mathf.CeilToInt((histModel.xMax - histModel.xMin) / histModel.binWidth);

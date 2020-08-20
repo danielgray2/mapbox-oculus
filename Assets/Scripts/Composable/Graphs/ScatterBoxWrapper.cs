@@ -38,25 +38,49 @@ public class ScatterBoxWrapper : IAbstractWrapper
 
     ScatterBox wrapped;
     bool initialized = false;
-    bool firstRun = true;
+    AddObjectManipulator oM;
+    bool plottedOnce = false;
     public DataObj dataObj { get; set; }
     List<GameObject> pointList = new List<GameObject>();
+    List<GameObject> currMarkerList = new List<GameObject>();
 
     // Update is called once per frame
-    void Update()
+    public void Plot()
     {
-        if (initialized && firstRun)
+        if (initialized && !plottedOnce)
         {
             CreateDataPoints(wrapped.CreatePoints());
             DrawAxes(wrapped.ScaleAxes());
             AddLabels();
             DrawScale(wrapped.PlaceScale());
 
-            AddObjectManipulator oM = this.gameObject.AddComponent<AddObjectManipulator>();
+            oM = this.gameObject.AddComponent<AddObjectManipulator>();
             oM.PlaceObjectManipulator(this.transform);
 
-            firstRun = false;
+            plottedOnce = true;
         }
+    }
+
+    public override void ReRender()
+    {
+        for (int i = 0; i < pointList.Count; i++)
+        {
+            Destroy(pointList[i]);
+        }
+        pointList = new List<GameObject>();
+
+        for (int i = 0; i < currMarkerList.Count; i++)
+        {
+            Destroy(currMarkerList[i]);
+        }
+        currMarkerList = new List<GameObject>();
+
+        CreateDataPoints(wrapped.CreatePoints());
+        DrawAxes(wrapped.ScaleAxes());
+        AddLabels();
+        DrawScale(wrapped.PlaceScale());
+
+        oM.UpdateObjectManipulator();
     }
 
     public void Initialize(ScatterModel model)
@@ -65,6 +89,7 @@ public class ScatterBoxWrapper : IAbstractWrapper
         {
             wrapped = new ScatterBox(model);
             this.model = model;
+            model.modelUpdateEvent.AddListener(HandleModelUpdate);
             initialized = true;
         }
     }
@@ -83,9 +108,9 @@ public class ScatterBoxWrapper : IAbstractWrapper
             // TODO: Use the value from options
             dataPoint.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
             // TODO: Use the value from options
-            dataPoint.transform.rotation = Quaternion.identity;
+            dataPoint.transform.localRotation = Quaternion.identity;
             dataPoint.GetComponent<DataPoint>().SetOriginalValues();
-            dataPoint.GetComponent<DataPoint>().SetData(scatterModel.compModel.dataObj.df.Rows[i]);
+            dataPoint.GetComponent<DataPoint>().SetData(scatterModel.dataObj.df.Rows[i]);
 
             // Assigns original values to dataPointName
             string dataPointName =
@@ -100,7 +125,7 @@ public class ScatterBoxWrapper : IAbstractWrapper
             dataPoint.GetComponent<Renderer>().material.color =
                 new Color(x, y, z, 1.0f);
             // Adds a Point object to this point
-            dataPoint.GetComponent<DataPoint>().data = scatterModel.compModel.dataObj.df.Rows[i];
+            dataPoint.GetComponent<DataPoint>().data = scatterModel.dataObj.df.Rows[i];
             pointList.Add(dataPoint);
         }
     }
@@ -150,20 +175,22 @@ public class ScatterBoxWrapper : IAbstractWrapper
         {
             GameObject currMarker;
             currMarker = Instantiate(markerPrefab, markerParent);
-            Debug.Log("plotScale: " + plotScale);
             currMarker.transform.localPosition = new Vector3(plotScale / i, plotScale / 5, 0);
             currMarker.transform.rotation = xLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = scaleList[i-1][0].ToString("0.0");
+            currMarkerList.Add(currMarker);
 
             currMarker = Instantiate(markerPrefab, markerParent);
             currMarker.transform.localPosition = new Vector3(0, plotScale / i, 0);
             currMarker.transform.rotation = yLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = scaleList[i-1][1].ToString("0.0");
+            currMarkerList.Add(currMarker);
 
             currMarker = Instantiate(markerPrefab, markerParent);
             currMarker.transform.localPosition = new Vector3(0, plotScale / 5, plotScale / i);
             currMarker.transform.rotation = zLabel.transform.rotation;
             currMarker.GetComponent<TextMesh>().text = scaleList[i-1][2].ToString("0.0");
+            currMarkerList.Add(currMarker);
         }
     }
 

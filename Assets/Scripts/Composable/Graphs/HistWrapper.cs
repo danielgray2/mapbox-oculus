@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -28,25 +27,49 @@ public class HistWrapper : IAbstractWrapper
     GameObject xLabel;
 
     bool initialized = false;
-    bool firstRun = true;
+    bool plottedOnce = false;
+    AddObjectManipulator oM;
     Histogram wrapped;
     List<GameObject> barList = new List<GameObject>();
+    List<GameObject> currMarkerList = new List<GameObject>();
 
     // Start is called before the first frame update
-    void Update()
+    public void Plot()
     {
-        if (initialized && firstRun)
+        if (initialized && !plottedOnce)
         {
             DrawBins(wrapped.CalcBins());
             DrawAxes();
             DrawScale();
             AddLabels();
 
-            AddObjectManipulator oM = this.gameObject.AddComponent<AddObjectManipulator>();
+            oM = this.gameObject.AddComponent<AddObjectManipulator>();
             oM.PlaceObjectManipulator(this.transform);
 
-            firstRun = false;
+            plottedOnce = true;
         }
+    }
+
+    public override void ReRender()
+    {
+        for (int i = 0; i < barList.Count; i++)
+        {
+            Destroy(barList[i]);
+        }
+        barList = new List<GameObject>();
+
+        for (int i = 0; i < currMarkerList.Count; i++)
+        {
+            Destroy(currMarkerList[i]);
+        }
+        currMarkerList = new List<GameObject>();
+
+        DrawBins(wrapped.CalcBins());
+        DrawAxes();
+        DrawScale();
+        AddLabels();
+
+        oM.UpdateObjectManipulator();
     }
 
     public void Initialize(HistModel model)
@@ -55,6 +78,7 @@ public class HistWrapper : IAbstractWrapper
         {
             wrapped = new Histogram(model);
             this.model = model;
+            model.modelUpdateEvent.AddListener(HandleModelUpdate);
             initialized = true;
         }
     }
@@ -73,7 +97,7 @@ public class HistWrapper : IAbstractWrapper
             // This is just a place holder for now, we need to come back and change
             // "currDataObj.df.Rows[0]" to be something that actually has a meaning.
             // This is fine for now though.
-            bar.GetComponent<DataPoint>().SetData(histModel.compModel.dataObj.df.Rows[0]);
+            bar.GetComponent<DataPoint>().SetData(histModel.dataObj.df.Rows[0]);
 
             // Assigns original values to dataPointName
             string barName = i.ToString();
@@ -90,7 +114,7 @@ public class HistWrapper : IAbstractWrapper
             bar.GetComponent<Renderer>().material.color =
                 Color.Lerp(startColor, endColor, i / binNums.Count);
             // Adds a Point object to this point
-            bar.GetComponent<DataPoint>().data = histModel.compModel.dataObj.df.Rows[i];
+            bar.GetComponent<DataPoint>().data = histModel.dataObj.df.Rows[i];
             barList.Add(bar);
         }
     }
@@ -136,6 +160,7 @@ public class HistWrapper : IAbstractWrapper
             value = (float)Math.Round(value, 1);
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
             currMarker.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
+            currMarkerList.Add(currMarker);
 
             value = ((histModel.maxBin - histModel.minBin) / i) + histModel.minBin;
             currMarker = Instantiate(markerPrefab, markerParent);
@@ -143,6 +168,7 @@ public class HistWrapper : IAbstractWrapper
             currMarker.transform.rotation = xLabel.transform.rotation;
             value = (float)Math.Round(value, 1);
             currMarker.GetComponent<TextMesh>().text = value.ToString("0.0");
+            currMarkerList.Add(currMarker);
         }
     }
 

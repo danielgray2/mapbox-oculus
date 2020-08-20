@@ -12,12 +12,15 @@ public class LatLonTransf : IAbsTransf
     public string latColName { get; set; }
     public string lonColName { get; set; }
     public AbstractMap absMap { get; set; }
+    public static new string friendlyName { get; protected set; } = "LatLonTransf";
 
     public LatLonTransf(string latColName, string lonColName, AbstractMap absMap)
     {
         this.absMap = absMap;
         this.latColName = latColName;
         this.lonColName = lonColName;
+
+        friendlyName = "LatLonTransf";
     }
 
     public override DataObj ApplyTransformation(DataObj dO)

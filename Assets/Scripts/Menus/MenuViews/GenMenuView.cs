@@ -20,8 +20,9 @@ public class GenMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        model = new ComposableModel();
-        mV.RegisterModel(model.gUID, model);
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        IAbsCompModel compModel = new BaseCompModel();
+        mV.RegisterModel(compModel.gUID, compModel);
+        mV.UpdateCurrModel(compModel);
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 }

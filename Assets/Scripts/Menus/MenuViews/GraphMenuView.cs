@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphMenuView : IAbstractView
+public class GraphMenuView : IAbsMenuView
 {
     public override void Initialize(IAbsModel iAbsModel)
     {

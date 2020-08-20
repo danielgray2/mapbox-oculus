@@ -1,30 +1,41 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class AddObjectManipulator : MonoBehaviour
 {
+    protected Transform root;
+
     public void PlaceObjectManipulator(Transform root)
     {
+        this.root = root;
         List<Renderer> allRends = GetAllChildrenRenderers(root);
         Bounds tempBounds = new Bounds();
         foreach(Renderer rend in allRends)
         {
             tempBounds.Encapsulate(rend.bounds);
         }
-        BoxCollider bc = gameObject.AddComponent<BoxCollider>();
+
+        BoxCollider bc = root.gameObject.AddComponent<BoxCollider>();
         bc.center = tempBounds.center;
         bc.size = tempBounds.extents;
 
         root.gameObject.AddComponent<ObjectManipulator>();
-        BoundingBox box = gameObject.AddComponent<BoundingBox>();
+        BoundingBox box = root.gameObject.AddComponent<BoundingBox>();
         box.ShowWireFrame = false;
         box.ShowScaleHandles = false;
         box.ShowRotationHandleForX = false;
         box.ShowRotationHandleForY = false;
         box.ShowRotationHandleForZ = false;
+    }
+
+    public void UpdateObjectManipulator()
+    {
+        Destroy(root.gameObject.GetComponent<BoxCollider>());
+        Destroy(root.gameObject.GetComponent<ObjectManipulator>());
+        Destroy(root.gameObject.GetComponent<BoundingBox>());
+
+        PlaceObjectManipulator(root);
     }
 
     protected List<Renderer> GetAllChildrenRenderers(Transform root)

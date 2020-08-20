@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScatterModel : IAbsModel
+public class ScatterModel : IAbsGraphModel
 {
     public float extraMargin { get; set; } = 0.1f;
     public string xName { get; set; }
@@ -13,8 +14,4 @@ public class ScatterModel : IAbsModel
     public int numMarkersPerAxis { get; set; } = 2;
     public GameObject parent { get; set; }
     public MenuView menuView { get; set; }
-    public ScatterModel(ComposableModel compModel)
-    {
-        this.compModel = compModel;
-    }
 }

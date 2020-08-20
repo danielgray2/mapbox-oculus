@@ -27,8 +27,6 @@ public class NewContextMenuView : IAbsMenuView
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iAbsModel;
-        controller = new NewContextMenuContr(this, model);
         contextTypeDDObj.options = GetContextOptions();
     }
 
@@ -38,7 +36,7 @@ public class NewContextMenuView : IAbsMenuView
         ContextTypeEnum enumVal = ContextDict.stringEnumDict[contextName];
         next = DetermineNext(enumVal);
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public List<TMP_Dropdown.OptionData> GetContextOptions()

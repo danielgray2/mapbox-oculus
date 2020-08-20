@@ -1,35 +1,29 @@
 ﻿using System;
 
-public class MapMenuContr : IAbsMenuContr
+public class MapMenuContr : IAbsCompContr
 {
-    public MapMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
-
-    public override void Update() { }
-
-    public void UpdateMapModel(MapModel mapModel)
+    public void UpdateLatName(IAbsModel model, string newName)
     {
-        this.model = mapModel;
-    }
-
-    public void UpdateLatName(string newName)
-    {
-        MapModel mapModel = CastToMapModel();
+        MapModel mapModel = CastToMapModel(model);
         mapModel.latColName = newName;
+        mapModel.modelUpdateEvent.Invoke();
     }
 
-    public void UpdateLonName(string newName)
+    public void UpdateLonName(IAbsModel model, string newName)
     {
-        MapModel mapModel = CastToMapModel();
+        MapModel mapModel = CastToMapModel(model);
         mapModel.lonColName = newName;
+        mapModel.modelUpdateEvent.Invoke();
     }
 
-    public void UpdateExaggeration(string newVal)
+    public void UpdateExaggeration(IAbsModel model, string newVal)
     {
-        MapModel mapModel = CastToMapModel();
+        MapModel mapModel = CastToMapModel(model);
         mapModel.exaggerationFactor = int.Parse(newVal);
+        mapModel.modelUpdateEvent.Invoke();
     }
 
-    MapModel CastToMapModel()
+    MapModel CastToMapModel(IAbsModel model)
     {
         if (!(model is MapModel mapModel))
         {

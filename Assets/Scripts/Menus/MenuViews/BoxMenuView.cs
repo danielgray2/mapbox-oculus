@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -14,6 +13,9 @@ public class BoxMenuView : IAbsMenuView
     GameObject configDPMenuGo;
 
     [SerializeField]
+    GameObject dataObjMenuGo;
+
+    [SerializeField]
     GameObject transfsMenuGo;
 
     [SerializeField]
@@ -23,37 +25,25 @@ public class BoxMenuView : IAbsMenuView
     GameObject childrenMenuGo;
 
     [SerializeField]
-    GameObject dataObjDDGo;
+    GameObject genMenuGo;
 
     protected GameObject next;
-    protected TMP_Dropdown dataDDObj;
     protected string dataObjName;
+    protected IAbsCompModel compModel;
 
     private void Start()
     {
         Setup(MenuEnum.BOX, menuHandlerGo.GetComponent<MenuView>());
-        dataDDObj = dataObjDDGo.GetComponent<TMP_Dropdown>();
     }
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iAbsModel;
-        controller = new BoxMenuContr(this, model);
-        dataDDObj.options = GetGraphOptions();
+        compModel = VizUtils.CastToCompModel(iAbsModel);
     }
 
     public void PrepForTransition()
-    {   
-        if (!(controller is BoxMenuContr boxContr))
-        {
-            throw new ArgumentException("Controller must be of type BoxMenuContr");
-        }
-
-        dataObjName = dataDDObj.options[dataDDObj.value].text;
-        DataObj dataObj = DataStore.Instance.dataDict[dataObjName];
-
-        boxContr.UpdateModelDataObj(dataObj);
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+    {
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public List<TMP_Dropdown.OptionData> GetGraphOptions()
@@ -93,25 +83,40 @@ public class BoxMenuView : IAbsMenuView
 
     public void ChildrenBtnClicked()
     {
+        IAbsCompModel prevModel = VizUtils.CastToCompModel(mV.GetCurrModel());
+        Transform prevTransform = prevModel.transform;
+        mV.UpdateCurrModel(CreateChild());
+        mV.UpdateSuperComp(prevModel);
+        mV.UpdateParentTransform(prevTransform);
         next = childrenMenuGo;
+        mV.SetCreatingSubComp(true);
         PrepForTransition();
     }
 
-    public ComposableModel CastToCompModel()
+    public void ChangeDataBtnClicked()
     {
-        ComposableModel compModel;
-        if (model is ComposableModel)
+        next = dataObjMenuGo;
+        PrepForTransition();
+    }
+
+    public void ContinueBtnClicked()
+    {
+        if (mV.mM.creatingSubComp)
         {
-            compModel = (ComposableModel)model;
-        }
-        else if (model.compModel != null)
-        {
-            compModel = model.compModel;
+            mV.SetCreatingSubComp(false);
+            mV.UpdateCurrModel(compModel.superComp);
         }
         else
         {
-            throw new ArgumentException("Model must be of type ComposableModel");
+            next = genMenuGo;
+            PrepForTransition();
         }
-        return compModel;
+    }
+
+    public IAbsCompModel CreateChild()
+    {
+        IAbsCompModel baseModel = new BaseCompModel();
+        mV.RegisterModel(baseModel.gUID, baseModel);
+        return baseModel;
     }
 }

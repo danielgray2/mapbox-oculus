@@ -3,37 +3,35 @@ using UnityEngine;
 
 public class MenuContr : IAbsMenuContr
 {
-    public MenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
+    MenuModel menuModel;
+
+    public MenuContr(MenuModel menuModel)
+    {
+        this.menuModel = menuModel;
+    }
 
     public void RegisterMenu(MenuEnum key, IAbsMenuView value)
     {
-        MenuModel menuModel = CastToMenuModel();
         menuModel.menuDictionary.Add(key, value);
     }
 
     public void RegisterModel(Guid key, IAbsModel value)
     {
-        MenuModel menuModel = CastToMenuModel();
         menuModel.modelDictionary.Add(key, value);
     }
 
-    public override void Update() { }
-
     public void UpdateCurrModelGUID(Guid newMenuGUID)
     {
-        MenuModel menuModel = CastToMenuModel();
         menuModel.currModelGUID = newMenuGUID;
     }
 
     public void UpdateCurrMenu(MenuEnum newMenuEnum)
     {
-        MenuModel menuModel = CastToMenuModel();
         menuModel.currMenuEnum = newMenuEnum;
     }
 
     public void PrepForRoute(RoutingObj routeObj)
     {
-        MenuModel menuModel = CastToMenuModel();
         if (menuModel.currMenuEnum != routeObj.viewEnum)
         {
             menuModel.menuDictionary[menuModel.currMenuEnum].gameObject.SetActive(false);

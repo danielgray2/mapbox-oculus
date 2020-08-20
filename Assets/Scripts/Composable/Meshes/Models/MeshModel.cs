@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeshModel : IAbsModel
+public class MeshModel : IAbsMeshModel
 {
     public string yCol { get; set; }
     public string xCol { get; set; }
@@ -10,9 +11,4 @@ public class MeshModel : IAbsModel
     public string valueCol { get; set; }
     public List<MeshVizLayer> meshLayerList { get; set; }
     public MenuView menuView { get; set; }
-
-    public MeshModel(ComposableModel compModel)
-    {
-        this.compModel = compModel;
-    }
 }

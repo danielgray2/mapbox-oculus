@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MapBaseMenuView : IAbsMenuView
 {
@@ -23,12 +20,11 @@ public class MapBaseMenuView : IAbsMenuView
     public override void Initialize(IAbsModel iAbsModel)
     {
         model = iAbsModel;
-        controller = new MapBaseMenuContr(this, model);
     }
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public void BoxBtnClicked()

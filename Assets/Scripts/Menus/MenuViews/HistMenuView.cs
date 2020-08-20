@@ -1,6 +1,4 @@
 using Microsoft.Data.Analysis;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,9 +18,7 @@ public class HistMenuView : IAbsMenuView
     GameObject histPrefab;
 
     protected TMP_Dropdown dDObj;
-
     protected HistModel histModel;
-    protected HistMenuContr histContr;
 
     private void Start()
     {
@@ -31,16 +27,18 @@ public class HistMenuView : IAbsMenuView
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        if (!(iAbsModel is ComposableModel compModel))
+        if(iAbsModel is HistModel)
         {
-            throw new ArgumentException("Model must be of type ComposableModel");
+            histModel = (HistModel)iAbsModel;
         }
-
-        histModel = new HistModel(compModel);
-        mV.RegisterModel(histModel.gUID, histModel);
-        histContr = new HistMenuContr(this, histModel);
-        controller = histContr;
-        model = histModel;
+        else
+        {
+            IAbsCompModel compModel = VizUtils.CastToCompModel(iAbsModel);
+            histModel = new HistModel();
+            histModel.SetValsFromBase(compModel);
+            mV.RegisterModel(histModel.gUID, histModel);
+            mV.UpdateCurrModel(histModel);
+        }
 
         dDObj = dDGo.GetComponent<TMP_Dropdown>();
 
@@ -51,7 +49,8 @@ public class HistMenuView : IAbsMenuView
 
     public List<TMP_Dropdown.OptionData> GetAxisOptions()
     {
-        DataObj dataObj = histModel.compModel.dataObj;
+        IAbsCompModel compModel = VizUtils.CastToCompModel(mV.GetCurrModel());
+        DataObj dataObj = compModel.dataObj;
         List<string> nameList = new List<string>();
         foreach (DataFrameColumn col in dataObj.df.Columns)
         {
@@ -73,18 +72,22 @@ public class HistMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        histContr.UpdateColName(dDObj.options[dDObj.value].text);
+        mV.UpdateHistColName(dDObj.options[dDObj.value].text);
 
+        // Maybe move this to some sort of composable creator
         GameObject histGo = Instantiate(histPrefab, Vector3.zero, Quaternion.identity);
         
-        if (histModel.parent != null)
+        if (histModel.superComp != null)
         {
             histGo.transform.parent = histModel.parent.transform;
         }
-        HistWrapper histWrapper = histGo.GetComponent<HistWrapper>();
-        histWrapper.Initialize(histModel);
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        HistWrapper histWrapper = histGo.GetComponent<HistWrapper>();
+        mV.UpdateTransform(histWrapper.transform);
+        histWrapper.Initialize(histModel);
+        histWrapper.Plot();
+
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
 
     }
 }

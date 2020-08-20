@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HistBaseMenuView : IAbsMenuView
@@ -23,12 +20,11 @@ public class HistBaseMenuView : IAbsMenuView
     public override void Initialize(IAbsModel iAbsModel)
     {
         model = iAbsModel;
-        controller = new HistBaseMenuContr(this, model);
     }
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public void BoxBtnClicked()

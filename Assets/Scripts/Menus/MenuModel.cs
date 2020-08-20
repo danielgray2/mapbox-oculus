@@ -9,4 +9,6 @@ public class MenuModel : IAbsModel
     public Dictionary<Guid, IAbsModel> modelDictionary = new Dictionary<Guid, IAbsModel>();
     public Guid currModelGUID { get; set; }
     public MenuEnum currMenuEnum { get; set; }
+    public bool creatingSubComp { get; set; } = false;
+    public List<string> transfsToProc { get; set; } = new List<string>();
 }

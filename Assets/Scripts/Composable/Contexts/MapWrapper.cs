@@ -12,7 +12,7 @@ public class MapWrapper : IAbstractWrapper
     public Material tileMaterial;
 
     GameObject mapGo;
-    GameObject pointHolder;
+    AddObjectManipulator oM;
     Map wrapped;
     bool plottedOnce = false;
     bool initialized = false;
@@ -30,36 +30,35 @@ public class MapWrapper : IAbstractWrapper
         {
             wrapped = new Map(model);
             this.model = model;
+            model.modelUpdateEvent.AddListener(HandleModelUpdate);
+            // Register for updates here
             initialized = true;
-
-            pointHolder = new GameObject();
-            pointHolder.name = "PointHolder";
         }
-
-        Plot();
     }
 
     public void Plot()
     {
-        if (!plottedOnce)
+        if (initialized && !plottedOnce)
         {
             DrawMap();
-            pointHolder.transform.parent = GetComponentInChildren<AbstractMap>().transform;
-            pointHolder.transform.localPosition = Vector3.zero;
+            oM = this.gameObject.AddComponent<AddObjectManipulator>();
+            oM.PlaceObjectManipulator(this.transform);
+
             plottedOnce = true;
         }
     }
 
-    public void Replot()
+    public override void ReRender()
     {
-        plottedOnce = false;
-        Plot();
+        Destroy(mapGo);
+        DrawMap();
+        oM.UpdateObjectManipulator();
     }
 
     void DrawMap()
     {
         MapModel mapModel = CastToMapModel();
-        DataObj dataObj = mapModel.compModel.dataObj;
+        DataObj dataObj = mapModel.dataObj;
         string latColName = mapModel.latColName;
         string lonColName = mapModel.lonColName;
 

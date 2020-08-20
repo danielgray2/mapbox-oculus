@@ -20,15 +20,11 @@ public class ScatterBaseMenuView : IAbsMenuView
         Setup(MenuEnum.SCATTERPLOT_BASE, menuHandlerGo.GetComponent<MenuView>());
     }
 
-    public override void Initialize(IAbsModel iAbsModel)
-    {
-        model = iAbsModel;
-        controller = new ScatterBaseMenuContr(this, model);
-    }
+    public override void Initialize(IAbsModel iAbsModel) { }
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public void BoxBtnClicked()

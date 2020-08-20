@@ -23,12 +23,11 @@ public class MeshBaseMenuView : IAbsMenuView
     public override void Initialize(IAbsModel iAbsModel)
     {
         model = iAbsModel;
-        controller = new MeshBaseMenuContr(this, model);
     }
 
     public void PrepForTransition()
     {
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public void BoxBtnClicked()

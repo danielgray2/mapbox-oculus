@@ -112,6 +112,4 @@ public class MeshVizLayer : IAbstractView
             Gizmos.DrawSphere(vertices[i], 0.1f);
         }
     }
-
-    public override void Initialize(IAbsModel iAbsModel) {}
 }

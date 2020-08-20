@@ -1,42 +1,37 @@
 ﻿
 using System;
 
-public class MeshMenuContr : IAbsMenuContr
+public class MeshMenuContr : IAbsCompContr
 {
-    public MeshMenuContr(IAbstractView view, IAbsModel model) : base(view, model) {}
-
-    public override void Update() { }
-
-    public void UpdateMeshModel(MeshModel meshModel)
+    public void UpdateXColName(IAbsModel model, string newName)
     {
-        model = meshModel;
-    }
-
-    public void UpdateXColName(string newName)
-    {
-        MeshModel meshModel = CastToMeshModel();
+        MeshModel meshModel = CastToMeshModel(model);
         meshModel.xCol = newName;
+        meshModel.modelUpdateEvent.Invoke();
     }
 
-    public void UpdateYColName(string newName)
+    public void UpdateYColName(IAbsModel model, string newName)
     {
-        MeshModel meshModel = CastToMeshModel();
+        MeshModel meshModel = CastToMeshModel(model);
         meshModel.yCol = newName;
+        meshModel.modelUpdateEvent.Invoke();
     }
 
-    public void UpdateZColName(string newName)
+    public void UpdateZColName(IAbsModel model, string newName)
     {
-        MeshModel meshModel = CastToMeshModel();
+        MeshModel meshModel = CastToMeshModel(model);
         meshModel.zCol = newName;
+        meshModel.modelUpdateEvent.Invoke();
     }
 
-    public void UpdateValueColName(string newName)
+    public void UpdateValColName(IAbsModel model, string newName)
     {
-        MeshModel meshModel = CastToMeshModel();
+        MeshModel meshModel = CastToMeshModel(model);
         meshModel.valueCol = newName;
+        meshModel.modelUpdateEvent.Invoke();
     }
 
-    MeshModel CastToMeshModel()
+    MeshModel CastToMeshModel(IAbsModel model)
     {
         if (!(model is MeshModel meshModel))
         {

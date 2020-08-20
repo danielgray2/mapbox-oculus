@@ -1,23 +1,16 @@
 using System;
 using UnityEngine;
 
-public class HistMenuContr : IAbsMenuContr
+public class HistMenuContr : IAbsCompContr
 {
-    public HistMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
 
-    public override void Update(){}
-
-    public void UpdateHistModel(HistModel model)
-    {
-        this.model = model;
-    }
-
-    public void UpdateColName(string newName)
+    public void UpdateColName(IAbsModel model, string newName)
     {
         if (!(model is HistModel histModel))
         {
-            throw new ArgumentException("Model must be of type ScatterplotModel");
+            throw new ArgumentException("Model must be of type HistModel");
         }
         histModel.xName = newName;
+        histModel.modelUpdateEvent.Invoke();
     }
 }

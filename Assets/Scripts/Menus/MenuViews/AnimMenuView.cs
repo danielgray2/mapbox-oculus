@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimMenuView : IAbstractView
+public class AnimMenuView : IAbsMenuView
 {
     public override void Initialize(IAbsModel iAbsModel)
     {

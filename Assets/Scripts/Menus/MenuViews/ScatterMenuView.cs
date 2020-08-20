@@ -29,7 +29,6 @@ public class ScatterMenuView : IAbsMenuView
     protected TMP_Dropdown zDDObj;
 
     protected ScatterModel scatterModel;
-    protected ScatterMenuContr scatterContr;
 
     private void Start()
     {
@@ -38,16 +37,11 @@ public class ScatterMenuView : IAbsMenuView
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        if(!(iAbsModel is ComposableModel compModel))
-        {
-            throw new ArgumentException("Model must be of type ComposableModel");
-        }
-
-        scatterModel = new ScatterModel(compModel);
+        scatterModel = new ScatterModel();
+        IAbsCompModel compModel = VizUtils.CastToCompModel(iAbsModel);
+        scatterModel.SetValsFromBase(compModel);
         mV.RegisterModel(scatterModel.gUID, scatterModel);
-        model = scatterModel;
-        scatterContr = new ScatterMenuContr(this, model);
-        controller = scatterContr;
+        mV.UpdateCurrModel(scatterModel);
 
         xDDObj = xDDGo.GetComponent<TMP_Dropdown>();
         yDDObj = yDDGo.GetComponent<TMP_Dropdown>();
@@ -62,7 +56,7 @@ public class ScatterMenuView : IAbsMenuView
 
     public List<TMP_Dropdown.OptionData> GetAxisOptions()
     {
-        DataObj dataObj = scatterModel.compModel.dataObj;
+        DataObj dataObj = scatterModel.dataObj;
         List<string> nameList = new List<string>();
         foreach (DataFrameColumn col in dataObj.df.Columns)
         {
@@ -84,10 +78,11 @@ public class ScatterMenuView : IAbsMenuView
 
     public void PrepForTransition()
     {
-        scatterContr.updateXName(xDDObj.options[xDDObj.value].text);
-        scatterContr.updateYName(yDDObj.options[yDDObj.value].text);
-        scatterContr.updateZName(zDDObj.options[zDDObj.value].text);
+        mV.UpdateScatterXName(xDDObj.options[xDDObj.value].text);
+        mV.UpdateScatterYName(yDDObj.options[yDDObj.value].text);
+        mV.UpdateScatterZName(zDDObj.options[zDDObj.value].text);
 
+        // Probably should move this at some point
         if (scatterModel.parent != null)
         {
             transform.parent = scatterModel.parent.transform;
@@ -95,8 +90,10 @@ public class ScatterMenuView : IAbsMenuView
 
         GameObject scatterBoxGo = Instantiate(scatterBoxPrefab, Vector3.zero, Quaternion.identity);
         ScatterBoxWrapper scatterBoxWrapper = scatterBoxGo.GetComponent<ScatterBoxWrapper>();
+        mV.UpdateTransform(scatterBoxWrapper.transform);
         scatterBoxWrapper.Initialize(scatterModel);
+        scatterBoxWrapper.Plot();
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 }

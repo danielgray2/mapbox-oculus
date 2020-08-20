@@ -13,6 +13,9 @@ public class DepthLatLonTransf : IAbsTransf
     public string latColName { get; set; }
     public string lonColName { get; set; }
     public AbstractMap absMap { get; set; }
+
+    public static new string friendlyName { get; protected set; } = "DepthLatLonTransf";
+
     public DepthLatLonTransf(string depthColName, string latColName, string lonColName, AbstractMap absMap)
     {
         this.depthColName = depthColName;

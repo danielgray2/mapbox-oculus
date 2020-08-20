@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HistModel : IAbsModel
+public class HistModel : IAbsGraphModel
 {
     public float extraMargin { get; set; } = 0.1f;
     public string xName { get; set; }
@@ -17,8 +18,4 @@ public class HistModel : IAbsModel
     public float xMin { get; set; }
     public int numMarkersPerAxis { get; set; } = 2;
     public GameObject parent { get; set; }
-    public HistModel(ComposableModel compModel)
-    {
-        this.compModel = compModel;
-    }
 }

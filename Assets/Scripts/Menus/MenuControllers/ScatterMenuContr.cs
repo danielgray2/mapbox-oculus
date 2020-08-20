@@ -2,74 +2,67 @@
 using System;
 using UnityEngine;
 
-public class ScatterMenuContr : IAbsMenuContr
+public class ScatterMenuContr : IAbsCompContr
 {
-    public ScatterMenuContr(IAbstractView view, IAbsModel model) : base(view, model) { }
-
-    public override void Update(){}
-
-    public void UpdateScatterModel(ScatterModel scatterModel)
+    public void UpdateXName(IAbsModel model, string text)
     {
-        model = scatterModel;
-    }
-
-    public void updateXName(string text)
-    {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.xName = text;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateYName(string text)
+    public void UpdateYName(IAbsModel model, string text)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.yName = text;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateZName(string text)
+    public void UpdateZName(IAbsModel model, string text)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.zName = text;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateCompModel(ComposableModel compModel)
+    public void UpdateExtraMargin(IAbsModel model, float extraMargin)
     {
-        ScatterModel scatterModel = CastToScatterModel();
-        scatterModel.compModel = compModel;
-    }
-
-    public void updateExtraMargin(float extraMargin)
-    {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.extraMargin = extraMargin;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updatePlotScale(float plotScale)
+    public void UpdatePlotScale(IAbsModel model, float plotScale)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.plotScale = plotScale;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateDataPointScale(Vector3 dataPointScale)
+    public void UpdateDataPointScale(IAbsModel model, Vector3 dataPointScale)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.dataPointScale = dataPointScale;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateNumMarkersPerAxis(int numMarkersPerAxis)
+    public void UpdateNumMarkersPerAxis(IAbsModel model, int numMarkersPerAxis)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.numMarkersPerAxis = numMarkersPerAxis;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public void updateParent(GameObject parent)
+    public void UpdateParent(IAbsModel model, GameObject parent)
     {
-        ScatterModel scatterModel = CastToScatterModel();
+        ScatterModel scatterModel = CastToScatterModel(model);
         scatterModel.parent = parent;
+        scatterModel.modelUpdateEvent.Invoke();
     }
 
-    public ScatterModel CastToScatterModel()
+    public ScatterModel CastToScatterModel(IAbsModel iAbsModel)
     {
-        if(!(model is ScatterModel sM))
+        if(!(iAbsModel is ScatterModel sM))
         {
             throw new ArgumentException("Model must be of type ScatterModel");
         }

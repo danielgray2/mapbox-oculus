@@ -12,24 +12,32 @@ public class MeshVizWrapper : IAbstractWrapper
 
     protected MeshViz wrapped;
     protected bool initialized = false;
-    protected bool firstRun = true;
+    protected bool plottedOnce = false;
+    protected GameObject go;
 
     // Update is called once per frame
-    void Update()
+    public void Plot()
     {
-        if (initialized && firstRun)
+        if (initialized && !plottedOnce)
         {
             MeshModel meshModel = CastToMeshVizModel();
             DrawMesh(wrapped.CreateMesh(meshModel));
-            firstRun = false;
+            plottedOnce = true;
         }
+    }
+
+    public override void ReRender()
+    {
+        Destroy(go);
+        MeshModel meshModel = CastToMeshVizModel();
+        DrawMesh(wrapped.CreateMesh(meshModel));
     }
 
     public void Initialize(MeshModel meshModel)
     {
         model = meshModel;
+        model.modelUpdateEvent.AddListener(HandleModelUpdate);
         wrapped = new MeshViz();
-        this.gradient = gradient;
         initialized = true;
     }
 
@@ -38,7 +46,7 @@ public class MeshVizWrapper : IAbstractWrapper
         List<MeshVizLayer> meshLayerList = new List<MeshVizLayer>();
         for (int i = 0; i < meshStruct.Count; i++)
         {
-            GameObject go = new GameObject();
+            go = new GameObject();
             go.transform.parent = this.transform;
             go.transform.position = Vector3.zero;
             go.AddComponent<MeshFilter>();

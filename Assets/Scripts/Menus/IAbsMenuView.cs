@@ -14,5 +14,5 @@ public abstract class IAbsMenuView : IAbstractView
         mV.RegisterMenu(mE, this);
     }
 
-    public abstract override void Initialize(IAbsModel iAbsModel);
+    public abstract void Initialize(IAbsModel iAbsModel);
 }

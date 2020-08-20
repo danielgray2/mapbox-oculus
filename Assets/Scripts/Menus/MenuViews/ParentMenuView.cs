@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParentMenuView : IAbstractView
+public class ParentMenuView : IAbsMenuView
 {
     public override void Initialize(IAbsModel iAbsModel)
     {

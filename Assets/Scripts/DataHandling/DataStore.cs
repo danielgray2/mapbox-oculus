@@ -8,6 +8,7 @@ using Microsoft.Data.Analysis;
 public sealed class DataStore
 {
     public Dictionary<string, DataObj> dataDict = new Dictionary<string, DataObj>();
+    public Dictionary<DataObj, string> reverseDataDict = new Dictionary<DataObj, string>();
     public List<SData> sDataRecords { get; private set;}
     public List<VData> vDataRecords { get; private set; }
     ///*
@@ -52,12 +53,14 @@ public sealed class DataStore
     {
         DataObj dO = new DataObj(df);
         dataDict.Add(name, dO);
+        reverseDataDict.Add(dO, name);
     }
 
     public void AddDataSet(DataFrame df, string name)
     {
         DataObj dO = new DataObj(df);
         dataDict.Add(name, dO);
+        reverseDataDict.Add(dO, name);
         ///*
         this.sDataRecords = sDataRecords;
 

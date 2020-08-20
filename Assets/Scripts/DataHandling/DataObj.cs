@@ -25,6 +25,11 @@ public class DataObj
     protected Dictionary<string, Dictionary<STATSVALS, dynamic>> statsDict { get; set; }
     public DataObj(DataFrame df)
     {
+        UpdateDf(df);
+    }
+
+    public void UpdateDf(DataFrame df)
+    {
         this.df = df;
         statsDict = new Dictionary<string, Dictionary<STATSVALS, dynamic>>();
     }
@@ -500,5 +505,15 @@ public class DataObj
             }
         }
         return retList;
+    }
+
+    public DataFrame MergeDf(DataFrame dfToMerge)
+    {
+        DataFrame clonedDf = df.Clone();
+        for(int i = 0; i < dfToMerge.Columns.Count; i++)
+        {
+            clonedDf.Columns.Append(dfToMerge.Columns[i]);
+        }
+        return clonedDf;
     }
 }

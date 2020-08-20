@@ -33,13 +33,11 @@ public class NewGraphMenuView : IAbsMenuView
         GraphTypeEnum enumVal = GraphDict.stringEnumDict[graphName];
         next = DetermineNext(enumVal);
 
-        mV.Route(new RoutingObj(next.GetComponent<IAbsMenuView>().mE, model.gUID));
+        mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }
 
     public override void Initialize(IAbsModel iAbsModel)
     {
-        model = iAbsModel;
-        controller = new NewGraphMenuContr(this, model);
         graphTypeDDObj.options = GetGraphOptions();
     }
 

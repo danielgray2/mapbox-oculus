@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Analysis;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
@@ -15,7 +14,7 @@ public class MeshViz : IAbstractMeshViz
     // in descending order of how long they remain constant for.
     public List<List<List<MeshDataObj>>> CreateMesh(MeshModel meshModel)
     {
-        DataObj dO = meshModel.compModel.dataObj;
+        DataObj dO = meshModel.dataObj;
 
         string yCol = meshModel.yCol;
         string xCol = meshModel.xCol;
@@ -150,6 +149,7 @@ public class MeshViz : IAbstractMeshViz
         return returnList;
     }
 
+    /*
     private void Update()
     {
         if (parentViz != null)
@@ -158,4 +158,5 @@ public class MeshViz : IAbstractMeshViz
             dataMesh.transform.localScale = parentViz.localScale;
         }
     }
+    */
 }

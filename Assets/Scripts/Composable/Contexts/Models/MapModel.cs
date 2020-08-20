@@ -1,7 +1,9 @@
 ﻿using Mapbox.Unity.Map;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class MapModel : IAbsModel
+public class MapModel : IAbsContextModel
 {
     public string latColName { get; set; }
     public string lonColName { get; set; }
@@ -19,8 +21,10 @@ public class MapModel : IAbsModel
     public MapExtentType mapExtentType { get; set; } = MapExtentType.Custom;
     public Vector3 maxDpSize { get; set; }
     public Vector3 minDpSize { get; set; }
-    public MapModel(ComposableModel compModel)
+
+    public MapModel()
     {
-        this.compModel = compModel;
+        availTransfs.Add(DepthLatLonTransf.friendlyName);
+        availTransfs.Add(LatLonTransf.friendlyName);
     }
 }

@@ -17,7 +17,7 @@ public class ScatterBox : IAbstractGraph
     {
         this.model = model;
         GraphStore.Instance.graphList.Add(this);
-        DataObj dataObj = model.compModel.dataObj;
+        DataObj dataObj = model.dataObj;
 
         xMax = dataObj.GetMax(model.xName);
         yMax = dataObj.GetMax(model.yName);
@@ -44,7 +44,7 @@ public class ScatterBox : IAbstractGraph
         }
 
         List<List<float>> retList = new List<List<float>>();
-        DataObj dataObj = scatterModel.compModel.dataObj;
+        DataObj dataObj = scatterModel.dataObj;
 
         for (var i = 0; i < dataObj.df.Rows.Count; i++)
         {
