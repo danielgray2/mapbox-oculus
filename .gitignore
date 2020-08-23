@@ -114,3 +114,4 @@ crashlytics-build.properties
 # Third Party
 /Assets/ThirdParty/*
 !/Assets/ThirdParty/Plugins
+!/Assets/ThirdParty/ThirdPartyAssembly.asmdef
