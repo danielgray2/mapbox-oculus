@@ -209,6 +209,12 @@ public class MenuView : IAbstractView
         baseCompContr.UpdateSuperComp(model, curr);
     }
 
+    public void AddTransfToUse(IAbsTransf transfToAdd)
+    {
+        IAbsCompModel curr = VizUtils.CastToCompModel(GetCurrModel());
+        curr.useTransfs.Add(transfToAdd);
+    }
+
     public IAbsMenuView FindConfigMenu(IAbsCompModel compModel)
     {
         switch (compModel)
