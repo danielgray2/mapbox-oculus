@@ -109,7 +109,10 @@ public class DepLatLonMenuView : IAbsMenuView
         string mapName = mapDDObj.options[mapDDObj.value].text;
         AbstractMap selectedMap = mapDict[mapName];
 
-        mV.AddTransfToUse(new DepthLatLonTransf(depthName, latName, lonName, selectedMap));
+        if (compModel is MapModel thisMapModel)
+        {
+            mV.AddTransfToUse(new DepthLatLonTransf(depthName, latName, lonName, selectedMap, thisMapModel.exaggerationFactor));
+        }
 
         mV.ActivateMenu(next.GetComponent<IAbsMenuView>());
     }

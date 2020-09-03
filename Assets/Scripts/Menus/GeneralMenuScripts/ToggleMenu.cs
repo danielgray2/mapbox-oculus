@@ -1,11 +1,15 @@
-﻿using System.Collections;
+﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.Input;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ToggleMenu : MonoBehaviour
 {
     [SerializeField]
-    public GameObject menu;
+    public GameObject selectorMenu;
+    [SerializeField]
+    public GameObject mainMenu;
 
     private void Update()
     {
@@ -14,13 +18,23 @@ public class ToggleMenu : MonoBehaviour
 
     public void HandleMenuToggle()
     {
-        if (menu.activeSelf && (Input.GetKeyDown(KeyCode.I) || OVRInput.GetDown(OVRInput.RawButton.Y)))
+        if (selectorMenu.activeSelf && Input.GetKeyDown(KeyCode.I) || selectorMenu.activeSelf && OVRInput.GetDown(OVRInput.RawButton.Y))
         {
-            menu.SetActive(false);
+            selectorMenu.SetActive(false);
         }
-        else if (!menu.activeSelf && (Input.GetKeyDown(KeyCode.I) || OVRInput.GetUp(OVRInput.RawButton.Y)))
+        else if (!selectorMenu.activeSelf && Input.GetKeyDown(KeyCode.I) || !selectorMenu.activeSelf && OVRInput.GetDown(OVRInput.RawButton.Y))
         {
-            menu.SetActive(true);
+            selectorMenu.SetActive(true);
+            mainMenu.SetActive(false);
+        }
+        else if (mainMenu.activeSelf && Input.GetKeyDown(KeyCode.O) || mainMenu.activeSelf && OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+            mainMenu.SetActive(false);
+        }
+        else if (!mainMenu.activeSelf && Input.GetKeyDown(KeyCode.O) || !mainMenu.activeSelf && OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+            mainMenu.SetActive(true);
+            selectorMenu.SetActive(false);
         }
     }
 }

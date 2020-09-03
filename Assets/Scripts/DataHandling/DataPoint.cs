@@ -6,17 +6,18 @@ using UnityEngine;
 
 public class DataPoint : MonoBehaviour
 {
+    //TODO: I could see this becoming a controller
+    // with some of its elements going into a model.
     public DataFrameRow data { get; set; }
 
     List<IAnimation> animationList = new List<IAnimation>();
     List<IAnimation> animsToAdd = new List<IAnimation>();
     List<IAnimation> animsToRemove = new List<IAnimation>();
-    bool instantiated = false;
-
     public Vector3 origLocalScale { get; set; }
     public Vector3 origLocalPos { get; set; }
     public Quaternion origLocalRotation { get; set; }
     public Color origColor { get; set; }
+
 
     void Update()
     {

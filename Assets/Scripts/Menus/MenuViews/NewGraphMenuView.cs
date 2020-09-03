@@ -16,6 +16,9 @@ public class NewGraphMenuView : IAbsMenuView
     GameObject histogramMenuGo;
 
     [SerializeField]
+    GameObject tensorGlyphMenuGo;
+
+    [SerializeField]
     GameObject graphTypeDDGo;
 
     protected TMP_Dropdown graphTypeDDObj;
@@ -68,6 +71,9 @@ public class NewGraphMenuView : IAbsMenuView
                 break;
             case GraphTypeEnum.HISTOGRAM:
                 retVal = histogramMenuGo;
+                break;
+            case GraphTypeEnum.TENSOR_GLYPH:
+                retVal = tensorGlyphMenuGo;
                 break;
             default:
                 throw new ArgumentException("Graph type not recognized");

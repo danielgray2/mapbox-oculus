@@ -14,6 +14,7 @@ public class MenuView : IAbstractView
     protected MapMenuContr mapMenuContr = new MapMenuContr();
     protected MeshMenuContr meshMenuContr = new MeshMenuContr();
     protected ScatterMenuContr scatterMenuContr = new ScatterMenuContr();
+    protected TenGlyphMenuContr glyphMenuContr = new TenGlyphMenuContr();
     protected BaseCompContr baseCompContr = new BaseCompContr();
 
     private void Awake()
@@ -79,6 +80,7 @@ public class MenuView : IAbstractView
 
     public void UpdateCurrModel(IAbsModel newModel)
     {
+        Debug.Log("Updated the model");
         menuContr.UpdateCurrModelGUID(newModel.gUID);
     }
 
@@ -207,6 +209,78 @@ public class MenuView : IAbstractView
     {
         IAbsCompModel curr = VizUtils.CastToCompModel(GetCurrModel());
         baseCompContr.UpdateSuperComp(model, curr);
+    }
+
+    public void UpdateGlyphXPosName(string xPosColName)
+    {
+        glyphMenuContr.UpdateGlyphXPosName(GetCurrModel(), xPosColName);
+    }
+
+    public void UpdateGlyphYPosName(string yPosColName)
+    {
+        glyphMenuContr.UpdateGlyphYPosName(GetCurrModel(), yPosColName);
+    }
+
+    public void UpdateGlyphZPosName(string zPosColName)
+    {
+        glyphMenuContr.UpdateGlyphZPosName(GetCurrModel(), zPosColName);
+    }
+
+    public void UpdateGlyphOneCompAxisOne(string oneCompAxisOne)
+    {
+        glyphMenuContr.UpdateGlyphOneCompAxisOne(GetCurrModel(), oneCompAxisOne);
+    }
+
+    public void UpdateGlyphOneCompAxisTwo(string oneCompAxisTwo)
+    {
+        glyphMenuContr.UpdateGlyphOneCompAxisTwo(GetCurrModel(), oneCompAxisTwo);
+    }
+
+    public void UpdateGlyphOneCompAxisThree(string oneCompAxisThree)
+    {
+        glyphMenuContr.UpdateGlyphOneCompAxisThree(GetCurrModel(), oneCompAxisThree);
+    }
+
+    public void UpdateGlyphTwoCompAxisOne(string twoCompAxisOne)
+    {
+        glyphMenuContr.UpdateGlyphTwoCompAxisOne(GetCurrModel(), twoCompAxisOne);
+    }
+
+    public void UpdateGlyphTwoCompAxisTwo(string twoCompAxisTwo)
+    {
+        glyphMenuContr.UpdateGlyphTwoCompAxisTwo(GetCurrModel(), twoCompAxisTwo);
+    }
+
+    public void UpdateGlyphTwoCompAxisThree(string twoCompAxisThree)
+    {
+        glyphMenuContr.UpdateGlyphTwoCompAxisThree(GetCurrModel(), twoCompAxisThree);
+    }
+
+    public void UpdateGlyphThreeCompAxisOne(string threeCompAxisOne)
+    {
+        glyphMenuContr.UpdateGlyphThreeCompAxisOne(GetCurrModel(), threeCompAxisOne);
+    }
+
+    public void UpdateGlyphThreeCompAxisTwo(string threeCompAxisTwo)
+    {
+        glyphMenuContr.UpdateGlyphThreeCompAxisTwo(GetCurrModel(), threeCompAxisTwo);
+    }
+
+    public void UpdateGlyphThreeCompAxisThree(string threeCompAxisThree)
+    {
+        glyphMenuContr.UpdateGlyphThreeCompAxisThree(GetCurrModel(), threeCompAxisThree);
+    }
+    public void UpdateGlyphAxisOne(string glyphAxisOne)
+    {
+        glyphMenuContr.UpdateGlyphAxisOne(GetCurrModel(), glyphAxisOne);
+    }
+    public void UpdateGlyphAxisTwo(string glyphAxisTwo)
+    {
+        glyphMenuContr.UpdateGlyphAxisTwo(GetCurrModel(), glyphAxisTwo);
+    }
+    public void UpdateGlyphAxisThree(string glyphAxisThree)
+    {
+        glyphMenuContr.UpdateGlyphAxisThree(GetCurrModel(), glyphAxisThree);
     }
 
     public void AddTransfToUse(IAbsTransf transfToAdd)

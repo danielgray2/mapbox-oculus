@@ -12,17 +12,20 @@ public class DepthLatLonTransf : IAbsTransf
     public string depthColName { get; set; }
     public string latColName { get; set; }
     public string lonColName { get; set; }
+    public float exaggeration { get; set; }
     public AbstractMap absMap { get; set; }
 
     public static new string friendlyName { get; protected set; } = "DepthLatLonTransf";
 
-    public DepthLatLonTransf(string depthColName, string latColName, string lonColName, AbstractMap absMap)
+    public DepthLatLonTransf(string depthColName, string latColName, string lonColName, AbstractMap absMap, float exaggeration)
     {
         this.depthColName = depthColName;
         this.absMap = absMap;
         this.latColName = latColName;
         this.lonColName = lonColName;
+        this.exaggeration = exaggeration;
     }
+
     public override DataObj ApplyTransformation(DataObj dO)
     {
         int dfLength = (int)dO.df.Rows.Count;
@@ -44,7 +47,7 @@ public class DepthLatLonTransf : IAbsTransf
             // Convert kilometers to meters
             float depthInMeters = -(float)df.Columns[depthColName][i] * 1000;
             float adjUnityUnits = ratio * depthInMeters;
-            float adjElevUnity = unadjustedPos.y + adjUnityUnits - currentElevUnity;
+            float adjElevUnity = unadjustedPos.y + adjUnityUnits;
             xVals[i] = unadjustedPos.x;
             yVals[i] = adjElevUnity;
             zVals[i] = unadjustedPos.z;

@@ -63,6 +63,7 @@ public class MapWrapper : IAbstractWrapper
         string lonColName = mapModel.lonColName;
 
         mapGo = new GameObject();
+        mapGo.name = "MapHolder";
         mapGo.transform.parent = transform;
         mapGo.transform.localPosition = Vector3.zero;
         mapGo.transform.localRotation = Quaternion.identity;
@@ -100,7 +101,7 @@ public class MapWrapper : IAbstractWrapper
         oM.PlaceObjectManipulator(mapGo.transform);
     }
 
-    void CreateMapOptions(float firstLat, float firstLon)
+    public void CreateMapOptions(float firstLat, float firstLon)
     {
         MapModel mapModel = CastToMapModel();
         wrapped.CreateMapOptions(firstLat, firstLon);

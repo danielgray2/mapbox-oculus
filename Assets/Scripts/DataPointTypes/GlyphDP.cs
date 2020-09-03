@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlyphDP : MonoBehaviour
+public class GlyphDP : DataPoint
 {
     [SerializeField]
     public GameObject xComp;

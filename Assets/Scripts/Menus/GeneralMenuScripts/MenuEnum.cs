@@ -28,4 +28,6 @@ public enum MenuEnum
     DATA_OBJ,
     LAT_LON,
     DEP_LAT_LON,
+    NEW_TEN_GLYPH_GRAPH,
+    TEN_GLYPH_BASE
 }

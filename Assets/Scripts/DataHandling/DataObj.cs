@@ -470,6 +470,7 @@ public class DataObj
         return numMillis;
     }
 
+    //TODO: Doesn't work for floats
     public int CountNumVals<T>(string colName, T value) where T : IComparable
     {
         int counter = 0;

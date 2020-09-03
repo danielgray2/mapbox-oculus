@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 432403055906727843}
   - component: {fileID: 432403055906727840}
   - component: {fileID: 432403055906727841}
-  - component: {fileID: 432403055906727775}
-  - component: {fileID: 432403055906727772}
-  - component: {fileID: 7530734141789856149}
+  - component: {fileID: 5557801623674740141}
+  - component: {fileID: -1815282868551032896}
+  - component: {fileID: 8869483063065439085}
   m_Layer: 0
   m_Name: SelectorRegion
   m_TagString: Untagged
@@ -30,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432403055906727773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: eb9ea9939fcd10b47bcfd720a934c018, type: 2}
+  - {fileID: 2100000, guid: 07062e0b1a8e4db4a9268aeae26adcfa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &432403055906727775
+--- !u!114 &5557801623674740141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432403055906727773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a520982999a27bb4680dbfaca73e3004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quakeCreator: {fileID: 0}
+  glyphCreator: {fileID: 0}
+--- !u!114 &-1815282868551032896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 432403055906727842}
   manipulationType: 3
-  twoHandedManipulationType: 5
+  twoHandedManipulationType: 7
   allowFarManipulation: 1
   oneHandRotationModeNear: 1
   oneHandRotationModeFar: 1
@@ -131,7 +145,7 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &432403055906727772
+--- !u!114 &8869483063065439085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,15 +158,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTetherWhenManipulating: 0
---- !u!114 &7530734141789856149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 432403055906727773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a520982999a27bb4680dbfaca73e3004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

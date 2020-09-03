@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class DataCapturer : MonoBehaviour
 {
+    [SerializeField]
+    GameObject quakeCreator;
+    [SerializeField]
+    GameObject glyphCreator;
     public GameObject selectorShape { get; set; }
 
     public void HandleDataSelection()
@@ -11,6 +15,7 @@ public class DataCapturer : MonoBehaviour
         // Be aware that bounds.Contains() uses an exis aligned
         // bounding box, so any rotations on the selector region
         // will be ignored.
+        /*
         if(selectorShape == null) { return; }
         MapStore.Instance.selectedGOs = new List<GameObject>();
         foreach(GameObject go in MapStore.Instance.iconGOs)
@@ -21,5 +26,8 @@ public class DataCapturer : MonoBehaviour
             }
         }
         Debug.Log("Here is the count: " + MapStore.Instance.selectedGOs.Count);
+        */
+        quakeCreator.gameObject.SetActive(true);
+        glyphCreator.SetActive(true);
     }
 }

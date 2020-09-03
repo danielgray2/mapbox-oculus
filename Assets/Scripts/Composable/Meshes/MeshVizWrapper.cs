@@ -48,7 +48,7 @@ public class MeshVizWrapper : IAbstractWrapper
         {
             go = new GameObject();
             go.transform.parent = this.transform;
-            go.transform.position = Vector3.zero;
+            go.transform.localPosition = Vector3.zero;
             go.AddComponent<MeshFilter>();
             go.AddComponent<MeshRenderer>();
             Rigidbody rb = go.AddComponent<Rigidbody>();

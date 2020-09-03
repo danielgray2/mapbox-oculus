@@ -55,7 +55,8 @@ public class MeshVizLayer : IAbstractView
             for (int j = 0; j < dataMesh[k].Count; j++)
             {
                 MeshDataObj dataPoint = dataMesh[k][j];
-                vertices.Add(dataPoint.position);
+                // hard coded for now, fix later
+                vertices.Add(dataPoint.unityPosition);
                 dataPoints.Add(dataPoint);
             }
         }

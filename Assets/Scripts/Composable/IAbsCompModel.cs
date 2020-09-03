@@ -13,6 +13,8 @@ public enum ComposableType
 }
 public abstract class IAbsCompModel : IAbsModel
 {
+    // TODO: Tie in everything to work with this
+    public DataObj origDo { get; set; }
     public DataObj dataObj { get; set; }
     public ComposableType compType { get; set; }
     public List<string> availTransfs { get; set; } = new List<string>();

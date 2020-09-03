@@ -21,8 +21,10 @@ public class MeshViz : IAbstractMeshViz
         string zCol = meshModel.zCol;
         string valCol = meshModel.valueCol;
 
-        List<string> colOrdering = FindColOrdering(dO, yCol, xCol, zCol);
-        List<MeshDataObj> meshDataList = CreateDataList(dO, colOrdering[0], colOrdering[1], colOrdering[2], valCol);
+        //List<string> colOrdering = FindColOrdering(dO, yCol, xCol, zCol);
+        //List<MeshDataObj> meshDataList = CreateDataList(dO, colOrdering[0], colOrdering[1], colOrdering[2], valCol);
+        List<MeshDataObj> meshDataList = CreateDataList(dO, yCol, xCol, zCol, valCol);
+
         return CreateMeshStructure(meshDataList);
     }
 
@@ -59,7 +61,13 @@ public class MeshViz : IAbstractMeshViz
             float rawVal = float.Parse(df.Columns[valCol][i].ToString());
             float val = Mathf.InverseLerp(dO.GetMin(valCol), dO.GetMax(valCol), rawVal);
             Vector3 currPos = new Vector3(xPos, yPos, zPos);
+
+            float xUnityPos = float.Parse(df.Columns["XVals"][i].ToString());
+            float yUnityPos = float.Parse(df.Columns["YVals"][i].ToString());
+            float zUnityPos = float.Parse(df.Columns["ZVals"][i].ToString());
+
             MeshDataObj mDO = new MeshDataObj(val, currPos);
+            mDO.unityPosition = new Vector3(xUnityPos, yUnityPos, zUnityPos);
             dataList.Add(mDO);
         }
         return dataList;
