@@ -51,7 +51,9 @@ EditorBuildSettings:
     path: Assets/MRTK/Examples/Demos/HandTracking/Scenes/NearMenuExamples.unity
     guid: bf3eb3415bffceb41810526380c2c71c
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: de7f59dd8f4eaa64c9717e8029756142,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 72b5f96eef5d4094a822ceb83a35bb6f,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b330a2e858129784a9424e8cb32bd79c,
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: bc9e91cd217102840bd370326d291abb,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 7b4102257b2c7944e9bb486932d21ab1,
       type: 2}

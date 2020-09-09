@@ -29,6 +29,11 @@ public class IAbsCompContr : IAbsMenuContr
         model.modelUpdateEvent.Invoke();
     }
 
+    public void AddTransfToUse(IAbsCompModel model, IAbsTransf useTransf)
+    {
+        model.useTransfs.Add(useTransf);
+    }
+
     public void UpdateDataPointOptions(IAbsCompModel model, DataPointOptions dataPointOptions) 
     {
         model.dataPointOptions = dataPointOptions;
@@ -68,6 +73,12 @@ public class IAbsCompContr : IAbsMenuContr
     public void UpdateCompatSuperComps(IAbsCompModel model, List<Type> compatSuperComps) 
     {
         model.compatSuperComps = compatSuperComps;
+        model.modelUpdateEvent.Invoke();
+    }
+
+    public void UpdateMarkerType(IAbsCompModel model, MarkerType mT)
+    {
+        model.mT = mT;
         model.modelUpdateEvent.Invoke();
     }
 }

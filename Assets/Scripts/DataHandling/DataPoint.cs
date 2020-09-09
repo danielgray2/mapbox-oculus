@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Data.Analysis;
 using UnityEngine;
 
-public class DataPoint : MonoBehaviour
+public class DataPoint : IAbsDataMarker
 {
     public DataFrameRow data { get; set; }
 
@@ -86,5 +86,10 @@ public class DataPoint : MonoBehaviour
         origLocalScale = this.transform.localScale;
         origLocalRotation = this.transform.localRotation;
         origColor = this.GetComponent<Renderer>().material.color;
+    }
+
+    public override void AddMarker(Vector3 position)
+    {
+        this.transform.localPosition = position;
     }
 }

@@ -29,6 +29,13 @@ public abstract class IAbsCompModel : IAbsModel
     // Not set from base
     public List<Type> compatSuperComps { get; set; }
 
+    // Not set from base
+    public MarkerType mT { get; set; }
+
+    // Beginning to think that we should remove this and
+    // simply set the values as necessary without using
+    // a function like this. Perhaps more code, but a lot
+    // clearer as to what is going on.
     public void SetValsFromBase(IAbsCompModel compModel)
     {
         dataObj = compModel.dataObj;

@@ -28,4 +28,5 @@ public enum MenuEnum
     DATA_OBJ,
     LAT_LON,
     DEP_LAT_LON,
+    DATA_MARK_MENU,
 }

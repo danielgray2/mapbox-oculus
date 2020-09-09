@@ -7,6 +7,7 @@ public class MapModel : IAbsContextModel
 {
     public string latColName { get; set; }
     public string lonColName { get; set; }
+    public string depthColName { get; set; }
     public float iconSize { get; set; } = 5;
     public AbstractMap absMap { get; set; }
     public int zoom { get; set; } = 13;

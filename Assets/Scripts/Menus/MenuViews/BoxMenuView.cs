@@ -85,7 +85,7 @@ public class BoxMenuView : IAbsMenuView
     {
         IAbsCompModel prevModel = VizUtils.CastToCompModel(mV.GetCurrModel());
         Transform prevTransform = prevModel.transform;
-        mV.UpdateCurrModel(CreateChild());
+        mV.UpdateCurrModel(CreateChild(prevModel.dataObj));
         mV.UpdateSuperComp(prevModel);
         mV.UpdateParentTransform(prevTransform);
         next = childrenMenuGo;
@@ -113,9 +113,12 @@ public class BoxMenuView : IAbsMenuView
         }
     }
 
-    public IAbsCompModel CreateChild()
+    public IAbsCompModel CreateChild(DataObj dO)
     {
-        IAbsCompModel baseModel = new BaseCompModel();
+        IAbsCompModel baseModel = new BaseCompModel
+        {
+            dataObj = dO
+        };
         mV.RegisterModel(baseModel.gUID, baseModel);
         return baseModel;
     }

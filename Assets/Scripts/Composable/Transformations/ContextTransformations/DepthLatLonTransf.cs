@@ -44,7 +44,7 @@ public class DepthLatLonTransf : IAbsTransf
             // Convert kilometers to meters
             float depthInMeters = -(float)df.Columns[depthColName][i] * 1000;
             float adjUnityUnits = ratio * depthInMeters;
-            float adjElevUnity = unadjustedPos.y + adjUnityUnits - currentElevUnity;
+            float adjElevUnity = unadjustedPos.y + adjUnityUnits;
             xVals[i] = unadjustedPos.x;
             yVals[i] = adjElevUnity;
             zVals[i] = unadjustedPos.z;

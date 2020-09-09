@@ -180,6 +180,12 @@ public class MenuView : IAbstractView
         baseCompContr.UpdateParent(compModel, transform);
     }
 
+    public void AddTransfToUse(IAbsTransf transf)
+    {
+        IAbsCompModel compModel = VizUtils.CastToCompModel(GetCurrModel());
+        baseCompContr.AddTransfToUse(compModel, transf);
+    }
+
     public IAbsModel GetCurrModel()
     {
         return mM.modelDictionary[mM.currModelGUID];
@@ -203,10 +209,16 @@ public class MenuView : IAbstractView
 
     // TODO: Consider adding a parameter here instead of setting it
     // automatically from the curr
-    public void UpdateSuperComp(IAbsCompModel model)
+    public void UpdateSuperComp(IAbsCompModel superComp)
     {
         IAbsCompModel curr = VizUtils.CastToCompModel(GetCurrModel());
-        baseCompContr.UpdateSuperComp(model, curr);
+        baseCompContr.UpdateSuperComp(curr, superComp);
+    }
+
+    public void UpdateMarkerType(MarkerType mT)
+    {
+        IAbsCompModel curr = VizUtils.CastToCompModel(GetCurrModel());
+        baseCompContr.UpdateMarkerType(curr, mT);
     }
 
     public IAbsMenuView FindConfigMenu(IAbsCompModel compModel)

@@ -20,9 +20,9 @@ public class MenuContr : IAbsMenuContr
         menuModel.modelDictionary.Add(key, value);
     }
 
-    public void UpdateCurrModelGUID(Guid newMenuGUID)
+    public void UpdateCurrModelGUID(Guid newModelGUID)
     {
-        menuModel.currModelGUID = newMenuGUID;
+        menuModel.currModelGUID = newModelGUID;
     }
 
     public void UpdateCurrMenu(MenuEnum newMenuEnum)

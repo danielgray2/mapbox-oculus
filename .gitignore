@@ -118,6 +118,3 @@ crashlytics-build.properties
 
 # Settings
 /ProjectSettings/XRSettings.asset
-
-# asmdefs
-/Assets/ThirdParty/ThirdPartyAssembly.asmdef

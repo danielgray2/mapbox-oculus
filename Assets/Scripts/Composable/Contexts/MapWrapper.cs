@@ -1,10 +1,14 @@
 ﻿using Mapbox.Unity.Map;
 using Mapbox.Utils;
+using Microsoft.Data.Analysis;
 using System;
 using UnityEngine;
 
 public class MapWrapper : IAbstractWrapper
 {
+    [SerializeField]
+    GameObject dataMarkerMap;
+
     [SerializeField]
     public Texture2D loadingTexture;
 
@@ -45,6 +49,32 @@ public class MapWrapper : IAbstractWrapper
             oM.PlaceObjectManipulator(this.transform);
 
             plottedOnce = true;
+        }
+    }
+
+    protected override void AddMarkers()
+    {
+        DataMarkerMap dMM = dataMarkerMap.GetComponent<DataMarkerMap>();
+        MapModel mapModel = CastToMapModel();
+        GameObject markerPrefab = dMM.dict[mapModel.mT];
+
+        IAbsTransf transf;
+        DataFrame sliced;
+
+        if(mapModel.depthColName != "")
+        {
+            string depthColName = mapModel.depthColName;
+            string latColName = mapModel.latColName;
+            string lonColName = mapModel.lonColName;
+
+            transf = new DepthLatLonTransf(depthColName, latColName, lonColName, mapModel.absMap);
+
+            DataFrame dfToSlice = mapModel.dataObj.df;
+            sliced = new DataFrame(dfToSlice.Columns[depthColName], dfToSlice.Columns[latColName], dfToSlice.Columns[lonColName]);
+        }
+        else
+        {
+            transf = new LatLonTransf(mapModel.latColName, mapModel.lonColName, mapModel.absMap);
         }
     }
 

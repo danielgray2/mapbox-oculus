@@ -16,6 +16,9 @@ public class NewContextMenuView : IAbsMenuView
     [SerializeField]
     GameObject mapMenuGo;
 
+    [SerializeField]
+    GameObject threeDAxisMenuGo;
+
     protected TMP_Dropdown contextTypeDDObj;
     protected GameObject next;
 
@@ -63,6 +66,9 @@ public class NewContextMenuView : IAbsMenuView
         {
             case ContextTypeEnum.MAP:
                 retVal = mapMenuGo;
+                break;
+            case ContextTypeEnum.THREEDAXIS:
+                retVal = threeDAxisMenuGo;
                 break;
             default:
                 throw new ArgumentException("Graph type not recognized");
